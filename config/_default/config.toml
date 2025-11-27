@@ -5,6 +5,8 @@
 theme = "blog-story"
 languageCode = 'en-us'
 title = 'Welcome to this #WAIQ Age'
+defaultContentLanguage = "en"
+defaultContentLanguageInSubdir = false
 
 ## -----------------------------------------------
 ## Publish
@@ -84,3 +86,18 @@ area = "areas"
 [Params.asset]
 additional_css = ["/css/fontawesome-all.min.css","/css/waiq.css"]
 additional_js = ["/js/fontawesome-all.min.js","/js/waiq.js"]
+
+## -----------------------------------------------
+## Languages support
+## -----------------------------------------------
+[languages]
+
+[languages.en]
+  languageName = "English"
+  weight = 1
+  contentDir = "content/en"
+
+[languages.es]
+  languageName = "Español"
+  weight = 2
+  contentDir = "content/es"
