@@ -1,5 +1,12 @@
 {{ define "main" }}
-
+<!-- Language DEBUG -->
+<!--<div style="background: orange; padding: 20px; color: red;">
+  <p>Lang: {{ .Lang }}</p>
+	<p>Pages in "article": {{ len (where .Site.Pages "Section" "article") }}</p>
+	<p>Pages in "article" with "Lang": {{ len (where (where .Site.Pages "Section" "article") "Lang" .Lang)}}</p>
+  <p>Featured articles: {{ len (where (where .Site.Pages "Section" "article") "Params.featured" true) }}</p>
+</div>
+-->
 	{{ range sort (where .Site.Pages "Section" "article") ".Weight" "desc" ".Date" }}
 	  {{ if .Params.featured }}
 	    {{ .Render "spotlight" }}

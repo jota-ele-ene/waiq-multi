@@ -1,0 +1,11 @@
+{{ define "main" }}
+<section class="wrapper single style1 align-left">
+  <div class="inner">
+    <header>
+        <h1>{{ .Title }}</h1>
+        {{ with .Params.description }}<p>{{ . }}</p>{{ end }}
+    </header>
+    {{ .Content }}
+  </div>
+</section>
+{{ end }}

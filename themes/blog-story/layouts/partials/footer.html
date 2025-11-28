@@ -6,8 +6,13 @@
             {{ with .Site.Params.social.linkedin }}<li><a target="_blank" href="{{.}}" class="icon brands style2 fa-linkedin"><span class="label">LinkedIn</span></a></li>{{end}}
             {{ with .Site.Params.social.email }}<li><a target="_blank" href="mailto:{{.}}" class="fav icon style2 fa-envelope"><span class="label">Email</span></a></li>{{end}}
         </ul>
-        <p>© 2023{{ with .Site.Params.social.email }} | <a class="dark" href="mailto:{{.}}">{{.}}</a>{{end}}</p>
-</div>
+        <!--<p>© {{ (dict "Year" (now.Year)) }}}}{{ with .Site.Params.social.email }} | <a class="dark" href="mailto:{{.}}">{{.}}</a>{{end}}</p>-->
+    </div>
+    <p class="footer-nav">
+      <a href='{{ cond (eq .Lang "es") "/es" "" | absURL}}/legal/notice/'>{{ i18n "legal.notice" }}</a> |
+      <a href='{{ cond (eq .Lang "es") "/es" "" | absURL}}/legal/privacy/'>{{ i18n "legal.privacy" }}</a> |
+      <a href='{{ cond (eq .Lang "es") "/es" "" | absURL}}/legal/cookies/'>{{ i18n "legal.cookies" }}</a>
+    </p>
 </footer>
 
 <!-- FontAwesome JS -->

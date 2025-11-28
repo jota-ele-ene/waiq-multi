@@ -7,7 +7,7 @@ contain: content;
     <div class="content">
         {{ with .Title }}<h1 class="{{ with $.Params.h1 }}{{ . }}{{ end }}">{{ . }}</h1>{{ end }}
         {{ with .Params.Subtitle }}<p class="major">{{ . | safeHTML }}</p>{{ end }}
-        {{ with .Params.Description }}<p>{{ . | safeHTML}}</p>{{ end }}
+        <p>{{ .Content }}</p>
         <ul class="actions stacked">
             <li><a href="{{ with .Params.button_link }}{{ . }}{{ end }}" class="button primary large wide smooth-scroll-middle">{{ .Params.button_label }}</a></li>
         </ul>

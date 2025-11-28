@@ -12,3 +12,7 @@
 
 <!-- Scripts -->
 <script src='{{ $js.RelPermalink | absURL }}'></script>
+<script type="text/javascript">
+  sessionStorage.setItem('thisPage', sessionStorage.getItem('lastPage'));
+  sessionStorage.setItem('lastPage', window.location.href);
+</script>

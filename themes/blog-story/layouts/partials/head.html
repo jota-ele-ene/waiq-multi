@@ -1,10 +1,8 @@
 <head>
 
 	{{ if .IsHome }}
-		{{ with .Site.GetPage "/banner/Home.md" }}
-			<title>{{ .Site.Title }}</title>
-			<meta name="description" content="{{ .Description }}">
-		{{ end }}
+		<title>{{ .Site.Title }}</title>
+		<meta name="description" content="{{ .Description }}">
 	{{ else }}
 		<title>{{ with .Title }}{{ . }}{{ else }}Any page from {{ .Site.Title }}{{ end }}</title>
 		<meta name="description" content="{{ with .Description }}{{ . }}{{ else }}Page at {{ .Permalink }}{{ end }}">
@@ -21,14 +19,21 @@
 	{{ partial "favicon" }}
 	{{ end }}
 
+	<!-- layouts/partials/alternate-links.html -->
+	{{ if .IsTranslated }}
+	  {{ range .AllTranslations }}
+	    <link rel="alternate" hreflang="{{ .Lang }}" href="{{ .Permalink }}" />
+	  {{ end }}
+	{{ end }}
+
 	<link rel="canonical" href="{{ .Permalink }}" />
 
 	<!-- CSS -->
 	{{ $style := resources.Get "sass/main.scss" | resources.ExecuteAsTemplate "scss/main.scss" . | toCSS (dict "targetPath" "css/main.css" "outputStyle" "compressed" "enableSourceMap" false) | minify }}
-	<link rel="stylesheet" href="{{ $style.RelPermalink }}">
+	<link rel="stylesheet" href="{{ $style.Permalink }}">
 
 	{{ $noscript := resources.Get "sass/noscript.scss" | resources.ExecuteAsTemplate "noscript.scss" . | toCSS (dict "targetPath" "css/noscript.css" "enableSourceMap" false) | minify }}
-	<noscript><link rel="stylesheet" href="{{ $noscript.RelPermalink }}" /></noscript>
+	<noscript><link rel="stylesheet" href="{{ $noscript.Permalink }}" /></noscript>
 
 
 	<!-- identity widget -->

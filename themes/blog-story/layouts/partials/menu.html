@@ -1,13 +1,41 @@
+<!-- Language DEBUG -->
+<!--
+<p style="background: yellow; padding: 10px; color: red; font-weight: bold;">
+	.IsHome: {{ .IsHome }} |
+	.RelPermalink: {{ .RelPermalink }} |
+	.Type: {{ .Type }} |
+	.Lang: {{ .Lang }} |
+	.Site.GetPage: {{ .Site.GetPage }} |
+	.Site.Title: {{ .Site.Title }} |
+	.File.LogicalName: {{ if .File }}{{ .File.LogicalName }}{{ end }}
+</p>
+-->
+
+
 	{{ if .IsHome }}
     {{ with .Site.GetPage "/banner/Home.md" }}{{ .Render "summary" }}{{ end }}
   {{ end }}
 
   <div id="navbar">
 		<a href="/" class="home-icon icon solid fa-home"></a>
-    <a class='more {{ partial "active-menu.html" (dict "context" . "topic" "web3") }}' href="/topics/web3">WEB3</a>
-    <a class='more {{ partial "active-menu.html" (dict "context" . "topic" "AI") }}' href="/topics/ai">AI</a>
-    <a class='{{ partial "active-menu.html" (dict "context" . "topic" "Quantum") }}' href="/topics/quantum">QUANTUM</a>
+    <a class='more {{ partial "active-menu.html" (dict "context" . "topic" "web3") }}' href='{{ cond (eq .Lang "es") "/es" "" | absURL}}/topics/web3'>WEB3</a>
+    <a class='more {{ partial "active-menu.html" (dict "context" . "topic" "AI") }}' href='{{ cond (eq .Lang "es") "/es" "" | absURL}}/topics/ai'>AI</a>
+    <a class='{{ partial "active-menu.html" (dict "context" . "topic" "Quantum") }}' href='{{ cond (eq .Lang "es") "/es" "" | absURL}}/topics/quantum'>QUANTUM</a>
 		<a href="#M" class="search-icon icon solid fa-search" onClick="displayModal()"></a>
+	    <div class="language-switcher">
+	      {{ range $index, $item := .AllTranslations }}
+	        {{ if eq .Lang $.Page.Lang }}
+	          <span class="lang-control lang-active">{{ .Lang | upper }}</span>
+	        {{ else }}
+	          <a class="lang-control" href="{{ .Permalink }}" hreflang="{{ .Lang }}">
+	            {{ .Lang | upper }}
+	          </a>
+	        {{ end }}
+					{{ if ne $index (sub (len $.AllTranslations) 1) }}
+				    <span class="lang-control">|</span> <!-- Separador en todos menos en el último -->
+				  {{ end }}
+	      {{ end }}
+	    </div>
   </div>
 
 	<div id="M" class="modal">

@@ -154,9 +154,16 @@ footer a
   color: #837164;
 }
 
+.footer-nav a
+{
+  margin: 20px;
+}
+
 footer p
 {
   letter-spacing: 6px;
+  padding-bottom: 10PX;
+  margin: 0;
 }
 
 body {

@@ -84,7 +84,7 @@ area = "areas"
   #telegram = "https://telegram.org"
 
 [Params.asset]
-additional_css = ["/css/fontawesome-all.min.css","/css/waiq.css"]
+additional_css = ["/css/fontawesome-all.min.css","/css/waiq.css","/css/lang.css"]
 additional_js = ["/js/fontawesome-all.min.js","/js/waiq.js"]
 
 ## -----------------------------------------------
@@ -94,10 +94,18 @@ additional_js = ["/js/fontawesome-all.min.js","/js/waiq.js"]
 
 [languages.en]
   languageName = "English"
+  title = 'Welcome to this #WAIQ Age'
   weight = 1
   contentDir = "content/en"
 
+  [languages.en.params]
+    description = "WAIQ - Full experience"
+
 [languages.es]
   languageName = "Español"
+  title = 'Bienvenido a la era #WAIQ'
   weight = 2
   contentDir = "content/es"
+
+  [languages.es.params]
+    description = "WAIQ - Experiencia completa de blog"

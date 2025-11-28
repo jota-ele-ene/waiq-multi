@@ -1,5 +1,26 @@
 {{ define "main" }}
 
+<div id="en-404" style="display:none;">
 	{{ with .Site.GetPage "/banner/404.md" }}{{ .Render "summary" }}{{ end }}
+</div>
+<div id="es-404" style="display:none;">
+	<script>console.log("Renderizando es-404")</script>
+	{{ range where (where (where .Site.AllPages "Lang" "es") "Section" "banner") "File.BaseFileName" "404" }}
+	  {{ .Render "summary" }}
+	  {{ break }}  <!-- Solo primera -->
+	{{ end }}
+</div>
+
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+	  const url404es = sessionStorage.getItem('lastPage').includes('/es/');
+console.log("url404es="+url404es)
+	  if (url404es) {
+	    document.getElementById('es-404').style.display = 'block';
+	  } else {
+	    document.getElementById('en-404').style.display = 'block';
+	  }
+	});
+	</script>
 
 {{ end }}

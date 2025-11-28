@@ -8,10 +8,17 @@
 
     <!-- Gallery-->
     <div class="gallery {{ .Params.style }}">
-        {{ range shuffle (where .Site.RegularPages.ByDate "Section" "picture") }}
-            {{ .Render "summary" }}
-        {{ end }}
+
+      {{ $pictures := where (where .Site.AllPages "Lang" "en") "Section" "picture" }}
+
+      {{ range shuffle $pictures }}
+        {{ .Render "summary" }}
+      {{ end }}
+
     </div>
+
+
+
 
 </section>
 {{ end }}

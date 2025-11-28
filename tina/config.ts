@@ -37,29 +37,9 @@ export default defineConfig({
   schema: {
     collections: [
       {
-        name: "post",
-        label: "Posts",
-        path: "content/posts",
-        fields: [
-          {
-            type: "string",
-            name: "title",
-            label: "Title",
-            isTitle: true,
-            required: true,
-          },
-          {
-            type: "rich-text",
-            name: "body",
-            label: "Body",
-            isBody: true,
-          },
-        ],
-      },
-      {
-        name: "article",
-        label: "Article",
-        path: "content/article",
+        name: "article_es",
+        label: "Article (ES)",
+        path: "content/es/article",
         fields: [
           { type: "string", name: "title", label: "Title", isTitle: true, required: true },
           { type: "string", name: "areas", label: "Areas", list: true,
@@ -72,15 +52,56 @@ export default defineConfig({
           { type: "string", name: "description", label: "Description" },
           { type: "boolean", name: "draft", label: "Draft" },
           { type: "string", name: "button_url", label: "Button link" },
+          { type: "string", name: "button_label", label: "Button label" },
           { type: "boolean", name: "featured", label: "Featured" },
           { type: "image", name: "image", label: "Image" },
           { type: "rich-text", name: "body", label: "Body", isBody: true }
         ],
       },
       {
-        name: "banner",
-        label: "BAnner",
-        path: "content/banner",
+        name: "article_en",
+        label: "Article (EN)",
+        path: "content/en/article",
+        fields: [
+          { type: "string", name: "title", label: "Title", isTitle: true, required: true },
+          { type: "string", name: "areas", label: "Areas", list: true,
+              options: ['technology', 'society', 'legal', 'ip', 'regulation', 'innovation', 'use cases', 'business', 'ethical'] },
+          { type: "string", name: 'topics', label: 'Topics', component: 'list', field: {
+              component: 'select',
+              options: ['web3', 'ai', 'quantum']},
+          },
+          { type: "datetime", name: "date", label: "Date" },
+          { type: "string", name: "description", label: "Description" },
+          { type: "boolean", name: "draft", label: "Draft" },
+          { type: "string", name: "button_url", label: "Button link" },
+          { type: "string", name: "button_label", label: "Button label" },
+          { type: "boolean", name: "featured", label: "Featured" },
+          { type: "image", name: "image", label: "Image" },
+          { type: "rich-text", name: "body", label: "Body", isBody: true }
+        ],
+      },
+      {
+        name: "banner_en",
+        label: "BAnner (EN)",
+        path: "content/en/banner",
+        fields: [
+          { type: "string", name: "title", label: "Title", isTitle: true, required: true },
+          { type: "datetime", name: "date", label: "Date" },
+          { type: "string", name: "description", label: "Description" },
+          { type: "boolean", name: "draft", label: "Draft" },
+          { type: "string", name: "h1", label: "Cabecera" },
+          { type: "string", name: "style", label: "Style classes" },
+          { type: "string", name: "subtitle", label: "Subtitle" },
+          { type: "string", name: "button_label", label: "Button Label" },
+          { type: "string", name: "button_link", label: "Button Link" },
+          { type: "image", name: "image", label: "Image" },
+          { type: "rich-text", name: "body", label: "Body", isBody: true }
+        ],
+      },
+      {
+        name: "banner_es",
+        label: "BAnner (ES)",
+        path: "content/es/banner",
         fields: [
           { type: "string", name: "title", label: "Title", isTitle: true, required: true },
           { type: "datetime", name: "date", label: "Date" },
@@ -98,7 +119,7 @@ export default defineConfig({
       {
         name: "picture",
         label: "Profile picture",
-        path: "content/picture",
+        path: "content/en/picture",
         fields: [
           { type: "string", name: "title", label: "Title", isTitle: true, required: true },
           { type: "datetime", name: "date", label: "Date" },

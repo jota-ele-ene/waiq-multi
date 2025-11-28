@@ -1,6 +1,31 @@
 [readMore]
   other = "Read More"
+
 [posted]
   other = "Posted on"
+
+[by]
+  other = "by"
+
 [tags]
   other = "Tags"
+
+[categories]
+  other = "Categories"
+
+[home]
+  other = "Home"
+
+[blog]
+  other = "Blog"
+
+[about]
+  other = "About"
+
+[contact]
+  other = "Contact"
+
+[legal]
+  notice = "Legal notice"
+  privacy = "Privacy policy"
+  cookies = "Cookies"
