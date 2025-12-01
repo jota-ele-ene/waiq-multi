@@ -10,10 +10,10 @@ copyright = "{year}"
 ## -----------------------------------------------
 
 relativeURLs = "true"
-#canonifyURLs = "true"
+canonifyURLs = "false"
 
 # Local
-baseURL = "http://localhost:1313"
+baseURL = ""
 publishDir = "public"
 
 # Remote

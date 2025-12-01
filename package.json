@@ -14,7 +14,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tinacms dev -c \"hugo server -D --bind 0.0.0.0 --port 5000 --appendPort=false --disableFastRender\"",
+    "dev": "tinacms dev -c \"hugo server -D --bind 0.0.0.0 --port 5000 --baseURL / --appendPort=false --disableFastRender\"",
     "build": "tinacms build && hugo",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
