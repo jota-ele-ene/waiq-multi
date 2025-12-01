@@ -7,7 +7,7 @@
   "devDependencies": {
     "@tinacms/cli": "^1.12.5",
     "@types/node": "^24.10.1",
-    "hugo-bin": "^0.149.2"
+    "hugo-extended": "^0.152.2"
   },
   "name": "waiq-full",
   "version": "1.0.0",
