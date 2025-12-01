@@ -1,7 +1,7 @@
 <!-- Spotlight -->
         <section class="spotlight style1 content-align-left image-position-center onscroll-image-fade-in" id="first">
             <div class="content">
-                <h2>{{ .Title }}{{ if .Params.button_url }}<a class="external" target="_blank" href="{{ .Params.button_url }}">external source<i class="fa fa-external-link-square icon" aria-hidden="true"></i></a>{{ end }}</h2>
+                <h2>{{ .Title }}{{ if .Params.button_url }}<br><a class="external" target="_blank" href="{{ .Params.button_url }}">external source<i class="fa fa-external-link-square icon" aria-hidden="true"></i></a>{{ end }}</h2>
                 <div class="tags">
                   <ul id="categories">
                     {{ range .Params.topics }}

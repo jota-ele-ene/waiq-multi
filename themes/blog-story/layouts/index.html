@@ -6,8 +6,13 @@
 	<p>Pages in "article" with "Lang": {{ len (where (where .Site.Pages "Section" "article") "Lang" .Lang)}}</p>
   <p>Featured articles: {{ len (where (where .Site.Pages "Section" "article") "Params.featured" true) }}</p>
 </div>
--->
 	{{ range sort (where .Site.Pages "Section" "article") ".Weight" "desc" ".Date" }}
+		{{ if .Params.featured }}
+			{{ .Render "spotlight" }}
+		{{ end }}
+	{{ end }}
+-->
+	{{ range first 4 (sort (where .Site.Pages "Section" "article") ".Weight" "desc" ".Date") }}
 	  {{ if .Params.featured }}
 	    {{ .Render "spotlight" }}
 	  {{ end }}
