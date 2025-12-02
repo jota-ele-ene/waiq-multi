@@ -1,5 +1,5 @@
 ---
-title: El trabajo mixto humano-IA en la economía aumentada
+title: Human-AI hybrid work in the augmented economy
 topics:
   - ai
 areas:
@@ -8,14 +8,11 @@ areas:
   - ethical
 date: 2025-11-27T00:00:00.000Z
 description: >-
-  La acelerada evolución de la Inteligencia Artificial está redefiniendo la
-  economía y el trabajo, pasando de la automatización a la colaboración
-  cognitiva entre humanos y máquinas. Áurea Rodríguez introduce el concepto de
-  “trabajo mixto humano-IA”, donde la IA libera tareas rutinarias y amplifica la
-  creatividad, el pensamiento crítico y la toma de decisiones éticas. Surge así
-  el Talento Interior Bruto (TIB), una métrica que integra capacidades humanas
-  irremplazables con el poder de la IA para generar soluciones a gran escala,
-  orientando el crecimiento hacia una “economía aumentada”.
+  The quick evolution of Artificial Intelligence is redefining the
+  economy and work, moving from automation to cognitive collaboration
+  between humans and machines. Áurea Rodríguez introduces the concept of “human-AI mixed work,” where AI frees up routine tasks and amplifies creativity, critical thinking, and ethical decision-making. This gives rise to Gross Internal Talent (GIT), a metric that integrates irreplaceable human capabilities
+  with the power of AI to generate large-scale solutions,
+  guiding growth toward an “augmented economy.”
 button_url: >-
   https://www.sepe.es/HomeSepe/que-es-observatorio/Hipatia/cuadernos-mercado-trabajo/revista-cuadernos-mercado-trabajo/detalle-articulo.html?detail=/Inteligencia-Artificial/eltrabajomixtohumanoiaenlaeconomiaaumentada
 button_label: Ver informe
