@@ -44,13 +44,19 @@ npm run dev
 This command:
 1. Starts TinaCMS dev server on port 4001
 2. Runs Hugo server on 0.0.0.0:5000
-3. Enables live reload and draft content
+3. Dynamically sets baseURL using `REPLIT_DEV_DOMAIN` environment variable
+4. Enables live reload and draft content
+
+**Important for Replit**: The dev script automatically detects the Replit domain from the `REPLIT_DEV_DOMAIN` environment variable and adds the `--baseURL https://<replit-domain>` flag. This ensures all asset URLs work correctly through Replit's HTTPS proxy. If running outside Replit where this variable is not set, the baseURL flag is omitted entirely, and Hugo will use the empty baseURL from `config/development/config.toml`, resulting in relative URLs.
 
 ### TinaCMS Admin
 Access the CMS admin interface at `/admin/index.html` when the dev server is running.
 
 ### Environment Variables
-TinaCMS requires:
+**Replit (automatically set):**
+- `REPLIT_DEV_DOMAIN`: Used to configure Hugo's baseURL for correct asset loading
+
+**TinaCMS (required, set manually):**
 - `TINA_PUBLIC_CLIENT_ID`: TinaCMS public client ID
 - `TINA_TOKEN`: TinaCMS authentication token
 
@@ -77,13 +83,13 @@ The site generates a fully static output that can be deployed to any static host
 ### Replit Environment Setup
 1. Replaced `hugo-bin` with `hugo-extended` package to support SCSS compilation
 2. Configured Hugo dev server to bind to `0.0.0.0:5000` for Replit proxy compatibility
-3. Updated development configuration to use `baseURL = "/"` for relative URLs
+3. Implemented dynamic baseURL configuration using `REPLIT_DEV_DOMAIN` environment variable
 4. Set up workflow for "Start Hugo with TinaCMS"
 5. Configured static deployment with build command
 
 ### Configuration Updates
-- `package.json`: Updated dev script with proper Hugo server flags
-- `config/development/config.toml`: Changed baseURL from `http://localhost:1313` to `/`
+- `package.json`: Updated dev script to dynamically set baseURL from `REPLIT_DEV_DOMAIN`
+- `config/development/config.toml`: Changed baseURL from `http://localhost:1313` to empty string
 - Added deployment configuration for static site publishing
 
 ## Notes
