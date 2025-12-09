@@ -1,5 +1,5 @@
 ---
-title: 'The bggest decision yet: allowing AI to train itself'
+title: 'The biggest decision yet: allowing AI to train itself'
 areas:
   - society
   - innovation
