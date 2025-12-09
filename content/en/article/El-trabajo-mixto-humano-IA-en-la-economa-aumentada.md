@@ -15,7 +15,7 @@ description: >-
   guiding growth toward an “augmented economy.”
 button_url: >-
   https://www.sepe.es/HomeSepe/que-es-observatorio/Hipatia/cuadernos-mercado-trabajo/revista-cuadernos-mercado-trabajo/detalle-articulo.html?detail=/Inteligencia-Artificial/eltrabajomixtohumanoiaenlaeconomiaaumentada
-button_label: Ver informe
+button_label: See report
 featured: true
 image: /images/upload/001_CONCEPTOS_TECNOLOGIA_9.jpg
 ---
