@@ -6,11 +6,13 @@ style: style1 orient-center content-align-center image-position-center
 summary: "Hoy en día, todas las empresas integran de forma natural sus estrategias en torno a Internet, los dispositivos móviles y la nube. Es inconcebible que puedan entenderse como disciplinas separadas.
    En unos años, la historia se repetirá con otras tres disciplinas: <strong>web3</strong>, <strong>inteligencia artificial</strong> y <strong>tecnologías cuánticas</strong>. Las tres se retroalimentarán y complementarán entre sí, y su convergencia multiplicará las oportunidades para que startups y empresas desarrollen nuevas ventajas competitivas.
   ¿Quieres unirte a nosotros?"
-button_link: "#first"
 description: "Hoy en día, todas las empresas integran de forma natural sus estrategias en torno a Internet, los dispositivos móviles y la nube. Es inconcebible que puedan entenderse como disciplinas separadas.
    En unos años, la historia se repetirá con otras tres disciplinas: <strong>web3</strong>, <strong>inteligencia artificial</strong> y <strong>tecnologías cuánticas</strong>. Las tres se retroalimentarán y complementarán entre sí, y su convergencia multiplicará las oportunidades para que startups y empresas desarrollen nuevas ventajas competitivas.
   ¿Quieres unirte a nosotros?"
+button_link: "#first"
 button_label: "Sumérgete en #WAIQ"
+second_link: "/es/legal/manifesto"
+second_label: "Únete a WAIQ"
 h1: home
 subtitle: Bienvenido al lugar donde se dan las conversaciones <b>#WAIQ</b>
 date: 2023-10-23T23:11:31.017Z

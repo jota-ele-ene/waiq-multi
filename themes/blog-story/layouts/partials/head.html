@@ -40,7 +40,7 @@
 	<!--<script type="text/javascript" src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>-->
 
 	{{ range .Site.Params.asset.additional_css -}}
-		<link rel="stylesheet" href="{{ . | absURL }}">
+		<link rel="stylesheet" href="{{ . | absURL }}?v={{ now.Unix }}">
 	{{- end }}
 
 </head>

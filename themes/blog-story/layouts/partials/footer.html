@@ -9,6 +9,7 @@
         <!--<p>© {{ (dict "Year" (now.Year)) }}}}{{ with .Site.Params.social.email }} | <a class="dark" href="mailto:{{.}}">{{.}}</a>{{end}}</p>-->
     </div>
     <p class="footer-nav">
+      <a href='{{ cond (eq .Lang "es") "/es" "" | absURL}}/article/about/'>{{ i18n "legal.about" }}</a> |
       <a href='{{ cond (eq .Lang "es") "/es" "" | absURL}}/legal/notice/'>{{ i18n "legal.notice" }}</a> |
       <a href='{{ cond (eq .Lang "es") "/es" "" | absURL}}/legal/privacy/'>{{ i18n "legal.privacy" }}</a> |
       <a href='{{ cond (eq .Lang "es") "/es" "" | absURL}}/legal/cookies/'>{{ i18n "legal.cookies" }}</a>

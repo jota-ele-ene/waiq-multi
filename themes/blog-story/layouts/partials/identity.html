@@ -1,5 +1,8 @@
 
 <script>
+
+    console.log("baseURL:", "{{ .Site.BaseURL }}");
+
     const baseURL = "{{ .Site.BaseURL }}";
     // Si ya está autenticado, redirigir directamente
     if (sessionStorage.getItem('authenticated') === 'true') {

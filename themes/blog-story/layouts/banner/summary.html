@@ -1,4 +1,9 @@
 <!-- Banner -->
+<!-- DEBUG
+<pre>
+{{ printf "%#v" .Params }}
+</pre>
+-->
 <section class="banner {{ .Params.style }}" style="height: 100%;
 margin: 0;
 overflow: clip;
@@ -10,6 +15,9 @@ contain: content;
         <p>{{ .Content }}</p>
         <ul class="actions stacked">
             <li><a href="{{ with .Params.button_link }}{{ . }}{{ end }}" class="button primary large wide smooth-scroll-middle">{{ .Params.button_label }}</a></li>
+            {{ with .Params.second_link }}
+                <li><a href="{{ . }}" class="button primary large wide smooth-scroll-middle">{{ $.Params.second_label }}</a></li>
+            {{ end }}
         </ul>
     </div>
     {{ with .Params.image }}<div class="image">

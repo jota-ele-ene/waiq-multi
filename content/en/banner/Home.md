@@ -10,7 +10,6 @@ summary: " Today, every company naturally integrates its strategies around web,
   and complement each other and their convergence will multiply the
   opportunities for startups and corporates to develop new competitive
   advantages. Want to join us?"
-button_link: "#first"
 description: "Today, every company naturally integrates its strategies around
   web, mobile and cloud. It is inconceivable that they can be understood as
   separate disciplines. In a few years, history will repeat itself with three
@@ -18,7 +17,10 @@ description: "Today, every company naturally integrates its strategies around
   back and complement each other and their convergence will multiply the
   opportunities for startups and corporates to develop new competitive
   advantages. Want to join us?"
+button_link: "#first"
 button_label: "Dive into #WAIQ"
+second_link: "/legal/manifesto"
+second_label: "Join #WAIQ"
 h1: home
 subtitle: Welcome to the place where conversations around <b>#WAIQ</b> happen
 date: 2023-10-23T23:11:31.017Z

@@ -20,6 +20,8 @@
   </div>
 </section>
 
-{{ partial "related" . }}
+{{ if not .Params.noRelated }}
+  {{ partial "related" . }}
+{{ end }}
 
 {{ end }}

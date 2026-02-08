@@ -2,8 +2,45 @@ body {
   color: rgb(2,21,71)!important;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1 {
     color: rgb(2,21,71)!important;
+    margin: 0 0 2rem;
+}
+
+h2 {
+  position: relative;
+  display: inline-block;
+      font-weight: bold;
+    font-size: x-large;
+    color: #00A8BC !important;
+}
+
+h2::before {
+  content: "";
+  position: absolute;
+  top: -8px;          /* separación vertical */
+  width: 100px;        /* largo de la línea */
+  border-top: 6px solid #00A8BC;
+}
+
+h3, h4, h5, h6 {
+    color: rgb(2,21,71)!important;
+}
+
+.waiq-word {
+  display: inline-block;
+  line-height: 1em;  
+}
+
+h1 .waiq-word img{
+  height:0.75em;
+}
+
+.waiq-text {
+    height: 0.75em;
+    vertical-align: middle;
+    display: inline-block;
+    margin-bottom: 0.2em;
 }
 
 .external {
@@ -155,12 +192,12 @@ footer a
 
 .footer-nav a
 {
-  margin: 20px;
+  margin: 0.4em;
 }
 
 footer p
 {
-  letter-spacing: 6px;
+  letter-spacing: 5px;
   padding-bottom: 10PX;
   margin: 0;
 }

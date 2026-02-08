@@ -1,9 +1,19 @@
 {{ define "main" }}
+{{ $logo := `<span class="waiq-word"><img src="/images/waiq-text.png" alt="WAIQ" class="waiq-logo"></span>` }}
+{{ $title := replace .Title "WAIQ" $logo }}
 <section class="wrapper single style1 align-left">
+<!-- 
+<pre>
+{{ printf "%#v" $title }}
+{{ printf "%#v" $logo }}
+</pre>
+-->
   <div class="inner">
     <header>
-        <h1>{{ .Title }}</h1>
-        {{ with .Params.description }}<p>{{ . }}</p>{{ end }}
+        <h1 class="{{ with $.Params.h1 }}{{ . }}{{ end }}">
+          {{ $title | safeHTML }}
+        </h1>
+        {{ with .Params.description }}<p class="subtitle">{{ . }}</p>{{ end }}
     </header>
     {{ .Content }}
   </div>
