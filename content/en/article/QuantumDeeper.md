@@ -1,11 +1,11 @@
 ---
-title: Quantum avanza en la política y la fabricación
+title: Quantum Moves Deeper Into Policy and Manufacturing
 topics:
   - quantum
 areas:
   - technology
 date: 2026-02-02T00:00:00.000Z
-description: La tecnología cuántica entró en una fase más pragmática en enero, cuando tanto los gobiernos como las empresas cambiaron su enfoque de los hitos de la investigación a la planificación a largo plazo, la capacidad de fabricación y la integración nacional, según los datos recopilados por la plataforma de inteligencia The Quantum Insider.
+description: Quantum technology entered a more pragmatic phase in January as governments and companies alike shifted their focus from research milestones to long-term planning, manufacturing capacity and national integration, according to data tracked by The Quantum Insider’s Intelligence Platform.
 button_label: Leer más
 button_url: https://thequantuminsider.com/2026/02/02/january-2026-quantum-recap-quantum-moves-deeper-into-policy-and-manufacturing/
 featured: true
