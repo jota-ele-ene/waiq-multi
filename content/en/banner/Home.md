@@ -22,7 +22,7 @@ button_label: "Dive into #WAIQ"
 second_link: "/legal/manifesto"
 second_label: "Join #WAIQ"
 h1: home
-subtitle: Welcome to the place where conversations around <b>#WAIQ</b> happen
+subtitle: Welcome to the place where conversations around #WAIQ happen
 date: 2023-10-23T23:11:31.017Z
 image: images/waiq-tm.png
 ---

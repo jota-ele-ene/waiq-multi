@@ -1,9 +1,11 @@
 <!-- Gallery -->
 {{ with .Site.GetPage "/banner/WhoWeAre.md" }}
 <section class="wrapper style1 align-center">
+    {{ $logo := `<span class="waiq-word"><img src="./images/waiq-text.png" alt="WAIQ" class="waiq-logo" style="height: 0.8em;"></span>` }}
+    {{ $summary := replace .Params.summary "#WAIQ" $logo }}
     <div class="inner">
         <h2>{{ .Title }}</h2>
-        <p>{{ .Params.summary | safeHTML }}</p>
+        <p>{{ $summary | safeHTML }}</p>
     </div>
 
     <!-- Gallery-->

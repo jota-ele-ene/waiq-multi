@@ -1,0 +1,14 @@
+{{ define "main" }}
+  <main>
+    <!-- Gallery-->
+    <div class="gallery {{ .Params.style }}">
+
+      {{ $pictures := where (where .Site.AllPages "Lang" "en") "Section" "picture" }}
+
+      {{ range shuffle $pictures }}
+        {{ .Render "summary" }}
+      {{ end }}
+
+    </div>
+  </main>
+{{ end }}
