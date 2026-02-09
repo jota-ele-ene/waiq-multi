@@ -30,6 +30,11 @@
             justify-content: center;
         }
 
+        .inner {
+            margin: 0 auto;
+            max-width: max-content;
+            padding: 0 20%;
+        }
         .image {
             display: inline!important;
         }
@@ -63,12 +68,29 @@
             font-size: 1rem;
         }
 
+        h1.home {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        h2::before {
+            border-top: 0px;
+        }
+
+        .content {
+            padding: 0 0 2rem;
+        }
+
+        .content p {
+            padding: 0.4em 1em;
+        }
+
         /* Loading Screen */
         .loading-screen {
             display: none;
             text-align: center;
-            padding: 40px 20px;
-            margin: 30%;
+            padding: 0 20px;
+            margin: 0 auto;
         }
 
         .loading-screen.active {
@@ -128,12 +150,12 @@
             100% { width: 100%; }
         }
 
-        .loading-text {
+        /*.loading-text {
             color: #666;
             font-size: 1.1rem;
             font-weight: 600;
             margin-bottom: 10px;
-        }
+        }*/
 
         .form-group {
             margin-bottom: 10px;
@@ -354,7 +376,7 @@
             padding: 40px;
             max-width: 600px;
             width: 90%;
-            max-height: 90vh;
+            max-height: 90vh; 
             overflow-y: auto;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             animation: scaleIn 0.3s ease;
@@ -362,7 +384,6 @@
         }
 
         .modal-header {
-            text-align: center;
             margin-bottom: 30px;
         }
 
@@ -456,8 +477,26 @@
             margin-top: 30px;
         }
 
-        .modal-buttons button {
-          margin-bottom: 10px;
+        button {
+            margin: 10px;
+            /* padding: 0.4rem; */
+            border: 0;
+            cursor: pointer;
+            display: inline-block;
+            font-weight: 400;
+            letter-spacing: .125em;
+            text-align: center;
+            text-decoration: none;
+            text-transform: uppercase;
+            white-space: nowrap;
+            font-size: .75rem;
+            max-width: 20rem;
+            height: 3.75em;
+            line-height: 3.75em;
+            border-radius: 3.75em;
+            padding: 0 2.5em;
+            text-overflow: ellipsis;
+            overflow: hidden;
         }
 
         .modal-btn {
@@ -546,12 +585,6 @@
             animation: scaleIn 0.5s ease;
         }
 
-        .confirmation-screen h2 {
-            color: #333;
-            font-size: 1.8rem;
-            margin: 20% auto 20px;
-        }
-
         .confirmation-screen p {
             color: #666;
             font-size: 1rem;
@@ -577,6 +610,7 @@
             gap: 15px;
             flex-shrink: 0;
             align-items: center;
+            width: 40%;
         }
 
         .image-preview {
@@ -631,10 +665,10 @@
         }
 
         #confirmationImage.confirmation-image {
-            width: 200px;
+           /* width: 200px;
             height: 200px;
             object-fit: cover;
-            object-position: center;
+            object-position: center;*/
             border-radius: 12px;
             position: relative;
             max-width: 100%;
@@ -733,9 +767,10 @@
 </head>
 <body>
 
-  <section class="banner style1 orient-center content-align-center image-position-center fullscreen onload-image-fade-in onload-content-fade-right"
+  <section class="style1 orient-center content-align-center image-position-center fullscreen onload-image-fade-in onload-content-fade-right"
   style="height: 100%;margin: 0; overflow: clip;contain: content;
  ">
+   <div class="inner">
     <div class="content">
         <h1 class="home">      <img src="../images/waiq-tm.png" alt="" height="100px"></h1>
         <p>Welcome to the <strong>#WAIQ</strong> site. We have sent you this form because you have participated in <strong>#WAIQ Community</strong> activities on occasion. </p>
@@ -941,6 +976,7 @@
             </div>
         </div>
     </div>
+  </div>
   </div>
 </section>
 
