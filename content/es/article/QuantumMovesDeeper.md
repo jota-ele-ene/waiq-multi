@@ -9,5 +9,5 @@ description: Quantum technology entered a more pragmatic phase in January as gov
 button_label: Leer más
 button_url: https://thequantuminsider.com/2026/02/02/january-2026-quantum-recap-quantum-moves-deeper-into-policy-and-manufacturing/
 featured: true
-image: https://thequantuminsider.com/wp-content/uploads/2026/02/t-da_md1qmc.jpg
+image: /images/upload/quantumdeeper.png
 ---
