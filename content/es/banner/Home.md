@@ -14,7 +14,7 @@ button_label: "Sumérgete en #WAIQ"
 second_link: "/es/legal/manifesto"
 second_label: "Únete a WAIQ"
 h1: home
-subtitle: Bienvenido al lugar donde se dan las conversaciones <b>#WAIQ</b>
+subtitle: Bienvenido a la casa de las conversaciones <b>#WAIQ</b>
 date: 2023-10-23T23:11:31.017Z
 image: images/waiq-tm.png
 ---

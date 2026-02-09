@@ -4,7 +4,7 @@
 {{ printf "%#v" .Params }}
 </pre>
 -->
-{{ $logo := `<span class="waiq-word"><img src="./images/waiq-text.png" alt="WAIQ" class="waiq-logo" style="height: 0.8em;"></span>` }}
+{{ $logo := `<span class="waiq-word"><img src="/images/waiq-text.png" alt="WAIQ" class="waiq-logo" style="height: 0.8em;"></span>` }}
 {{ $subtitle := replace .Params.Subtitle "#WAIQ" $logo }}
 <section class="banner {{ .Params.style }}" style="height: 100%;
 margin: 0;
