@@ -39,6 +39,10 @@ ignoreLogs = ['warning-goldmark-raw-html']
 #googleAnalytics: G-MEASUREMENT_ID
 #swetrixAnalytics = "3UYKaHJP56by"
 
+[umamiAnalytics]
+domain    = "cloud.umami.is"
+websiteid = "851feb30-981e-42e5-b269-453cfd2fb07f"
+
 ## -----------------------------------------------
 ## Taxonomies
 ## -----------------------------------------------
