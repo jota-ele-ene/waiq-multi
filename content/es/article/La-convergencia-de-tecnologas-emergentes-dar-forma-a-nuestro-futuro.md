@@ -1,5 +1,9 @@
 ---
 title: La convergencia de tecnologías emergentes dará forma a nuestro futuro
+topics: 
+  - web3
+  - ai
+  - quantum
 areas:
   - technology
   - innovation
@@ -10,6 +14,6 @@ description: 'Muy en la línea de la tesis de WAIQ, este artículo de Forbes No 
 button_url: 'https://www.forbes.com/sites/chuckbrooks/2026/02/01/emerging-technology-convergence-will-shape-our-future/'
 button_label: Leer más
 featured: true
-image: /Captura%20de%20pantalla%202026-02-10%20203719.png
+image: /images/upload/Captura%20de%20pantalla%202026-02-10%20203719.png
 ---
 

@@ -137,17 +137,103 @@ h1 .waiq-word img{
 };
 }
 
+.mosaic article .caption>*,
 .gallery.style2 article .caption>* {
     max-width: 100%;
     margin-bottom: 0.5rem;
 }
 
-.gallery.style2 article .caption h3 {
-    color: white!important;
+.mosaic article, .mosaic img,
+.gallery article, .gallery img {
+    height: 200px !important;
+    width: 200px !important;
 }
 
+
+.mosaic article {
+    -moz-flex-grow: 0;
+    -webkit-flex-grow: 0;
+    -ms-flex-grow: 0;
+    flex-grow: 0;
+    -moz-flex-shrink: 0;
+    -webkit-flex-shrink: 0;
+    -ms-flex-shrink: 0;
+    flex-shrink: 0;
+    display: block;
+    position: relative;
+    overflow: hidden;
+    width: 22.5rem;
+    max-width: 75vw;
+}
+
+.mosaic article .caption,
+.gallery.style2 article .caption {
+    -moz-align-items: center;
+    -webkit-align-items: center;
+    -ms-align-items: center;
+    align-items: center;
+    display: -moz-flex;
+    display: -webkit-flex;
+    display: -ms-flex;
+    display: flex;
+    -moz-flex-direction: column;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -moz-justify-content: center;
+    -webkit-justify-content: center;
+    -ms-justify-content: center;
+    justify-content: center;
+    pointer-events: none;
+    -moz-transition: opacity .2s ease-in-out;
+    -webkit-transition: opacity .2s ease-in-out;
+    -ms-transition: opacity .2s ease-in-out;
+    transition: opacity .2s ease-in-out;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, .5);
+    opacity: 0;
+    padding: 1rem;
+    z-index: 1;
+    font-size: .8rem;
+}
+
+.mosaic article:hover .caption,
+.gallery.style2 article:hover .caption {
+    opacity: 1;
+}
+
+.gallery.style2 article .caption h3,
+.mosaic article .caption h3,
+.mosaic article .caption p,
+.mosaic article .caption .icon.brands:before {
+    color: white!important;
+    text-align: center;
+}
+
+.mosaic article .caption .icons .brands,
 .gallery.style2 article .caption .icons .brands {
     font-size: 1.2rem;
+}
+
+.mosaic {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 200px));
+  grid-auto-rows: 200px;
+  gap: 1rem;
+  justify-content: center; /* opcional, centra el grid en el contenedor */
+}
+
+.mosaic-item {
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+input#mosaic-filter {
+    margin: 5% auto;
 }
 
 input[type="submit"],input[type="reset"],input[type="button"],button,.button {

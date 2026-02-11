@@ -13,8 +13,12 @@
 
       {{ $pictures := where (where .Site.AllPages "Lang" "en") "Section" "picture" }}
 
-      {{ range shuffle $pictures }}
-        {{ .Render "summary" }}
+      
+      {{ range $pictures }}
+        {{- $tags := lower (default "" .Params.tags) -}}
+        {{- if in $tags (lower "core") -}}
+          {{ .Render "summary" }}
+        {{- end -}}
       {{ end }}
 
     </div>

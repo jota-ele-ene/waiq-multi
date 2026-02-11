@@ -3,7 +3,7 @@ title: "#WAIQers"
 date: 2023-10-23T23:11:31.017Z
 draft: false
 style: "style2 medium onload-fade-in onscroll-fade-in"
-summary: "<strong>#WAIQ</strong> nació en julio de 2023 como un curso de verano en la <strong>Facultad de Derecho de Harvard</strong>. Tres días para revisar tres tecnologías desde tres dimensiones relevantes: tecnología, impacto legal y ética. <br>. Más allá del curso, somos un foro en el que innovadores, profesionales del derecho y otras mentes curiosas compartieron conocimientos, experiencias, retos, oportunidades y preocupaciones en torno a <strong>web3</strong>, <strong>AI</strong> and <strong>quantum</strong>.<br>Conoce a los <strong>#waiqers</strong>."
+summary: "<strong>#WAIQ</strong> nació en julio de 2023 como un curso de verano en la <strong>Facultad de Derecho de Harvard</strong>. Tres días para revisar tres tecnologías desde tres dimensiones relevantes: tecnología, impacto legal y ética. <br>. Más allá del curso, somos un foro en el que innovadores, profesionales del derecho y otras mentes curiosas compartieron conocimientos, experiencias, retos, oportunidades y preocupaciones en torno a <strong>web3</strong>, <strong>AI</strong> and <strong>quantum</strong>.<br><a href='/waiqers'>Conoce a los <strong>#waiqers</strong></a>."
 ---
 
 This course, entitled “Web3, AI, and QUANTUM COMPUTING (WAIQ): Challenges and Opportunities for Innovators, Legal Professionals and other Curious Minds,” is designed to provide an in-depth understanding of the impact of emerging technologies from three relevant dimensions: technical, legal, and ethical.

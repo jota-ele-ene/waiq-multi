@@ -1,5 +1,8 @@
 ---
 title: Cómo blockchain y la IA crearán una nueva era de infraestructuras seguras
+topics:
+  - web3
+  - ai
 areas:
   - technology
   - use cases

@@ -1,14 +1,54 @@
 {{ define "main" }}
-  <main>
+<section class="wrapper single style1 align-left">
+  <div class="inner">
+    <header>
+        <h1>{{ .Title }}</h1>
+        {{ with .Params.description }}<p>{{ . }}</p>{{ end }}
+    </header>
     <!-- Gallery-->
-    <div class="gallery {{ .Params.style }}">
+    <input type="text" id="mosaic-filter" placeholder="Escribe para filtrar…">
+
+    <div class="mosaic" id="mosaic">
 
       {{ $pictures := where (where .Site.AllPages "Lang" "en") "Section" "picture" }}
 
       {{ range shuffle $pictures }}
-        {{ .Render "summary" }}
+        {{ .Render "mosaic" }}
       {{ end }}
 
     </div>
-  </main>
+
+  </div>
+</section>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const input = document.getElementById('mosaic-filter');
+  const items = Array.from(document.querySelectorAll('.mosaic-item'));
+
+  input.addEventListener('input', function () {
+    const q = this.value.trim().toLowerCase();
+
+    items.forEach(item => {
+      // campos del front matter en data-*
+      const title = (item.dataset.title || '').toLowerCase();
+      const tags = (item.dataset.tags || '').toLowerCase();
+      const role = (item.dataset.role || '').toLowerCase();
+  
+      // contenido interno (por si quieres buscar también en el texto renderizado)
+      const text = item.textContent.toLowerCase();
+
+      const hayMatch =
+        !q ||
+        title.includes(q) ||
+        tags.includes(q) ||
+        role.includes(q) ||
+        text.includes(q);
+
+      item.style.display = hayMatch ? '' : 'none';
+    });
+  });
+});
+</script>
+
 {{ end }}
+
