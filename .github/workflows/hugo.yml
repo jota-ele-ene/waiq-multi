@@ -23,6 +23,7 @@ jobs:
       HUGO_VERSION: 0.152.2
       NODE_VERSION: 22.20.0
       TZ: Europe/Oslo
+      HUGO_ENVIRONMENT: production
     steps:
       - name: Checkout
         uses: actions/checkout@v5
