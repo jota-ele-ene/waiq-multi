@@ -1,6 +1,7 @@
 ---
 title: Teté Huertas
 date: 2026-02-11T00:00:00.000Z
+image: /images/upload/WAIQ_1762374378936_092nzojd0.jpg
 linkedin: 'https://www.linkedin.com/in/maria-jose-huertas-jim%C3%A9nez-abogada-innovacion-tecnologia-arte/'
 ---
 
