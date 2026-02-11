@@ -1,11 +1,5 @@
 <head>
 
-	<script>
-  		console.log('Hugo Debug – env:', '{{ hugo.Environment }}');
-  		console.log('Hugo Debug – cnf:', '{{ .Site.Params.cnf }}');
-  		console.log('Hugo Debug – params:', 	JSON.parse({{ jsonify .Site.Params }}));
-	</script>
-	
 	{{ if .IsHome }}
 		<title>{{ .Site.Title }}</title>
 		<meta name="description" content="{{ .Description }}">
@@ -48,8 +42,6 @@
 	{{ range .Site.Params.asset.additional_css -}}
 		<link rel="stylesheet" href="{{ . | absURL }}?v={{ now.Unix }}">
 	{{- end }}
-
-	console.log('Hugo Debug – isset "analytics":', 	{{(isset .Site.Params "analytics")}});
 
 	{{ if and (isset .Site.Params "analytics") (eq hugo.Environment "production") }}
 	  <script async
