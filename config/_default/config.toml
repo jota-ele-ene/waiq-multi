@@ -2,6 +2,7 @@
 ## Basic Configuration
 ## -----------------------------------------------
 
+cnf = "/_default/config.toml"
 theme = "blog-story"
 languageCode = 'en-us'
 title = 'Welcome to this #WAIQ Age'
@@ -39,7 +40,7 @@ ignoreLogs = ['warning-goldmark-raw-html']
 #googleAnalytics: G-MEASUREMENT_ID
 #swetrixAnalytics = "3UYKaHJP56by"
 
-[params.analytics]
+[Params.analytics]
 domain    = "cloud.umami.is"
 websiteid = "851feb30-981e-42e5-b269-453cfd2fb07f"
 

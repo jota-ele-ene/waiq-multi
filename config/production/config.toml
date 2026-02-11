@@ -2,6 +2,7 @@
 ## Basic Configuration
 ## -----------------------------------------------
 
+cnf = "/production/config.toml"
 title = "Welcome to #WAIQ Age"
 copyright = "{year}"
 

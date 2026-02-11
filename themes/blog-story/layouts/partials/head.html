@@ -2,8 +2,8 @@
 
 	<script>
   		console.log('Hugo Debug – env:', '{{ hugo.Environment }}');
-  		console.log('Hugo Debug – baseURL:', '{{ .Site.BaseURL }}');
-  		console.log('Hugo Debug – params:', 	JSON.parse({{ jsonify .Site }}));
+  		console.log('Hugo Debug – cnf:', '{{ .Site.Params.cnf }}');
+  		console.log('Hugo Debug – params:', 	JSON.parse({{ jsonify .Site.Params }}));
 	</script>
 	
 	{{ if .IsHome }}
@@ -49,10 +49,12 @@
 		<link rel="stylesheet" href="{{ . | absURL }}?v={{ now.Unix }}">
 	{{- end }}
 
-	{{ if and (isset site.Params "umamiAnalytics") (eq hugo.Environment "production") }}
+	console.log('Hugo Debug – isset "analytics":', 	{{(isset .Site.Params "analytics")}});
+
+	{{ if and (isset .Site.Params "analytics") (eq hugo.Environment "production") }}
 	  <script async
-	          src="https://{{ site.Params.umamiAnalytics.domain }}/script.js"
-	          data-website-id="{{ site.Params.umamiAnalytics.websiteid }}">
+	          src="https://{{ .Site.Params.analytics.domain }}/script.js"
+	          data-website-id="{{ .Site.Params.analytics.websiteid }}">
 	  </script>
 	{{ end }}
 
