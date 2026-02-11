@@ -43,4 +43,8 @@
 		<link rel="stylesheet" href="{{ . | absURL }}?v={{ now.Unix }}">
 	{{- end }}
 
+	{{ if eq hugo.Environment "production" }}
+	<script defer src="https://cloud.umami.is/script.js" data-website-id="851feb30-981e-42e5-b269-453cfd2fb07f"></script>
+	{{ end }}
+
 </head>
