@@ -3,7 +3,7 @@
 	<script>
   		console.log('Hugo Debug – env:', '{{ hugo.Environment }}');
   		console.log('Hugo Debug – baseURL:', '{{ .Site.BaseURL }}');
-  		console.log('Hugo Debug – params:', 	JSON.parse({{ jsonify site.Params }}));
+  		console.log('Hugo Debug – params:', 	JSON.parse({{ jsonify .Site }}));
 	</script>
 	
 	{{ if .IsHome }}
