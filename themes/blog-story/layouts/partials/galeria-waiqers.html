@@ -9,7 +9,7 @@
     </div>
 
     <!-- Gallery-->
-    <div class="gallery {{ .Params.style }}">
+    <div class="gallery {{ .Params.style }}" id="gallery">
 
       {{ $pictures := where (where .Site.AllPages "Lang" "en") "Section" "picture" }}
 
@@ -24,6 +24,25 @@
     </div>
 
 
+  <script>
+document.addEventListener('DOMContentLoaded', function () {
+  const container = document.getElementById('gallery');
+  if (!container) return;
+console.log('container: '+container);
+  //const items = Array.from(container.children); 
+  const items = Array.from(document.querySelectorAll('#gallery .inner article'));
+  console.log('items length:', items.length, items);
+
+  // Fisher–Yates shuffle
+  for (let i = items.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [items[i], items[j]] = [items[j], items[i]];
+  }
+
+  // Vaciar y volver a insertar en el nuevo orden
+  items.forEach(item => container.appendChild(item));
+});
+</script>
 
 
 </section>

@@ -147,6 +147,8 @@ h1 .waiq-word img{
 .gallery article, .gallery img {
     height: 200px !important;
     width: 200px !important;
+        object-fit: cover;
+    object-position: top;
 }
 
 
@@ -161,7 +163,7 @@ h1 .waiq-word img{
     flex-shrink: 0;
     display: block;
     position: relative;
-    overflow: hidden;
+    overflow: hidden!important;
     width: 22.5rem;
     max-width: 75vw;
 }
