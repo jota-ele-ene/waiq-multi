@@ -10,7 +10,7 @@ noRelated: true
 
 
 ## Who are we? 
-We are a community of independent professionals with our own goals, interests and dynamics. We all work for different companies and institutions, but {{< waiq >}} is completely independent from all of them and they do not interfere in its decisions, content, activities or representation. All opinions, analyses or activities of the community are those of the WAIQers themselves.[Learn about them here](/waiqers’).
+We are a community of independent professionals with our own goals, interests and dynamics. We all work for different companies and institutions, but {{< waiq >}} is completely independent from all of them and they do not interfere in its decisions, content, activities or representation. All opinions, analyses or activities of the community are those of the WAIQers themselves.[Learn about them here](/waiqers).
 
 
 ## Why do we do it? 
