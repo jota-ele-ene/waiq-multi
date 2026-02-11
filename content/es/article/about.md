@@ -9,14 +9,14 @@ noRelated: true
 {{< waiq >}} son las siglas de **Web3, Inteligencia Artificial y Ciencias Cuánticas**. Más allá del acrónimo, {{< waiq >}} comenzó como un curso de verano en la Facultad de Derecho de Harvard, al que se invitó a participar a un grupo de tecnólogos, abogados y otros expertos en el campo de las tecnologías de la información y la comunicación (TIC). Sin embargo, {{< waiq >}} es ahora mucho más que eso, ya que se ha convertido en un think tank que debate sobre las tecnologías emergentes, las oportunidades que plantean para la innovación y su impacto en la sociedad. Descubre lo que nos mueve, la razón de ser de {{< waiq >}} y por qué hacemos lo que hacemos [leyendo nuestro manifiesto](/es/legal/manifesto).
 
 ## ¿Quiénes lo forman? 
-Somos una comunidad de profesionales independientes con sus propios objetivos, intereses y dinámicas. Todos trabajamos para diferentes empresas e instituciones, pero {{< waiq >}} es completamente independiente de todas ellas y estas no interfieren en sus decisiones, contenidos, actividades o representación. Todas las opiniones, análisis o actividades de la comunidad son los de los propios WAIQers.
+Somos una comunidad de profesionales independientes con sus propios objetivos, intereses y dinámicas. Todos trabajamos para diferentes empresas e instituciones, pero {{< waiq >}} es completamente independiente de todas ellas y estas no interfieren en sus decisiones, contenidos, actividades o representación. Todas las opiniones, análisis o actividades de la comunidad son los de los propios WAIQers. [Conócelos aquí](/waiqers).
 
 
 ## ¿Por qué lo hacemos? 
 Creemos firmemente que son las personas las que impulsan la tecnología y no al revés. Además, la evolución tecnológica plantea muchas preocupaciones y retos debido a su impacto en la vida humana. Las personas inteligentes que conversan e intercambian conocimientos pueden resolver problemas complejos y mejorar la sociedad. Nuestro objetivo es abordar los retos que plantea la adopción de la tecnología, teniendo en cuenta las dimensiones legales, normativas y éticas. 
 
 ## ¿Qué hay en esta web? 
-Queremos que sea un punto de encuentro donde podamos compartir pensamientos, ideas, artículos, proyectos e intereses comunes, así como un escaparate que dé visibilidad a todos los #WAIQers. Encontrarás referencias publicadas en fuentes externas, informes y algunas reflexiones y análisis de los #WAIQers sobre los temas relacionados con #WAIQ.
+Queremos que sea un punto de encuentro donde podamos compartir pensamientos, ideas, artículos, proyectos e intereses comunes, así como un escaparate que dé visibilidad a todos los #WAIQers. Encontrarás referencias publicadas en fuentes externas, informes y algunas reflexiones y análisis de los #WAIQers sobre los temas relacionados con {{< waiq >}}.
 
 
 ## ¿A quién va dirigido? 

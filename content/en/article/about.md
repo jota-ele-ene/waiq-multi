@@ -10,14 +10,14 @@ noRelated: true
 
 
 ## Who are we? 
-We are a community of independent professionals with our own goals, interests and dynamics. We all work for different companies and institutions, but {{< waiq >}} is completely independent from all of them and they do not interfere in its decisions, content, activities or representation. All opinions, analyses or activities of the community are those of the WAIQers themselves.
+We are a community of independent professionals with our own goals, interests and dynamics. We all work for different companies and institutions, but {{< waiq >}} is completely independent from all of them and they do not interfere in its decisions, content, activities or representation. All opinions, analyses or activities of the community are those of the WAIQers themselves.[Learn about them here](/waiqers’).
 
 
 ## Why do we do it? 
 We firmly believe that it is people who drive technology, not the other way around. Furthermore, technological evolution raises many concerns and challenges due to its impact on human life. Intelligent people who talk and exchange knowledge can solve complex problems and improve society. Our goal is to address the challenges posed by the adoption of technology, taking into account the legal, regulatory and ethical dimensions. 
 
 ## What's on this website? 
-We want it to be a meeting point where we can share thoughts, ideas, articles, projects and common interests, as well as a showcase that gives visibility to all #WAIQers. You will find references published in external sources, reports and some reflections and analyses by #WAIQers on topics related to #WAIQ.
+We want it to be a meeting point where we can share thoughts, ideas, articles, projects and common interests, as well as a showcase that gives visibility to all #WAIQers. You will find references published in external sources, reports and some reflections and analyses by #WAIQers on topics related to {{< waiq >}}.
 
 
 ## Who is it aimed at? 
