@@ -9,7 +9,7 @@ areas:
 date: 2026-02-13T22:40:00.000+01:00
 description: >+
   A lab in Maryland is building a quantum computer capable of solving problems that today’s supercomputers cannot. This technology could revolutionize medical research by speeding up the discovery of new cancer treatments. At the same time, it poses serious cybersecurity risks, as it could break the encryption that protects passwords and sensitive data. The quantum race is now a strategic global priority, with governments and tech giants competing to lead both its development and its defenses.
-draft: "false"
+draft: "true"
 featured: "true"
 button_label: Read more
 button:link: https://www.washingtonpost.com/dc-md-va/2026/02/08/this-maryland-labs-quantum-computer-could-cure-cancer-steal-passwords/
