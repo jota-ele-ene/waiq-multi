@@ -1029,8 +1029,10 @@
                 formScreen.classList.remove('active');
                 loadProfileData(profileId);
             } else {
-                window.location.href = '/';
-            }
+                //window.location.href = '/';
+                currentRowId = buildNewId();
+                loadingScreen.classList.remove('active');
+                formScreen.classList.add('active');            }
         });
 
         async function loadProfileData(profileId) {
@@ -1341,6 +1343,29 @@
                 messageDiv.style.display = 'none';
             }, 5000);
         }
+
+        function buildNewId() {
+
+            // Generar nuevo profileID
+            let newID = "WAIQ_";
+
+            const letras = 'abcdefghijklmnopqrstuvwxyz';
+            const numeros = '0123456789';
+
+            for (let i = 0; i < 14; i++) {
+                newID += numeros.charAt(Math.floor(Math.random() * numeros.length));
+            }
+
+            newID += "_";
+
+            for (let i = 0; i < 14; i++) {
+                newID += (numeros+letras).charAt(Math.floor(Math.random() * (numeros+letras).length));
+            }
+
+            console.log ( "GEnerado nuevo ID: '"+newID+"'");
+            return newID;
+        }
+
     </script>
 </body>
 </html>
