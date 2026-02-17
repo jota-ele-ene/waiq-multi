@@ -186,7 +186,7 @@ h1 .waiq-word img{
     -webkit-justify-content: center;
     -ms-justify-content: center;
     justify-content: center;
-    pointer-events: none;
+    /*pointer-events: none;*/
     -moz-transition: opacity .2s ease-in-out;
     -webkit-transition: opacity .2s ease-in-out;
     -ms-transition: opacity .2s ease-in-out;
