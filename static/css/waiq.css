@@ -219,7 +219,9 @@ h1 .waiq-word img{
 
 .mosaic article .caption .icons .brands,
 .mosaic article .caption .icons .fa-solid,
+.mosaic article .caption .icons .svg,
 .gallery.style2 article .caption .icons .brands,
+.gallery.style2 article .caption .icons svg,
 .gallery.style2 article .caption .icons .fa-solid {
     font-size: 1.2rem;
 }
