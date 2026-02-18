@@ -211,13 +211,16 @@ h1 .waiq-word img{
 .gallery.style2 article .caption h3,
 .mosaic article .caption h3,
 .mosaic article .caption p,
-.mosaic article .caption .icon.brands:before {
+.mosaic article .caption .icon.brands:before,
+.mosaic article .caption .icon.fa-solid:before {
     color: white!important;
     text-align: center;
 }
 
 .mosaic article .caption .icons .brands,
-.gallery.style2 article .caption .icons .brands {
+.mosaic article .caption .icons .fa-solid,
+.gallery.style2 article .caption .icons .brands,
+.gallery.style2 article .caption .icons .fa-solid {
     font-size: 1.2rem;
 }
 
