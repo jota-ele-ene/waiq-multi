@@ -285,7 +285,8 @@ def md_noticia(n, fecha, img_path, lang):
     base   = REPO_PATH_EN if lang == "en" else REPO_PATH_ES
     img    = f"/{img_path.replace('static/','')}" if img_path else ""
     return f"{base}/{fecha}-{slug}.md", (
-        f'---\ntitle: "{title.replace(chr(34),chr(39))}"\n'
+        title_safe = title.replace('"', "'")
+        f'title: "{title_safe}"'
         f"date: {fecha}T00:00:00Z\ndraft: false\n"
         f'description: "{desc[:200].replace(chr(34),chr(39))}"\n'
         f"topics:\n{yml_list(topics)}\nareas:\n{yml_list(areas)}\n"
@@ -305,7 +306,8 @@ def md_articulo(art, fecha, img_path, lang):
     base   = REPO_PATH_EN if lang == "en" else REPO_PATH_ES
     img    = f"/{img_path.replace('static/','')}" if img_path else ""
     return f"{base}/{fecha}-{art['slug']}.md", (
-        f'---\ntitle: "{title.replace(chr(34),chr(39))}"\n'
+        title_safe = title.replace('"', "'")
+        f'title: "{title_safe}"'
         f"date: {fecha}T00:00:00Z\ndraft: false\n"
         f'description: "{desc[:200].replace(chr(34),chr(39))}"\n'
         f"topics:\n{yml_list(topics)}\nareas:\n{yml_list(areas)}\n"
