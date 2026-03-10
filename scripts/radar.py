@@ -1,13 +1,22 @@
 """
 WAIQ Radar — Pipeline principal
 
-Modos (variable RADAR_MODE):
+Modos (variable RADAR_MODE o argumento --mode):
   full          — busca + genera + publica en GitHub + email  [default]
   fetch-only    — busca + genera + email + guarda JSON  (sin GitHub)
-  publish-only  — lee JSON (RADAR_JSON_PATH) + publica + email
+  publish-only  — lee JSON + publica + email
+
+Uso desde línea de comandos:
+  python radar.py                                        # full (usa env vars)
+  python radar.py --mode fetch-only                     # solo fetch
+  python radar.py --mode publish-only --json radar.json # publicar desde JSON
+
+Variables de entorno opcionales extra:
+  SAVE_RAW_RESPONSES=1   guarda respuestas crudas de Claude en output/raw/
+  RADAR_JSON_PATH        ruta al JSON para publish-only (alternativa a --json)
 """
 
-import os, re, sys, json, time, smtplib, urllib.request
+import os, re, sys, json, time, smtplib, urllib.request, argparse
 from datetime import datetime, timezone, timedelta
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -17,8 +26,36 @@ import anthropic
 from github import Github, GithubException
 
 # ─────────────────────────────────────────────────────────────
-# CONFIGURACIÓN
+# ARGUMENTOS CLI  (permiten sobreescribir env vars)
 # ─────────────────────────────────────────────────────────────
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="WAIQ Radar pipeline")
+    parser.add_argument(
+        "--mode", choices=["full", "fetch-only", "publish-only"],
+        default=None,
+        help="Modo de ejecución (sobreescribe RADAR_MODE)"
+    )
+    parser.add_argument(
+        "--json", dest="json_path", default=None,
+        help="Ruta al JSON intermedio para publish-only (sobreescribe RADAR_JSON_PATH)"
+    )
+    parser.add_argument(
+        "--save-raw", action="store_true", default=False,
+        help="Guardar respuestas crudas de Claude (sobreescribe SAVE_RAW_RESPONSES)"
+    )
+    parser.add_argument(
+        "--output-dir", dest="output_dir", default=None,
+        help="Directorio de salida para JSON y raw (sobreescribe OUTPUT_DIR)"
+    )
+    return parser.parse_args()
+
+
+# ─────────────────────────────────────────────────────────────
+# CONFIGURACIÓN  (env vars + CLI, CLI tiene prioridad)
+# ─────────────────────────────────────────────────────────────
+
+_args = parse_args()
 
 ANTHROPIC_API_KEY  = os.environ.get("ANTHROPIC_API_KEY", "")
 GITHUB_TOKEN       = os.environ.get("GITHUB_TOKEN", "")
@@ -28,9 +65,10 @@ GMAIL_USER         = os.environ.get("GMAIL_USER", "")
 GMAIL_APP_PASSWORD = os.environ.get("GMAIL_APP_PASSWORD", "")
 EMAIL_RECIPIENTS   = os.environ.get("EMAIL_RECIPIENTS", "")
 
-RADAR_MODE      = os.environ.get("RADAR_MODE", "full").lower()
-RADAR_JSON_PATH = os.environ.get("RADAR_JSON_PATH", "")
-OUTPUT_DIR      = os.environ.get("OUTPUT_DIR", ".")
+RADAR_MODE      = _args.mode      or os.environ.get("RADAR_MODE", "full").lower()
+RADAR_JSON_PATH = _args.json_path or os.environ.get("RADAR_JSON_PATH", "")
+OUTPUT_DIR      = _args.output_dir or os.environ.get("OUTPUT_DIR", ".")
+SAVE_RAW        = _args.save_raw  or bool(os.environ.get("SAVE_RAW_RESPONSES", ""))
 
 MODEL_SEARCH = "claude-sonnet-4-6"
 MODEL_WRITE  = "claude-haiku-4-5-20251001"
@@ -60,6 +98,122 @@ WAIQ_CONTEXT = (
 )
 
 # ─────────────────────────────────────────────────────────────
+# GUARDAR RESPUESTAS RAW DE CLAUDE
+# ─────────────────────────────────────────────────────────────
+
+def guardar_raw(nombre: str, response, texto_extraido: str, fecha: str):
+    """
+    Guarda la respuesta cruda de Claude en output/raw/FECHA_nombre.json
+    Incluye: todos los bloques de contenido, uso de tokens y texto extraído.
+    Solo se ejecuta si SAVE_RAW=True.
+    """
+    if not SAVE_RAW:
+        return
+
+    raw_dir = Path(OUTPUT_DIR) / "raw"
+    raw_dir.mkdir(parents=True, exist_ok=True)
+
+    # Serializar los bloques de contenido (pueden ser text, tool_use, tool_result)
+    bloques = []
+    for b in response.content:
+        bloque = {"type": getattr(b, "type", "unknown")}
+        if hasattr(b, "text"):
+            bloque["text"] = b.text
+        if hasattr(b, "name"):
+            bloque["name"] = b.name
+        if hasattr(b, "input"):
+            bloque["input"] = b.input
+        if hasattr(b, "id"):
+            bloque["id"] = b.id
+        bloques.append(bloque)
+
+    payload = {
+        "nombre":    nombre,
+        "fecha":     fecha,
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "model":     getattr(response, "model", ""),
+        "usage": {
+            "input_tokens":  getattr(response.usage, "input_tokens",  0),
+            "output_tokens": getattr(response.usage, "output_tokens", 0),
+            "cache_read":    getattr(response.usage, "cache_read_input_tokens",     0),
+            "cache_written": getattr(response.usage, "cache_creation_input_tokens", 0),
+        },
+        "stop_reason":   getattr(response, "stop_reason", ""),
+        "content_blocks": bloques,
+        "texto_extraido": texto_extraido,
+    }
+
+    outfile = raw_dir / f"{fecha}_{nombre}.json"
+    outfile.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(f"   💾 Raw guardado: {outfile}")
+
+
+# ─────────────────────────────────────────────────────────────
+# PARSER JSON ROBUSTO
+# ─────────────────────────────────────────────────────────────
+
+def parse_json_robusto(text: str) -> dict:
+    text = text.strip().lstrip('\ufeff')
+    text = re.sub(r'^```(?:json)?\s*', '', text)
+    text = re.sub(r'\s*```\s*$', '', text).strip()
+
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        pass
+
+    start, end = text.find('{'), text.rfind('}')
+    if start != -1 and end > start:
+        candidate = text[start:end+1]
+        try:
+            return json.loads(candidate)
+        except json.JSONDecodeError:
+            text = candidate
+
+    repaired = _reparar_newlines(text)
+    try:
+        return json.loads(repaired)
+    except json.JSONDecodeError:
+        pass
+
+    sin_trailing = re.sub(r',\s*([}\]])', r'\1', repaired)
+    try:
+        return json.loads(sin_trailing)
+    except json.JSONDecodeError:
+        pass
+
+    try:
+        import json_repair
+        return json_repair.loads(text)
+    except (ImportError, Exception):
+        pass
+
+    try:
+        json.loads(repaired)
+    except json.JSONDecodeError as e:
+        s = max(0, e.pos - 80)
+        snippet = repr(repaired[s:e.pos+80])
+        raise ValueError(f"JSON inválido en pos {e.pos}: {e.msg}\nContexto: ...{snippet}...") from e
+    raise ValueError("JSON inválido — causa desconocida")
+
+
+def _reparar_newlines(text: str) -> str:
+    result, in_str, escaped = [], False, False
+    for ch in text:
+        if escaped:
+            result.append(ch); escaped = False; continue
+        if ch == '\\':
+            result.append(ch); escaped = True; continue
+        if ch == '"':
+            in_str = not in_str; result.append(ch); continue
+        if in_str and ch == '\n': result.append('\\n'); continue
+        if in_str and ch == '\r': result.append('\\r'); continue
+        if in_str and ch == '\t': result.append('\\t'); continue
+        result.append(ch)
+    return ''.join(result)
+
+
+# ─────────────────────────────────────────────────────────────
 # CONTABILIDAD DE COSTES
 # ─────────────────────────────────────────────────────────────
 
@@ -68,54 +222,30 @@ cost_log: list[dict] = []
 
 def registrar_coste(llamada, model, usage, n_searches=0):
     p = PRICING.get(model, {"input": 3.00, "output": 15.00, "search": 10.00})
-    input_tk  = getattr(usage, "input_tokens",  0)
-    output_tk = getattr(usage, "output_tokens", 0)
-    cost_in     = (input_tk  / 1_000_000) * p["input"]
-    cost_out    = (output_tk / 1_000_000) * p["output"]
-    cost_search = (n_searches / 1_000)    * p["search"]
-    cost_total  = cost_in + cost_out + cost_search
-    entry = {
-        "llamada": llamada, "model": model,
-        "input_tokens": input_tk, "output_tokens": output_tk,
-        "n_searches": n_searches,
-        "cost_input": cost_in, "cost_output": cost_out,
-        "cost_search": cost_search, "cost_total": cost_total,
-    }
+    in_tk  = getattr(usage, "input_tokens",  0)
+    out_tk = getattr(usage, "output_tokens", 0)
+    cost   = (in_tk/1_000_000)*p["input"] + (out_tk/1_000_000)*p["output"] + (n_searches/1_000)*p["search"]
+    entry  = {"llamada": llamada, "model": model, "input_tokens": in_tk,
+              "output_tokens": out_tk, "n_searches": n_searches, "cost_total": cost}
     cost_log.append(entry)
-    srch_str = f" + {n_searches} búsq" if n_searches else ""
-    print(f"   💰 {llamada}: {input_tk:,}in + {output_tk:,}out{srch_str} = ${cost_total:.4f}")
+    srch = f" + {n_searches} búsq" if n_searches else ""
+    print(f"   💰 {llamada}: {in_tk:,}in + {out_tk:,}out{srch} = ${cost:.4f}")
     return entry
 
 
-def contar_searches(response):
-    return sum(
-        1 for b in response.content
-        if getattr(b, "type", "") == "tool_use" and getattr(b, "name", "") == "web_search"
-    )
+def contar_searches(response) -> int:
+    return sum(1 for b in response.content
+               if getattr(b, "type","") == "tool_use" and getattr(b, "name","") == "web_search")
 
 
-def imprimir_resumen_costes():
-    total     = sum(e["cost_total"]   for e in cost_log)
-    total_in  = sum(e["input_tokens"] for e in cost_log)
-    total_out = sum(e["output_tokens"] for e in cost_log)
-    total_sr  = sum(e["n_searches"]   for e in cost_log)
-    sep = "─" * 62
-    print(f"\n{sep}")
-    print("📊  INFORME DE COSTES")
-    print(sep)
-    print(f"  {'LLAMADA':<26} {'MODELO':<12} {'IN':>7} {'OUT':>6} {'SRCH':>5} {'USD':>8}")
-    print(sep)
+def imprimir_resumen_costes() -> float:
+    total = sum(e["cost_total"] for e in cost_log)
+    sep   = "─" * 62
+    print(f"\n{sep}\n📊  COSTES\n{sep}")
     for e in cost_log:
         m = e["model"].replace("claude-","").replace("-4-5-20251001","4.5").replace("-4-6","4.6")
-        print(f"  {e['llamada']:<26} {m:<12} "
-              f"{e['input_tokens']:>7,} {e['output_tokens']:>6,} "
-              f"{e['n_searches']:>5} {e['cost_total']:>8.4f}")
-    print(sep)
-    print(f"  {'TOTAL':<26} {'':<12} {total_in:>7,} {total_out:>6,} {total_sr:>5} {total:>8.4f}")
-    print(sep)
-    print(f"\n  💵  Coste esta ejecución : ${total:.4f} USD")
-    print(f"  📅  Coste anual (×104)   : ${total * 104:.2f} USD")
-    print(f"{sep}\n")
+        print(f"  {e['llamada']:<26} {m:<12} {e['input_tokens']:>7,} in {e['output_tokens']:>6,} out  ${e['cost_total']:.4f}")
+    print(f"{sep}\n  TOTAL: ${total:.4f}  |  anual ×104: ${total*104:.2f}\n{sep}\n")
     return total
 
 
@@ -123,7 +253,7 @@ def imprimir_resumen_costes():
 # 1. BÚSQUEDA
 # ─────────────────────────────────────────────────────────────
 
-def buscar_noticias(client):
+def buscar_noticias(client: anthropic.Anthropic, fecha: str) -> list[dict]:
     print("📡 Buscando noticias WAIQ...")
     desde = (datetime.now(timezone.utc) - timedelta(days=4)).strftime("%Y-%m-%d")
 
@@ -151,33 +281,34 @@ def buscar_noticias(client):
     n_searches = contar_searches(resp)
     registrar_coste("buscar_noticias", MODEL_SEARCH, resp.usage, n_searches)
 
-    text  = "".join(b.text for b in resp.content if hasattr(b, "text"))
-    text  = re.sub(r"```json|```", "", text).strip()
-    match = re.search(r'\{[\s\S]*\}', text)
-    if not match:
-        raise ValueError("JSON no encontrado en respuesta de búsqueda")
+    texto = "".join(b.text for b in resp.content if hasattr(b, "text"))
 
-    noticias = json.loads(match.group()).get("noticias", [])
+    # ── GUARDAR RAW ──
+    guardar_raw("buscar_noticias", resp, texto, fecha)
+
+    noticias = parse_json_robusto(texto).get("noticias", [])
     print(f"   ✓ {len(noticias)} noticias · {n_searches} búsquedas")
     return noticias
 
 
 # ─────────────────────────────────────────────────────────────
-# 2. ARTÍCULO DE OPINIÓN
+# 2. ARTÍCULO
 # ─────────────────────────────────────────────────────────────
 
-def generar_articulo(client, noticias):
-    print("✍️  Generando artículo...")
+def generar_articulo(client: anthropic.Anthropic, noticias: list[dict], fecha: str) -> dict:
+    print("✍️  Generando artículo (Haiku)...")
+
     refs = "\n".join(
         f"[{n.get('topic','').upper()}] {n['title_en']} ({n['source']}): "
         f"{n.get('description_en','')[:110]}"
         for n in noticias
     )
+
     prompt = (
         f"Eres articulista de WAIQ. Contexto: {WAIQ_CONTEXT}\n\n"
-        f"Noticias del radar:\n{refs}\n\n"
+        f"Noticias:\n{refs}\n\n"
         f"Escribe artículo de opinión (600-800 palabras/idioma). "
-        f"Tono: analítico, crítico, perspectiva europea. Para juristas y directivos. "
+        f"Tono analítico, crítico, perspectiva europea. Para juristas y directivos. "
         f"Usa subtítulos. Cita fuentes naturalmente.\n\n"
         f"Devuelve SOLO JSON sin backticks:\n"
         f'{{\"title_en\":\"...\",\"title_es\":\"...\",\"slug\":\"slug-kebab\",'
@@ -185,17 +316,21 @@ def generar_articulo(client, noticias):
         f'\"tags_en\":[],\"tags_es\":[],\"areas\":[],\"topics\":[],'
         f'\"body_en\":\"...markdown...\",\"body_es\":\"...markdown...\"}}'
     )
+
     resp = client.messages.create(
         model=MODEL_WRITE,
         max_tokens=3000,
         messages=[{"role": "user", "content": prompt}],
     )
+
     registrar_coste("generar_articulo", MODEL_WRITE, resp.usage)
-    text  = re.sub(r"```json|```", "", resp.content[0].text).strip()
-    match = re.search(r'\{[\s\S]*\}', text)
-    if not match:
-        raise ValueError("JSON no encontrado en artículo")
-    art = json.loads(match.group())
+
+    texto = resp.content[0].text
+
+    # ── GUARDAR RAW ──
+    guardar_raw("generar_articulo", resp, texto, fecha)
+
+    art = parse_json_robusto(texto)
     print(f"   ✓ «{art['title_en']}»")
     return art
 
@@ -204,13 +339,13 @@ def generar_articulo(client, noticias):
 # 3. JSON INTERMEDIO
 # ─────────────────────────────────────────────────────────────
 
-def guardar_json(noticias, articulo, fecha):
+def guardar_json(noticias, articulo, fecha) -> str:
     payload = {
-        "fecha": fecha,
-        "generado": datetime.now(timezone.utc).isoformat(),
-        "costes": cost_log,
-        "noticias": noticias,
-        "articulo": articulo,
+        "fecha":     fecha,
+        "generado":  datetime.now(timezone.utc).isoformat(),
+        "costes":    cost_log,
+        "noticias":  noticias,
+        "articulo":  articulo,
     }
     p = Path(OUTPUT_DIR) / f"radar_{fecha}.json"
     p.parent.mkdir(parents=True, exist_ok=True)
@@ -219,7 +354,7 @@ def guardar_json(noticias, articulo, fecha):
     return str(p)
 
 
-def cargar_json(path):
+def cargar_json(path) -> tuple:
     print(f"📂 Cargando {path}...")
     d = json.loads(Path(path).read_text(encoding="utf-8"))
     if "costes" in d:
@@ -281,18 +416,18 @@ def preparar_imagen(noticia, slug):
 # 5. MARKDOWN
 # ─────────────────────────────────────────────────────────────
 
-def slugify(t):
+def slugify(t: str) -> str:
     for a, b in [("á","a"),("é","e"),("í","i"),("ó","o"),("ú","u"),("ñ","n"),
                  ("à","a"),("è","e"),("ì","i"),("ò","o"),("ù","u"),("ü","u")]:
         t = t.lower().replace(a, b)
     return re.sub(r"\s+", "-", re.sub(r"[^a-z0-9\s-]", "", t)).strip("-")[:70]
 
 
-def yml_list(items):
+def yml_list(items: list) -> str:
     return "\n".join(f'  - "{i}"' for i in items)
 
 
-def md_noticia(n, fecha, img_path, lang):
+def md_noticia(n: dict, fecha: str, img_path: str, lang: str) -> tuple[str, str]:
     title  = n["title_en"]       if lang == "en" else n["title_es"]
     desc   = n["description_en"] if lang == "en" else n["description_es"]
     btn    = "Read in " + n.get("source","") if lang == "en" else "Leer en " + n.get("source","")
@@ -302,8 +437,7 @@ def md_noticia(n, fecha, img_path, lang):
     areas  = n.get("areas") or ["technology"]
     slug   = slugify(n["title_en"])
     base   = REPO_PATH_EN if lang == "en" else REPO_PATH_ES
-    img      = "/" + img_path.replace("static/", "") if img_path else ""
-    img_line = 'image: "' + img + '"' if img else '# image: ""'
+    img    = "/" + img_path.replace("static/", "") if img_path else ""
     content = (
         "---\n"
         f'title: "{title.replace(chr(34), chr(39))}"\n'
@@ -313,10 +447,10 @@ def md_noticia(n, fecha, img_path, lang):
         f"topics:\n{yml_list(topics)}\n"
         f"areas:\n{yml_list(areas)}\n"
         'categories:\n  - "Radar"\n'
-        f'source: "{n.get("source", "")}"\n'
-        f'url_original: "{n.get("url", "")}"\n'
+        f'source: "{n.get("source","")}"\n'
+        f'url_original: "{n.get("url","")}"\n'
         f'button_label: "{btn}"\n'
-        f"{img_line}\n"
+        f'{"image: \"" + img + "\"" if img else "# image: \"\""}\n'
         "---\n\n"
         f"{desc}\n\n"
         f"**{btn}:** [{n.get('source','')}]({n.get('url','')})\n"
@@ -324,15 +458,14 @@ def md_noticia(n, fecha, img_path, lang):
     return f"{base}/{fecha}-{slug}.md", content
 
 
-def md_articulo(art, fecha, img_path, lang):
+def md_articulo(art: dict, fecha: str, img_path: str, lang: str) -> tuple[str, str]:
     title  = art["title_en"]       if lang == "en" else art["title_es"]
     desc   = art["description_en"] if lang == "en" else art["description_es"]
     body   = art["body_en"]        if lang == "en" else art["body_es"]
     topics = [t.lower() for t in (art.get("topics") or ["ai"]) if t.lower() in ["ai","web3","quantum"]]
     areas  = art.get("areas") or ["regulation"]
     base   = REPO_PATH_EN if lang == "en" else REPO_PATH_ES
-    img      = "/" + img_path.replace("static/", "") if img_path else ""
-    img_line = 'image: "' + img + '"' if img else '# image: ""'
+    img    = "/" + img_path.replace("static/", "") if img_path else ""
     content = (
         "---\n"
         f'title: "{title.replace(chr(34), chr(39))}"\n'
@@ -343,7 +476,7 @@ def md_articulo(art, fecha, img_path, lang):
         f"areas:\n{yml_list(areas)}\n"
         'categories:\n  - "Radar"\n  - "Opinion"\n'
         f'author: "{OPINION_AUTHOR}"\n'
-        f"{img_line}\n"
+        f'{"image: \"" + img + "\"" if img else "# image: \"\""}\n'
         "---\n\n"
         f"{body}\n"
     )
@@ -354,7 +487,7 @@ def md_articulo(art, fecha, img_path, lang):
 # 6. CONSTRUIR FICHEROS
 # ─────────────────────────────────────────────────────────────
 
-def construir_ficheros(noticias, articulo, fecha):
+def construir_ficheros(noticias: list, articulo: dict, fecha: str) -> tuple[list, list]:
     txt, bin_ = [], []
     print("📄 Generando ficheros...")
 
@@ -383,7 +516,7 @@ def construir_ficheros(noticias, articulo, fecha):
 # 7. GITHUB
 # ─────────────────────────────────────────────────────────────
 
-def push_github(txt, bin_, fecha):
+def push_github(txt: list, bin_: list, fecha: str):
     print("🐙 Publicando en GitHub...")
     repo = Github(GITHUB_TOKEN).get_repo(GITHUB_REPO)
     msg  = f"Radar {fecha}"
@@ -403,7 +536,7 @@ def push_github(txt, bin_, fecha):
 # 8. EMAIL
 # ─────────────────────────────────────────────────────────────
 
-def enviar_email(noticias, articulo, fecha, publicado, coste):
+def enviar_email(noticias: list, articulo: dict, fecha: str, publicado: bool, coste: float):
     if not (GMAIL_USER and GMAIL_APP_PASSWORD and EMAIL_RECIPIENTS):
         print("   ⚠ Email no configurado — omitido")
         return
@@ -412,8 +545,8 @@ def enviar_email(noticias, articulo, fecha, publicado, coste):
     rows = "".join(
         f'<div style="border-left:3px solid {colors.get(n.get("topic","ai"),"#6366f1")};'
         f'padding:12px 16px;margin:10px 0;background:#fafafa;border-radius:0 8px 8px 0;">'
-        f'<div style="font-size:11px;color:{colors.get(n.get("topic","ai"),"#6366f1")};'
-        f'font-weight:700;letter-spacing:1px;">#{n.get("topic","").upper()} · {n.get("source","")}</div>'
+        f'<div style="font-size:11px;color:{colors.get(n.get("topic","ai"),"#6366f1")};font-weight:700;">'
+        f'#{n.get("topic","").upper()} · {n.get("source","")}</div>'
         f'<a href="{n["url"]}" style="font-size:15px;font-weight:700;color:#1a1a2e;text-decoration:none;">{n["title_en"]}</a>'
         f'<p style="font-size:13px;color:#555;margin:5px 0 7px;">{n["description_en"]}</p>'
         f'<a href="{n["url"]}" style="font-size:12px;color:{colors.get(n.get("topic","ai"),"#6366f1")};">Read →</a></div>'
@@ -431,10 +564,8 @@ def enviar_email(noticias, articulo, fecha, publicado, coste):
 
     html = (
         '<!DOCTYPE html><html><head><meta charset="UTF-8"></head>'
-        '<body style="font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif;'
-        'max-width:660px;margin:0 auto;padding:20px;color:#1a1a2e;">'
-        '<div style="background:linear-gradient(135deg,#1a1a2e,#6366f1);padding:28px;'
-        'border-radius:12px;color:white;margin-bottom:24px;">'
+        '<body style="font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif;max-width:660px;margin:0 auto;padding:20px;color:#1a1a2e;">'
+        '<div style="background:linear-gradient(135deg,#1a1a2e,#6366f1);padding:28px;border-radius:12px;color:white;margin-bottom:24px;">'
         f'<div style="font-size:11px;letter-spacing:2px;opacity:0.7;">WAIQ RADAR · {fecha}</div>'
         f'<h1 style="margin:8px 0 4px;font-size:24px;">#WAIQ News Radar</h1>'
         f'<p style="margin:0 0 10px;opacity:0.8;font-size:14px;">{len(noticias)} references · Web3·AI·Quantum</p>'
@@ -447,8 +578,7 @@ def enviar_email(noticias, articulo, fecha, publicado, coste):
         f'<h3 style="margin:0 0 10px;font-size:17px;">{articulo["title_en"]}</h3>'
         f'<p style="font-size:13px;color:#555;margin:0 0 14px;line-height:1.6;">{preview}</p>'
         f'{art_btn}</div>'
-        f'<p style="font-size:11px;color:#bbb;text-align:center;">WAIQ Radar · '
-        f'<a href="{HUGO_BASE_URL}" style="color:#bbb;">waiq.technology</a></p>'
+        f'<p style="font-size:11px;color:#bbb;text-align:center;">WAIQ Radar · <a href="{HUGO_BASE_URL}" style="color:#bbb;">waiq.technology</a></p>'
         '</body></html>'
     )
 
@@ -469,15 +599,17 @@ def enviar_email(noticias, articulo, fecha, publicado, coste):
 
 def main():
     print(f"\n🚀 WAIQ Radar [{RADAR_MODE.upper()}]")
+    if SAVE_RAW:
+        print(f"   💾 Guardando respuestas raw en {OUTPUT_DIR}/raw/")
     print("=" * 55)
     fecha = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
     if RADAR_MODE == "fetch-only":
         if not ANTHROPIC_API_KEY: sys.exit("❌ ANTHROPIC_API_KEY requerida")
         client   = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
-        noticias = buscar_noticias(client)
+        noticias = buscar_noticias(client, fecha)
         if not noticias: sys.exit("⚠️  Sin noticias")
-        articulo = generar_articulo(client, noticias)
+        articulo = generar_articulo(client, noticias, fecha)
         coste    = imprimir_resumen_costes()
         guardar_json(noticias, articulo, fecha)
         enviar_email(noticias, articulo, fecha, publicado=False, coste=coste)
@@ -485,7 +617,7 @@ def main():
 
     elif RADAR_MODE == "publish-only":
         if not GITHUB_TOKEN:    sys.exit("❌ GITHUB_TOKEN requerido")
-        if not RADAR_JSON_PATH: sys.exit("❌ RADAR_JSON_PATH requerido")
+        if not RADAR_JSON_PATH: sys.exit("❌ --json o RADAR_JSON_PATH requerido")
         noticias, articulo, fecha = cargar_json(RADAR_JSON_PATH)
         txt, bin_ = construir_ficheros(noticias, articulo, fecha)
         push_github(txt, bin_, fecha)
@@ -497,9 +629,9 @@ def main():
         if not ANTHROPIC_API_KEY: sys.exit("❌ ANTHROPIC_API_KEY requerida")
         if not GITHUB_TOKEN:      sys.exit("❌ GITHUB_TOKEN requerido")
         client   = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
-        noticias = buscar_noticias(client)
+        noticias = buscar_noticias(client, fecha)
         if not noticias: sys.exit("⚠️  Sin noticias")
-        articulo = generar_articulo(client, noticias)
+        articulo = generar_articulo(client, noticias, fecha)
         coste    = imprimir_resumen_costes()
         guardar_json(noticias, articulo, fecha)
         txt, bin_ = construir_ficheros(noticias, articulo, fecha)
