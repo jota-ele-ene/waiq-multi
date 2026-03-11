@@ -83,9 +83,12 @@ class WaiqRadar:
                 config={'temperature': 0.2} 
             )
             
-            # Limpiamos posible basura de markdown del texto
-            json_text = response.text.replace('```json', '').replace('```', '').strip()
-            data = json.loads(json_text)
+            # Limpieza de emergencia
+            clean_text = response.text.strip()
+            if clean_text.startswith("```"):
+                clean_text = clean_text.split("\n", 1)[-1].rsplit("\n", 1)[0].strip()
+
+            data = json.loads(clean_text)
 
             for art in data.get('articles', []):
                 # Verificación extra por si la IA ignora el prompt

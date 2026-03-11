@@ -47,6 +47,13 @@ INSTRUCCIONES TÉCNICAS:
 - Los 'topics' permitidos son: ai, web3, quantum.
 - Las 'areas' permitidas son: business, legal, regulation, innovation, technology, ethical, ip.
 - El 'filename' debe ser la fecha seguida de un slug corto en inglés (ej: 2026-03-11-quantum-spain-nodes).
+
+### RESTRICCIONES TÉCNICAS OBLIGATORIAS:
+1. NO incluyas ninguna noticia cuyo "filename" coincida con la lista de excluidos proporcionada.
+2. Formato de salida: Devuelve ÚNICAMENTE un objeto JSON puro.
+3. PROHIBIDO: No incluyas etiquetas de bloque de código como ```json o ```. 
+4. PROHIBIDO: No añadas texto introductorio ("Aquí tienes las noticias...") ni conclusiones.
+
 """
 
 def get_hugo_template(lang, title, date, description, image, area, topic, body, url=None):
