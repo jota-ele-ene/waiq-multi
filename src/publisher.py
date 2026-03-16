@@ -84,6 +84,7 @@ def publish_to_github(
         stats["images_total"] += 1
 
         image_ref = f"/images/upload/{date_iso}-{slug}.jpg" if img_path else None
+        item["image"] = image_ref 
 
         # ES
         _write_article(
@@ -95,7 +96,7 @@ def publish_to_github(
             description=item.get("description_es", ""),
             button_label=item.get("button_label_es", f"Leer en {item.get('source', '')}"),
             button_url=item.get("url", ""),
-            image=image_ref or item.get("url", ""),
+            image=image_ref,
             body=item.get("description_es", ""),
         )
         stats["files_created"] += 1
@@ -110,7 +111,7 @@ def publish_to_github(
             description=item.get("description_en", ""),
             button_label=item.get("button_label_en", f"Read in {item.get('source', '')}"),
             button_url=item.get("url", ""),
-            image=image_ref or item.get("url", ""),
+            image=image_ref,
             body=item.get("description_en", ""),
         )
         stats["files_created"] += 1
@@ -118,6 +119,16 @@ def publish_to_github(
     # 3. Generar artículo de opinión
     opinion_slug = _slugify(opinion.get("title_en", "opinion"))
     opinion_filename = f"{date_iso}-{opinion_slug}.md"
+
+    opinion_references = [
+        {
+            "url": item.get("url", ""),
+            "image": item.get("image"),  # None si no hay imagen
+            "source": item.get("source", ""),
+            "title": item.get("title_en", item.get("title_es", "")),
+        }
+        for item in news
+    ]
 
     # ES
     _write_article(
@@ -131,6 +142,8 @@ def publish_to_github(
         button_url=None,
         image=None,
         body=opinion.get("body_es", ""),
+        radar=True,
+        references=opinion_references,
     )
     stats["files_created"] += 1
 
@@ -146,6 +159,8 @@ def publish_to_github(
         button_url=None,
         image=None,
         body=opinion.get("body_en", ""),
+        radar=True,
+        references=opinion_references,
     )
     stats["files_created"] += 1
 
@@ -215,6 +230,8 @@ def _write_article(
     button_url: Optional[str],
     image: Optional[str],
     body: str,
+    radar: bool = False,
+    references: Optional[List[dict]] = None,
 ):
     """Escribe un archivo .md con front matter YAML para Hugo."""
     lines = ["---"]
@@ -235,13 +252,17 @@ def _write_article(
         lines.append(f"button_url: {button_url}")
     if image:
         lines.append(f"image: {image}")
+    if radar:
+        lines.append("radar: true")
+    if references:
+        lines.append("references:")
+        for ref in references:
+            lines.append(f"  - url: {ref.get('url', '')}")
+            if ref.get("image"):
+                lines.append(f"    image: {ref['image']}")
+            lines.append(f"    source: {ref.get('source', '')}")
+            lines.append(f'    title: "{_escape_yaml(ref.get("title", ""))}"')
     lines.append("---")
-    lines.append(body)
-    lines.append("")
-
-    path.write_text("\n".join(lines), encoding="utf-8")
-    logger.debug(f"Escrito: {path.name}")
-
 
 def _download_og_image(
     page_url: str,

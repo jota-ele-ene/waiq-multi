@@ -94,8 +94,11 @@ Respond as JSON:
   "body_es": "Full 3-4 paragraph article in Spanish with sources as markdown links",
   "body_en": "Full 3-4 paragraph article in English with sources as markdown links",
   "topics": ["ai", "web3", "quantum"],
-  "areas": ["technology", "regulation", ...]
-}}"""
+  "areas": ["technology", "regulation", ...],
+  "radar": true  
+  "references": [
+    {{"title": "...", "url": "...", "source": "...", "thumbnail": ""}}]
+  }}"""
 
 ANGLE_SYSTEM = """You are an editor choosing the best editorial angle for today's opinion piece."""
 
