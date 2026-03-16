@@ -21,7 +21,7 @@ llm:
 # --- Búsqueda Web ---
 # Proveedores soportados: duckduckgo (sin API key), serper, tavily, searxng
 search:
-  provider: "tavily"           # tavily | serper | duckduckgo | searxng
+  provider: "searxng"           # tavily | serper | duckduckgo | searxng
   max_results_per_query: 12
   recency_days: 10             # Solo noticias de los últimos N días
 
