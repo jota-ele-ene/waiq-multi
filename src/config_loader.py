@@ -9,8 +9,9 @@ from dotenv import load_dotenv
 
 def load_config(config_path: str = None) -> dict:
     """Carga la configuración desde YAML y .env"""
-    load_dotenv()
-
+    env_path = Path(__file__).parent.parent / ".env"
+    load_dotenv(env_path, override=True)
+    
     if config_path is None:
         config_path = Path(__file__).parent.parent / "config.yaml"
 

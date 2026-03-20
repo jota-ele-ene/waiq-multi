@@ -7,6 +7,8 @@ Optimizaciones de coste aplicadas:
   3. verify_urls limitado a verify_max artículos y 1000 chars de página (era 2000)
   4. max_tokens_opinion independiente para evitar truncado en compose
   5. waiq_context eliminado del system prompt de filtrado (redundante con criteria)
+  6. Payload de filtrado "slim": solo title+url+snippet antes de enviar al LLM
+  7. max_tokens del modelo de filtrado elevado a 8192 para evitar truncado de salida
 """
 
 import json
@@ -161,11 +163,44 @@ def _make_filter_llm(config: dict, tool_log: list) -> LLMClient:
     """
     Devuelve un LLMClient usando el modelo ligero definido en config.llm.model_filter.
     Si no está configurado, usa el modelo por defecto (sin coste extra).
+
+    OPT 7: Eleva max_tokens a 8192 para el modelo de filtrado, para evitar
+    truncado de salida al procesar lotes grandes de resultados.
     """
     model_override = config["llm"].get("model_filter")
     if model_override:
         logger.info(f"[coste] Usando modelo ligero para filtrado: {model_override}")
-    return LLMClient(config, tool_log=tool_log, model_override=model_override)
+
+    # Crear una config parcheada solo para este cliente, sin mutar la config global
+    filter_config = {
+        **config,
+        "llm": {
+            **config["llm"],
+            "max_tokens": config["llm"].get("max_tokens_filter", 8192),
+        },
+    }
+    return LLMClient(filter_config, tool_log=tool_log, model_override=model_override)
+
+
+def _build_slim_results_text(results: List[SearchResult]) -> str:
+    """
+    OPT 6: Construye el bloque de resultados para el prompt de filtrado
+    usando únicamente title + url + snippet (truncado a 150 chars).
+
+    Reduce drásticamente los tokens de entrada (~5-10x menos que enviar
+    el objeto completo), lo que evita truncados de salida al dejar más
+    presupuesto para la respuesta JSON.
+    """
+    lines = []
+    for i, r in enumerate(results):
+        snippet = (getattr(r, "snippet", "") or "")[:150]
+        lines.append(
+            f"[{i+1}] {r.title}\n"
+            f"    URL: {r.url}\n"
+            f"    Snippet: {snippet}\n"
+            f"    Date: {getattr(r, 'date', '') or 'N/A'}\n"
+        )
+    return "\n".join(lines)
 
 
 def _fetch_published_urls(config: dict) -> set:
@@ -232,9 +267,11 @@ def filter_news(
     Filtra y selecciona las noticias más relevantes usando el LLM.
 
     Optimizaciones aplicadas:
-    - Snippets truncados a 150 chars (era 500) → ~60% menos tokens de entrada
-    - Modelo ligero (model_filter) para esta fase → ~95% menos coste
-    - waiq_context eliminado del system prompt (redundante con criteria)
+    - OPT 1: Snippets truncados a 150 chars → ~60% menos tokens de entrada
+    - OPT 2: Modelo ligero (model_filter) → ~95% menos coste
+    - OPT 5: system prompt sin waiq_context (los criterios ya lo cubren)
+    - OPT 6: Payload "slim" (solo title+url+snippet) → ~5-10x menos tokens
+    - OPT 7: max_tokens=8192 para el cliente de filtrado → evita truncado JSON
 
     Adicionalmente, excluye antes del prompt las URLs que ya aparecen
     publicadas en https://waiq.technology/api/contents/index.json
@@ -257,15 +294,8 @@ def filter_news(
     )
     angles = ", ".join(config["editorial_angles"])
 
-    # OPT 1: snippets a 150 chars — suficiente para clasificar, no para redactar
-    results_text = ""
-    for i, r in enumerate(results):
-        results_text += (
-            f"\n[{i+1}] {r.title}\n"
-            f"    URL: {r.url}\n"
-            f"    Snippet: {r.snippet[:150]}\n"
-            f"    Date: {r.date}\n"
-        )
+    # OPT 6: payload slim — reduce drásticamente los tokens de entrada
+    results_text = _build_slim_results_text(results)
 
     input_table = _build_results_table(results)
     logger.info("TABLA DE NOTICIAS DE ENTRADA:\n%s", input_table)
@@ -282,7 +312,7 @@ def filter_news(
     # OPT 5: system prompt sin waiq_context (los criterios ya lo cubren)
     system_prompt = FILTER_SYSTEM
 
-    # OPT 2: modelo ligero para esta fase
+    # OPT 2 + OPT 7: modelo ligero con max_tokens elevado para esta fase
     filter_llm = _make_filter_llm(config, llm.tool_log)
 
     data = filter_llm.complete_json(

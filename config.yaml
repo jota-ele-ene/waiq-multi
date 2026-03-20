@@ -16,7 +16,7 @@ llm:
   model: "claude-sonnet-4-20250514"             # gpt-4o | claude-sonnet-4-20250514 | gemini-2.0-flash
   model_filter: "claude-haiku-4-5-20251001"   # gpt-4o-mini | claude-haiku-4-5-20251001 |gemini-2.0-flash-lite
   temperature: 0.4            # Baja para más precisión, alta para más creatividad
-  max_tokens: 4096
+  max_tokens: 8192
 
 # --- Búsqueda Web ---
 # Proveedores soportados: duckduckgo (sin API key), serper, tavily, searxng

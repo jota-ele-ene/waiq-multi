@@ -4,6 +4,7 @@ Abstracción del LLM. Soporta OpenAI, Anthropic y Google Gemini (google-genai SD
 
 import json
 import logging
+import re
 import time
 from typing import List, Dict, Optional
 
@@ -66,7 +67,14 @@ class LLMClient:
                     messages=[{"role": "user", "content": user_prompt}],
                 )
                 text = resp.content[0].text
-                usage = f"tokens: {resp.usage.input_tokens}in/{resp.usage.output_tokens}out"
+                # Avisar si el modelo se cortó por límite de tokens
+                if resp.stop_reason == "max_tokens":
+                    logger.warning(
+                        f"[truncation] Respuesta cortada por max_tokens={self.max_tokens} "
+                        f"(output_tokens={resp.usage.output_tokens}). "
+                        f"Considera aumentar max_tokens o reducir la entrada."
+                    )
+                usage = f"tokens: {resp.usage.input_tokens}in/{resp.usage.output_tokens}out (stop={resp.stop_reason})"
 
             elif self.provider == "google":
                 text, usage = self._google_generate(client, system_prompt, user_prompt)
@@ -141,14 +149,87 @@ class LLMClient:
 
         raise last_error
 
-    def complete_json(self, system_prompt: str, user_prompt: str, action_desc: str = "") -> dict:
-        """Envía prompt y parsea la respuesta como JSON."""
-        raw = self.complete(system_prompt, user_prompt + "\n\nRespond ONLY with valid JSON.", action_desc)
+    @staticmethod
+    def _salvage_truncated_json(text: str) -> dict:
+        """
+        Intenta recuperar un JSON truncado por límite de tokens.
 
+        Estrategia: busca el último elemento completo del array "news"
+        y cierra el JSON correctamente.
+        Devuelve el dict recuperado o lanza ValueError si no es posible.
+        """
+        # Buscar la posición del último objeto completo dentro del array
+        # Un objeto completo termina con "}," o "}" justo antes de "]"
+        last_complete = -1
+
+        # Buscar todas las posiciones donde termina un objeto del array
+        for m in re.finditer(r'\}(?=\s*[,\]])', text):
+            last_complete = m.end()
+
+        if last_complete == -1:
+            raise ValueError("No se encontró ningún objeto JSON completo en la respuesta truncada.")
+
+        # Recortar hasta el último objeto completo e intentar cerrar el JSON
+        candidate = text[:last_complete].rstrip().rstrip(",")
+
+        # Asegurarse de que el array y el objeto raíz estén cerrados
+        if not candidate.endswith("]"):
+            candidate += "]"
+        if not candidate.endswith("}}") and not candidate.endswith("}"):
+            candidate += "}"
+
+        # Contar llaves/corchetes y cerrar los que falten
+        open_braces = candidate.count("{") - candidate.count("}")
+        open_brackets = candidate.count("[") - candidate.count("]")
+        candidate += "]" * max(open_brackets, 0)
+        candidate += "}" * max(open_braces, 0)
+
+        salvaged = json.loads(candidate)
+        items = salvaged.get("news", [])
+        logger.warning(
+            f"[truncation] JSON truncado recuperado: {len(items)} item(s) salvados."
+        )
+        return salvaged
+
+    def complete_json(self, system_prompt: str, user_prompt: str, action_desc: str = "") -> dict:
+        """
+        Envía prompt y parsea la respuesta como JSON.
+
+        Si el JSON está truncado (típicamente por max_tokens insuficiente),
+        intenta recuperar los ítems completos antes de fallar.
+        """
+        raw = self.complete(
+            system_prompt,
+            user_prompt + "\n\nRespond ONLY with valid JSON.",
+            action_desc,
+        )
+
+        # Limpiar bloques markdown ```json ... ```
         text = raw.strip()
         if text.startswith("```"):
             lines = text.split("\n")
             lines = [l for l in lines if not l.strip().startswith("```")]
-            text = "\n".join(lines)
+            text = "\n".join(lines).strip()
 
-        return json.loads(text)
+        # Intento 1: parseo normal
+        try:
+            return json.loads(text)
+        except json.JSONDecodeError as exc:
+            logger.warning(
+                f"[truncation] JSONDecodeError en '{action_desc[:60]}': {exc}. "
+                f"Intentando recuperar JSON truncado..."
+            )
+
+        # Intento 2: recuperar JSON truncado
+        try:
+            return self._salvage_truncated_json(text)
+        except Exception as salvage_exc:
+            logger.error(
+                f"[truncation] No se pudo recuperar el JSON truncado: {salvage_exc}\n"
+                f"Últimos 300 chars de la respuesta: ...{text[-300:]}"
+            )
+            raise ValueError(
+                f"El LLM devolvió JSON malformado/truncado y no fue posible recuperarlo. "
+                f"Aumenta max_tokens (actual: {self.max_tokens}) o reduce el tamaño del input. "
+                f"Detalle: {salvage_exc}"
+            ) from salvage_exc
