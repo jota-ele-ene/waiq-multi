@@ -21,7 +21,7 @@ jobs:
         run: |
           set -e
           mkdir -p output
-          ENV_FILE="output/.env.${ENV_NAME}"
+          ENV_FILE="output/context.${ENV_NAME}"
 
           echo "Escribiendo en $ENV_FILE"
 
@@ -57,4 +57,15 @@ jobs:
           echo "LLM_MODEL=${{ vars.LLM_MODEL }}" >> "$ENV_FILE"
           echo "LLM_MODEL_FILTER=${{ vars.LLM_MODEL_FILTER }}" >> "$ENV_FILE"
 
-          
+          echo "Contenido real en disco:"
+          ls -l output
+          echo "----------"
+          cat "$ENV_FILE"
+
+      - name: Upload .env as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: waiq-env-${{ github.event.inputs.env_name }}
+          path: output
+          if-no-files-found: error
+          retention-days: 7         
