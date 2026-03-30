@@ -2,7 +2,7 @@
 title: "Last Radar API"
 type: "api"
 layout: "radar"
-url: "/api/"
+url: "/en/api/"
 outputs:
   - APIRadar
 build:

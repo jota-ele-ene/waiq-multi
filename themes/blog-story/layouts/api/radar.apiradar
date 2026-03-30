@@ -1,9 +1,9 @@
-{{ $currentLang := .Site.Language.Lang }}
-{{ $articles := where site.RegularPages "Section" "article" }}
-{{ $articles = where $articles "Lang" $currentLang }}
-{{ $radar := where $articles ".Params.radar" true }}
-{{ $latest := first 1 ($radar.ByDate.Reverse) }}
-{{ $page := index $latest 0 }}
+{{- $currentLang := .Site.Language.Lang -}}
+{{- $articles := where site.RegularPages "Section" "article" -}}
+{{- $articles = where $articles "Lang" $currentLang -}}
+{{- $radar := where $articles ".Params.radar" true -}}
+{{- $latest := first 1 ($radar.ByDate.Reverse) -}}
+{{- $page := index $latest 0 -}}
 {
   "title": {{ $page.Title | jsonify }},
   "date": {{ $page.Date | jsonify }},
