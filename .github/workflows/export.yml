@@ -23,6 +23,9 @@ jobs:
           mkdir -p output
           ENV_FILE="output/.env.${ENV_NAME}"
 
+          echo "Escribiendo en $ENV_FILE"
+
+          # Escribimos el archivo línea a línea (sin bloque { } para evitar problemas)
           {
             echo "# .env generado desde GitHub Actions (WAIQ Technology Radar)"
             echo "# Run ID: ${{ github.run_id }}"
@@ -49,7 +52,7 @@ jobs:
             echo "LLM_MODEL_FILTER=${{ vars.LLM_MODEL_FILTER }}"
           } > "$ENV_FILE"
 
-          echo "Generated file:"
+          echo "Contenido real en disco:"
           ls -l output
           echo "----------"
           cat "$ENV_FILE"
