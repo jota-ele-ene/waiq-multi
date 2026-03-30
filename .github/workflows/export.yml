@@ -25,42 +25,36 @@ jobs:
 
           echo "Escribiendo en $ENV_FILE"
 
-          # Escribimos el archivo línea a línea (sin bloque { } para evitar problemas)
-          {
-            echo "# .env generado desde GitHub Actions (WAIQ Technology Radar)"
-            echo "# Run ID: ${{ github.run_id }}"
-            echo ""
-            echo "# --- LLM ---"
-            echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}"
-            echo "ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }}"
-            echo "GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }}"
-            echo ""
-            echo "# --- Search ---"
-            echo "TAVILY_API_KEY=${{ secrets.TAVILY_API_KEY }}"
-            echo "SEARXNG_URL=${{ secrets.SEARXNG_URL }}"
-            echo ""
-            echo "# --- Email ---"
-            echo "SMTP_USERNAME=${{ secrets.SMTP_USERNAME }}"
-            echo "SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}"
-            echo ""
-            echo "# --- GitHub (para push al repo waiq-multi) ---"
-            echo "WAIQ_GITHUB_TOKEN=${{ secrets.WAIQ_GITHUB_TOKEN }}"
-            echo ""
-            echo "# --- LLM config (vars de repositorio; opcionales) ---"
-            echo "LLM_PROVIDER=${{ vars.LLM_PROVIDER }}"
-            echo "LLM_MODEL=${{ vars.LLM_MODEL }}"
-            echo "LLM_MODEL_FILTER=${{ vars.LLM_MODEL_FILTER }}"
-          } > "$ENV_FILE"
+          # Limpiamos por si existía
+          : > "$ENV_FILE"
 
-          echo "Contenido real en disco:"
-          ls -l output
-          echo "----------"
-          cat "$ENV_FILE"
+          echo "# .env generado desde GitHub Actions (WAIQ Technology Radar)" >> "$ENV_FILE"
+          echo "# Run ID: ${{ github.run_id }}" >> "$ENV_FILE"
+          echo "" >> "$ENV_FILE"
 
-      - name: Upload .env as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: waiq-env-${{ github.event.inputs.env_name }}
-          path: output
-          if-no-files-found: error
-          retention-days: 7
+          echo "# --- LLM ---" >> "$ENV_FILE"
+          echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> "$ENV_FILE"
+          echo "ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }}" >> "$ENV_FILE"
+          echo "GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }}" >> "$ENV_FILE"
+          echo "" >> "$ENV_FILE"
+
+          echo "# --- Search ---" >> "$ENV_FILE"
+          echo "TAVILY_API_KEY=${{ secrets.TAVILY_API_KEY }}" >> "$ENV_FILE"
+          echo "SEARXNG_URL=${{ secrets.SEARXNG_URL }}" >> "$ENV_FILE"
+          echo "" >> "$ENV_FILE"
+
+          echo "# --- Email ---" >> "$ENV_FILE"
+          echo "SMTP_USERNAME=${{ secrets.SMTP_USERNAME }}" >> "$ENV_FILE"
+          echo "SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}" >> "$ENV_FILE"
+          echo "" >> "$ENV_FILE"
+
+          echo "# --- GitHub (para push al repo waiq-multi) ---" >> "$ENV_FILE"
+          echo "WAIQ_GITHUB_TOKEN=${{ secrets.WAIQ_GITHUB_TOKEN }}" >> "$ENV_FILE"
+          echo "" >> "$ENV_FILE"
+
+          echo "# --- LLM config (vars de repositorio; opcionales) ---" >> "$ENV_FILE"
+          echo "LLM_PROVIDER=${{ vars.LLM_PROVIDER }}" >> "$ENV_FILE"
+          echo "LLM_MODEL=${{ vars.LLM_MODEL }}" >> "$ENV_FILE"
+          echo "LLM_MODEL_FILTER=${{ vars.LLM_MODEL_FILTER }}" >> "$ENV_FILE"
+
+          
