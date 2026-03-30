@@ -4,10 +4,8 @@
   {{ .Content }}
 
   <ul>
-    {{/* Filtra solo las páginas con .Params.radar == true */}}
-    {{ $radars := where .Site.RegularPages ".Params.radar" true }}
-    {{/* Si quieres limitarlo a una sección/tipo concreto: */}}
-    {{ $radars = where $radars "Section" "nombre-de-seccion" }}
+    {{ $radars := where .Site.RegularPages "Section" "article" }}
+    {{ $radars = where $radars ".Params.radar" true }}
 
     {{ range $radars }}
         {{ .Render "spotlight" }}

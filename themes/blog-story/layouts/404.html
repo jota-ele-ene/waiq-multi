@@ -5,9 +5,16 @@
 </div>
 <div id="es-404" style="display:none;">
 	<script>console.log("Renderizando es-404")</script>
-	{{ range where (where (where .Site.AllPages "Lang" "es") "Section" "banner") "File.BaseFileName" "404" }}
-	  {{ .Render "summary" }}
-	  {{ break }}  <!-- Solo primera -->
+
+	{{/* 1) Filtra páginas en es/banner que sí tienen File */}}
+	{{ $esBanner := where .Site.AllPages "Lang" "es" }}
+	{{ $esBanner = where $esBanner "Section" "banner" }}
+	{{ $esBanner = where $esBanner "File" "ne" nil }}
+
+	{{/* 2) De esas, busca la que tenga BaseFileName == "404" */}}
+	{{ range where $esBanner "File.BaseFileName" "404" }}
+		{{ .Render "summary" }}
+		{{ break }}
 	{{ end }}
 </div>
 

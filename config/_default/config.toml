@@ -30,7 +30,8 @@ publishDir = "public"
 ## -----------------------------------------------
 
 #disableKinds = ["taxonomy", "section"]
-disableKinds = ["section"]
+#disableKinds = ["section"]
+disableKinds = []
 ignoreLogs = ['warning-goldmark-raw-html']
 
 ## -----------------------------------------------
@@ -96,7 +97,7 @@ additional_js = ["/js/fontawesome-all.min.js","/js/waiq.js"]
 ## Languages support
 ## -----------------------------------------------
 defaultContentLanguage = "en"
-defaultContentLanguageInSubdir = true
+defaultContentLanguageInSubdir = false
 
 [languages]
 
@@ -118,9 +119,19 @@ defaultContentLanguageInSubdir = true
   [languages.es.params]
     description = "WAIQ - Experiencia completa de blog"
 
+[mediaTypes]
+  [mediaTypes."application/x-api"]
+    suffixes = [""]
+
 [outputFormats]
   [outputFormats.json]
     mediaType   = "application/json"
     baseName    = "index"
     isPlainText = true
+    notAlternative = true
+
+  [outputFormats.APIEndpoint]
+    mediaType      = "application/x-api"
+    baseName       = "contents"
+    isPlainText    = true
     notAlternative = true

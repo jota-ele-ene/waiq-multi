@@ -4,7 +4,7 @@ expertMode = true
 
 [nix]
 channel = "stable-25_05"
-packages = ["unzip", "vim", "psmisc"]
+packages = ["unzip", "vim", "psmisc", "tree"]
 
 [workflows]
 runButton = "Project"

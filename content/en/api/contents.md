@@ -1,8 +1,9 @@
 ---
 title: "Contents API"
 layout: "contents"
+url: "/api/"
 outputs:
-  - JSON
+  - APIEndpoint
 sitemap:
   disable: true
 ---
