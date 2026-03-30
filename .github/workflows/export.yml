@@ -1,4 +1,4 @@
-name: Export comtext for WAIQ Technology Radar
+name: Export context for WAIQ Technology Radar
 
 on:
   workflow_dispatch:
@@ -25,7 +25,6 @@ jobs:
           {
             echo "# .env generado desde GitHub Actions (WAIQ Technology Radar)"
             echo "# Run ID: ${{ github.run_id }}"
-            echo "# Copia y pega este contenido en otros entornos (.env, panel de variables, etc.)"
             echo ""
             echo "# --- LLM ---"
             echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}"
@@ -34,7 +33,6 @@ jobs:
             echo ""
             echo "# --- Search ---"
             echo "TAVILY_API_KEY=${{ secrets.TAVILY_API_KEY }}"
-            # echo "SERPER_API_KEY=${{ secrets.SERPER_API_KEY }}"
             echo "SEARXNG_URL=${{ secrets.SEARXNG_URL }}"
             echo ""
             echo "# --- Email ---"
@@ -50,24 +48,10 @@ jobs:
             echo "LLM_MODEL_FILTER=${{ vars.LLM_MODEL_FILTER }}"
           } > "$ENV_FILE"
 
-          echo "Generated $ENV_FILE"
-          ls -l output
-          echo "----------"
-          cat "$ENV_FILE"
-
-      - name: Debug env path before upload
-        env:
-          ENV_NAME: ${{ github.event.inputs.env_name }}
-        run: |
-          echo "PWD: $(pwd)"
-          echo "Listing output dir:"
-          ls -R
-          echo "Trying to cat output/.env.${ENV_NAME}"
-          cat output/.env.${ENV_NAME}
-
       - name: Upload .env as artifact
         uses: actions/upload-artifact@v4
         with:
           name: waiq-env-${{ github.event.inputs.env_name }}
-          path: output
+          path: output/.env.${{ github.event.inputs.env_name }}
+          if-no-files-found: error
           retention-days: 7
