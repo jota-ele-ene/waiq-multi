@@ -19,6 +19,7 @@ jobs:
         env:
           ENV_NAME: ${{ github.event.inputs.env_name }}
         run: |
+          set -e
           mkdir -p output
           ENV_FILE="output/.env.${ENV_NAME}"
 
@@ -48,10 +49,15 @@ jobs:
             echo "LLM_MODEL_FILTER=${{ vars.LLM_MODEL_FILTER }}"
           } > "$ENV_FILE"
 
+          echo "Generated file:"
+          ls -l output
+          echo "----------"
+          cat "$ENV_FILE"
+
       - name: Upload .env as artifact
         uses: actions/upload-artifact@v4
         with:
           name: waiq-env-${{ github.event.inputs.env_name }}
-          path: output/.env.${{ github.event.inputs.env_name }}
+          path: output
           if-no-files-found: error
           retention-days: 7
