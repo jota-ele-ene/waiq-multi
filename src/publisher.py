@@ -41,7 +41,8 @@ def _check_token(token: str, repo: str) -> None:
 
     # 1. Identidad del token
     try:
-        r = httpx.get("https://api.github.com/user", headers=headers, timeout=10)
+        r = httpx.get("https://api.github.com/user",
+                      headers=headers, timeout=10)
         scopes = r.headers.get("x-oauth-scopes", "(no scopes header)")
         token_type = r.headers.get("x-oauth-client-id", "(no client-id)")
         if r.status_code == 200:
@@ -88,7 +89,8 @@ def _check_token(token: str, repo: str) -> None:
                 "El token existe pero no tiene permisos suficientes."
             )
         else:
-            logger.warning(f"  /repos/{repo} → HTTP {r.status_code}: {r.text[:200]}")
+            logger.warning(
+                f"  /repos/{repo} → HTTP {r.status_code}: {r.text[:200]}")
     except Exception as e:
         logger.warning(f"  No se pudo verificar permisos del repo: {e}")
 
@@ -109,7 +111,7 @@ def publish_to_github(
     """
     gh_conf = config["github"]
     token = gh_conf.get("token", "")
-    repo  = gh_conf["repo"]
+    repo = gh_conf["repo"]
     branch = gh_conf["branch"]
 
     # ── Trazas de configuración GitHub ───────────────────────────────────
@@ -124,13 +126,15 @@ def publish_to_github(
             "https://github.com/settings/tokens con scope 'repo'."
         )
     elif len(token) < 20:
-        logger.warning(f"  El token parece demasiado corto ({len(token)} chars). ¿Está completo?")
+        logger.warning(
+            f"  El token parece demasiado corto ({len(token)} chars). ¿Está completo?")
     elif token.startswith("ghp_"):
         logger.info("  tipo: Classic PAT (ghp_...)")
     elif token.startswith("github_pat_"):
         logger.info("  tipo: Fine-grained PAT (github_pat_...)")
     else:
-        logger.warning(f"  tipo: desconocido (no empieza por ghp_ ni github_pat_)")
+        logger.warning(
+            f"  tipo: desconocido (no empieza por ghp_ ni github_pat_)")
     logger.info("────────────────────────────────────────────────")
 
     # Verificar token contra la API antes de clonar
@@ -198,7 +202,8 @@ def publish_to_github(
         filename = f"{date_iso}-{slug}.md"
 
         # Descargar imagen
-        img_path = _download_og_image(item.get("url", ""), slug, date_iso, img_dir, tool_log)
+        img_path = _download_og_image(
+            item.get("url", ""), slug, date_iso, img_dir, tool_log)
         if img_path:
             stats["images_ok"] += 1
         stats["images_total"] += 1
@@ -214,7 +219,8 @@ def publish_to_github(
             areas=item.get("areas", []),
             date=f"{date_iso}T08:00:00.000+01:00",
             description=item.get("description_es", ""),
-            button_label=item.get("button_label_es", f"Leer en {item.get('source', '')}"),
+            button_label=item.get(
+                "button_label_es", f"Leer en {item.get('source', '')}"),
             button_url=item.get("url", ""),
             image=image_ref,
             body=item.get("description_es", ""),
@@ -229,7 +235,8 @@ def publish_to_github(
             areas=item.get("areas", []),
             date=f"{date_iso}T08:00:00.000+01:00",
             description=item.get("description_en", ""),
-            button_label=item.get("button_label_en", f"Read in {item.get('source', '')}"),
+            button_label=item.get(
+                "button_label_en", f"Read in {item.get('source', '')}"),
             button_url=item.get("url", ""),
             image=image_ref,
             body=item.get("description_en", ""),
@@ -302,9 +309,11 @@ def publish_to_github(
     )
     logger.info(f"  git commit returncode: {commit_result.returncode}")
     if commit_result.stdout.strip():
-        logger.info(f"  git commit stdout: {commit_result.stdout.strip()[:300]}")
+        logger.info(
+            f"  git commit stdout: {commit_result.stdout.strip()[:300]}")
     if commit_result.stderr.strip():
-        logger.info(f"  git commit stderr: {commit_result.stderr.strip()[:300]}")
+        logger.info(
+            f"  git commit stderr: {commit_result.stderr.strip()[:300]}")
 
     if "nothing to commit" in commit_result.stdout:
         logger.warning("Nada que commitear (¿archivos duplicados?)")
@@ -318,10 +327,30 @@ def publish_to_github(
         return stats
 
     logger.info(f"  git push → origin/{branch}")
-    push_result = subprocess.run(
-        ["git", "push", "origin", branch],
-        cwd=work_dir, capture_output=True, text=True,
-    )
+    # push_result = subprocess.run(
+    #    ["git", "push", "origin", branch],
+    #    cwd=work_dir, capture_output=True, text=True,
+    # )
+
+    try:
+        push_result = subprocess.run(
+            ["git", "push", "origin", branch],
+            cwd=work_dir,
+            capture_output=True,
+            text=True,
+            timeout=10,
+        )
+    except subprocess.TimeoutExpired as e:
+        logger.error(f"[push] Timeout tras 120s: {e}")
+        tool_log.append({
+            "step": len(tool_log) + 1,
+            "tool": "git commit+push",
+            "model": "N/A",
+            "action": commit_msg,
+            "result": "ERROR — timeout en git push",
+        })
+    return stats
+
     logger.info(f"  git push returncode: {push_result.returncode}")
     if push_result.stdout.strip():
         logger.info(f"  git push stdout: {push_result.stdout.strip()[:300]}")
@@ -352,9 +381,11 @@ def publish_to_github(
                 f"  Detalle git: {stderr[:300]}"
             )
         elif "Authentication failed" in stderr:
-            logger.error(f"[push] Autenticación fallida. Token inválido o expirado. Detalle: {stderr[:200]}")
+            logger.error(
+                f"[push] Autenticación fallida. Token inválido o expirado. Detalle: {stderr[:200]}")
         elif "could not read Username" in stderr:
-            logger.error(f"[push] Git no encontró credenciales. ¿Token vacío? Detalle: {stderr[:200]}")
+            logger.error(
+                f"[push] Git no encontró credenciales. ¿Token vacío? Detalle: {stderr[:200]}")
         else:
             logger.error(f"[push] Error desconocido: {stderr[:300]}")
 

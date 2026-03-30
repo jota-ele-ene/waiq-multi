@@ -7,11 +7,12 @@ import yaml
 from pathlib import Path
 from dotenv import load_dotenv
 
+
 def load_config(config_path: str = None) -> dict:
     """Carga la configuración desde YAML y .env"""
     env_path = Path(__file__).parent.parent / ".env"
     load_dotenv(env_path, override=True)
-    
+
     if config_path is None:
         config_path = Path(__file__).parent.parent / "config.yaml"
 
@@ -24,14 +25,16 @@ def load_config(config_path: str = None) -> dict:
 
     if config["email"]["enabled"]:
         config["email"]["smtp"]["username"] = (
-            os.getenv("SMTP_USERNAME") or config["email"]["smtp"].get("username", "")
+            os.getenv("SMTP_USERNAME") or config["email"]["smtp"].get(
+                "username", "")
         )
         config["email"]["smtp"]["password"] = (
-            os.getenv("SMTP_PASSWORD") or config["email"]["smtp"].get("password", "")
+            os.getenv("SMTP_PASSWORD") or config["email"]["smtp"].get(
+                "password", "")
         )
 
     if config["github"]["enabled"]:
-        config["github"]["token"] = os.getenv("GITHUB_TOKEN", "")
+        config["github"]["token"] = os.getenv("WAIQ_GITHUB_TOKEN", "")
 
     return config
 
