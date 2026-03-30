@@ -1,7 +1,7 @@
+.syncmetadata
+public/
+node_modules/
+resources/
 .env
-logs/
-data/
-__pycache__/
-*.pyc
-.venv/
-venv/
+
+node_modules

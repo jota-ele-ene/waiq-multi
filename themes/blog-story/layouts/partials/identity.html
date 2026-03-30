@@ -1,0 +1,18 @@
+
+<script>
+
+    console.log("baseURL:", "{{ .Site.BaseURL }}");
+
+    const baseURL = "{{ .Site.BaseURL }}";
+    // Si ya está autenticado, redirigir directamente
+    if (sessionStorage.getItem('authenticated') === 'true') {
+        const authTime = sessionStorage.getItem('authTime');
+        // Sesión válida por 8 horas
+        if (Date.now() - parseInt(authTime) >  8 * 60 * 60 * 1000) {
+            sessionStorage.removeItem('authenticated');
+            sessionStorage.removeItem('authTime');
+            window.location.href = baseURL + '/pages/gate.html';
+         }
+    }
+    else window.location.href = baseURL + '/pages/gate.html';
+</script>

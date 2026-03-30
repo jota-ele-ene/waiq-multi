@@ -1,0 +1,66 @@
+## -----------------------------------------------
+## Basic Configuration
+## -----------------------------------------------
+
+cnf = "/production/config.toml"
+title = "Welcome to #WAIQ Age"
+copyright = "{year}"
+
+## -----------------------------------------------
+## Publish
+## -----------------------------------------------
+
+relativeURLs = "true"
+#canonifyURLs = "true"
+
+# Local
+#baseURL = "/"
+publishDir = "public"
+
+# Remote
+baseURL = "https://waiq.technology"
+
+## -----------------------------------------------
+## Hugo Built-in Features
+## -----------------------------------------------
+
+#disableKinds = ["taxonomy", "section"]
+
+## -----------------------------------------------
+## Analytics support
+## -----------------------------------------------
+
+#googleAnalytics: G-MEASUREMENT_ID
+#swetrixAnalytics = "3UYKaHJP56by"
+
+[umamiAnalytics]
+domain    = "cloud.umami.is"
+websiteid = "851feb30-981e-42e5-b269-453cfd2fb07f"
+
+
+## -----------------------------------------------
+## Site Parameters
+## -----------------------------------------------
+
+[Params]
+  description = "A (modular, highly tweakable) responsive one-page theme for Hugo"
+  logo = "images/banner.jpg"
+  favicon = true
+  gated = true
+
+[Params.social]
+
+[Params.asset]
+
+## ------------------------------------------------
+## Github Pages Deployment
+## ------------------------------------------------
+[caches]
+  [caches.images]
+    dir = ':cacheDir/images'
+
+[outputFormats.ButtonURLs]
+  mediaType = "application/json"
+  baseName = "button-urls"
+  isPlainText = true
+  notAlternative = true

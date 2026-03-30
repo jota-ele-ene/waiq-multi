@@ -1,0 +1,68 @@
+{{ define "main" }}
+<section class="wrapper single style1 align-left">
+  <div class="inner">
+    <header>
+        <h1>{{ .Title }}</h1>
+        {{ with .Params.description }}<p>{{ . }}</p>{{ end }}
+    </header>
+    <!-- Gallery-->
+    <input type="text" id="mosaic-filter" placeholder="Escribe para filtrar…">
+
+    <div class="mosaic" id="mosaic">
+
+      {{ $pictures := where (where .Site.AllPages "Lang" "en") "Section" "picture" }}
+
+      {{ range shuffle $pictures }}
+        {{ .Render "mosaic" }}
+      {{ end }}
+
+    </div>
+
+  </div>
+</section>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+  const container = document.getElementById('mosaic');
+  if (!container) return;
+
+  const items = Array.from(container.children); 
+  //const items = Array.from(document.querySelectorAll('.mosaic-item'));
+
+  // Fisher–Yates shuffle
+  for (let i = items.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [items[i], items[j]] = [items[j], items[i]];
+  }
+
+  // Vaciar y volver a insertar en el nuevo orden
+  items.forEach(item => container.appendChild(item));
+
+  const input = document.getElementById('mosaic-filter');
+
+  input.addEventListener('input', function () {
+    const q = this.value.trim().toLowerCase();
+
+    items.forEach(item => {
+      // campos del front matter en data-*
+      const title = (item.dataset.title || '').toLowerCase();
+      const tags = (item.dataset.tags || '').toLowerCase();
+      const role = (item.dataset.role || '').toLowerCase();
+  
+      // contenido interno (por si quieres buscar también en el texto renderizado)
+      const text = item.textContent.toLowerCase();
+
+      const hayMatch =
+        !q ||
+        title.includes(q) ||
+        tags.includes(q) ||
+        role.includes(q) ||
+        text.includes(q);
+
+      item.style.display = hayMatch ? '' : 'none';
+    });
+  });
+});
+</script>
+{{ end }}
+

@@ -1,0 +1,11 @@
+{
+  "images_attempted": 3,
+  "images_downloaded": 3,
+  "image_failures": [
+    {
+      "url": "https://www.senado.es/web/actividadparlamentaria/actualidad/noticias/NoticiasDetalle/index.html?id=2026_02_23_NORMA_IA",
+      "og": null,
+      "error": "HTTP Error 403: Forbidden"
+    }
+  ]
+}

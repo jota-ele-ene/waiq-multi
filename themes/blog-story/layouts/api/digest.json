@@ -1,0 +1,50 @@
+{{- /* 1. Leer days del front matter */ -}}
+{{- $days := .Params.days -}}
+{{- if not $days -}}
+  {{- $days = 30 -}}
+{{- end -}}
+
+{{- /* 2. Calcular fecha de corte: hoy - days */ -}}
+{{- $cutoff := now.AddDate 0 0 (mul -1 $days) -}}
+
+{{- /* 3. Recoger URLs filtrando por idioma, tipo y fecha */ -}}
+{{- $urls := slice -}}
+
+{{- range site.Sites -}}
+  {{- $lang := .Language.Lang -}}
+  {{- if or (eq $lang "es") (eq $lang "en") -}}
+    {{- $pages := where .RegularPages "Type" "article" -}}
+    {{- $pages = where $pages "Date" "gt" $cutoff -}}
+    {{- range $pages -}}
+      {{- with .Params.button_url -}}
+        {{- $urls = $urls | append (dict
+          "url" .
+          "date" $.PublishDate
+        ) -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /* 4. Quitar duplicados por URL y ordenar por fecha (opcional) */ -}}
+{{- $byURL := dict -}}
+{{- range $urls -}}
+  {{- $byURL = merge $byURL (dict .url .) -}}
+{{- end -}}
+{{- $unique := slice -}}
+{{- range $k, $v := $byURL -}}
+  {{- $unique = $unique | append $v -}}
+{{- end -}}
+
+{{- /* Ordenar por fecha descendente */ -}}
+{{- $unique = sort $unique "date" "desc" -}}
+
+{{- /* 5. Salida JSON */ -}}
+{{- dict
+  "button_urls" $unique
+  "total" (len $unique)
+  "days" $days
+  "cutoff" $cutoff
+  | jsonify (dict "indent" "  ")
+-}}
+

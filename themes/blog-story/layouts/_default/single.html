@@ -1,0 +1,22 @@
+{{ define "main" }}
+<section class="wrapper style1 align-center">
+    <div class="inner">
+        <div>
+          {{ .Params.description }}
+          <br/>
+          <br/>
+        </div>
+
+        <h2>More about {{ $.Params.topics }}</h2>
+        {{ range where .Site.Pages ".Permalink" "!=" .Permalink }}
+          {{ if eq .Params.topics $.Params.topics }}
+            <li>
+              <a href="{{ .Permalink}}">{{ .Title }}</a>
+            </li>
+          {{ end }}
+        {{ end }}
+
+      </div>
+  </section>
+
+{{ end }}

@@ -1,0 +1,92 @@
+# .pages.yml - Configuración de Pages CMS para Hugo
+
+# ==========================================
+# CARPETA DE ARCHIVOS MULTIMEDIA
+# ==========================================
+media:
+  input: static/images       # Ruta en el repositorio
+  output: /images            # Ruta pública en el sitio
+
+# ==========================================
+# TIPOS DE CONTENIDO
+# ==========================================
+content:
+  # ------------------------------------------
+  # COLECCIÓN: Artículos del Blog
+  # ------------------------------------------
+  - name: posts
+    label: Blog Posts
+    type: collection
+    path: content/posts      # Carpeta donde Hugo guarda los posts
+    format: yaml-frontmatter
+    filename: '{year}-{month}-{day}-{primary}.md'
+    view:
+      fields: [title, date, draft]
+      primary: title
+      sort: [date, title]
+      default:
+        sort: date
+        order: desc
+    fields:
+      - name: title
+        label: Título
+        type: string
+        required: true
+      
+      - name: date
+        label: Fecha de Publicación
+        type: date
+        required: true
+      
+      - name: draft
+        label: Borrador
+        type: boolean
+        default: false
+      
+      - name: description
+        label: Descripción
+        type: text
+        description: Resumen del artículo para SEO
+      
+      - name: tags
+        label: Etiquetas
+        type: string
+        list: true
+      
+      - name: categories
+        label: Categorías
+        type: string
+        list: true
+      
+      - name: image
+        label: Imagen Destacada
+        type: image
+      
+      - name: body
+        label: Contenido
+        type: rich-text
+
+  # ------------------------------------------
+  # ARCHIVO ÚNICO: Página Acerca de
+  # ------------------------------------------
+  - name: about
+    label: Página About
+    type: file
+    path: content/about.md
+    format: yaml-frontmatter
+    fields:
+      - name: title
+        label: Título
+        type: string
+        required: true
+      
+      - name: body
+        label: Contenido
+        type: rich-text
+
+# ==========================================
+# CONFIGURACIÓN GLOBAL
+# ==========================================
+settings:
+  content:
+    merge: true    # Preserva campos existentes no definidos

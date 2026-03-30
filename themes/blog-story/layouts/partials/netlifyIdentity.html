@@ -1,0 +1,18 @@
+<script>
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.on("init", user => {
+      console.log("netlifyIdentity: on init:"+JSON.stringify(user))
+      if (!user) {
+        if ("{{ .Site.Params.gated }}") { // go to ers
+          document.location.href = "/ers/";
+          console.log("netlifyIdentity; gated :-)")
+        } else console.log("no gated")
+        console.log("netlifyIdentity: on init, no user ")
+        window.netlifyIdentity.on("login", () => {
+          console.log("netlifyIdentity: on login, redirecting ")
+          document.location.href = "/ers/";
+        });
+      }
+    });
+  }
+</script>

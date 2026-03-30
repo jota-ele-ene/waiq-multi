@@ -1,0 +1,20 @@
+{{ define "main" }}
+
+<section class="wrapper style1 align-center">
+    <div class="inner">
+      <h2>Conversations</h2>
+      <p>We have already <strong>#WAIQ</strong> conversations. Let's explore them:</p>
+      <ul class="alt">
+        <li></li>
+        {{ range $name, $taxonomy := .Site.Taxonomies.topics }}
+            <li>{{ $taxonomy.Count }} <a href="/tags/{{ $name | urlize }}">#{{ $name }}</a> conversations</li>
+        {{end}}
+        {{ range $name, $taxonomy := .Site.Taxonomies.areas }}
+            <li>{{ $taxonomy.Count }} articles focus on <a href="/tags/{{ $name | urlize }}">#{{ $name }}</a> areas</li>
+        {{end}}
+        <li></li>
+      </ul>
+    </div>
+</section>
+
+{{ end }}

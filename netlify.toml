@@ -1,0 +1,10 @@
+[build]
+  command = """
+    curl -L https://github.com/gohugoio/hugo/releases/download/v0.136.5/hugo_extended_0.136.5_linux-amd64.tar.gz | tar -xz -C /tmp && \
+    /tmp/hugo --gc --minify
+  """
+  publish = "public"
+
+[build.environment]
+  HUGO_VERSION = "0.152.2"
+  HUGO_EXTENDED = "true"

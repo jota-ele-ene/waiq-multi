@@ -1,0 +1,28 @@
+<!-- Banner -->
+<!-- DEBUG
+<pre>
+{{ printf "%#v" .Params }}
+</pre>
+-->
+{{ $logo := `<span class="waiq-word"><img src="/images/waiq-text.png" alt="WAIQ" class="waiq-logo" style="height: 0.8em;"></span>` }}
+{{ $subtitle := replace .Params.Subtitle "#WAIQ" $logo }}
+<section class="banner {{ .Params.style }}" style="height: 100%;
+margin: 0;
+overflow: clip;
+contain: content;
+ ">
+    <div class="content">
+        {{ with .Title }}<h1 class="{{ with $.Params.h1 }}{{ . }}{{ end }}">{{ . }}</h1>{{ end }}
+        {{ with .Params.Subtitle }}<p class="major subtitle">{{ $subtitle | safeHTML }}</p>{{ end }}
+        <p>{{ .Content }}</p>
+        <ul class="actions stacked">
+            <li><a href="{{ with .Params.button_link }}{{ . }}{{ end }}" class="button primary large wide smooth-scroll-middle">{{ .Params.button_label }}</a></li>
+            {{ with .Params.second_link }}
+                <li><a href="{{ . }}" class="button primary large wide smooth-scroll-middle">{{ $.Params.second_label }}</a></li>
+            {{ end }}
+        </ul>
+    </div>
+    {{ with .Params.image }}<div class="image">
+      <img src="{{ . | absURL}}" alt="" />
+    </div>{{end}}
+</section>

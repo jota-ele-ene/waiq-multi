@@ -1,0 +1,126 @@
+## -----------------------------------------------
+## Basic Configuration
+## -----------------------------------------------
+
+cnf = "/_default/config.toml"
+theme = "blog-story"
+languageCode = 'en-us'
+title = 'Welcome to this #WAIQ Age'
+defaultContentLanguage = "en"
+defaultContentLanguageInSubdir = false
+
+## -----------------------------------------------
+## Publish
+## -----------------------------------------------
+
+relativeURLs = "true"
+#canonifyURLs = "true"
+
+# Local
+baseURL = "/"
+publishDir = "public"
+
+# Remote
+#baseURL = "https://caressofsteel.github.io/demos/hugo/hugo-story/"
+#publishDir = "//centos/sites/hugodev/hugostory/"
+
+
+## -----------------------------------------------
+## Hugo Built-in Features
+## -----------------------------------------------
+
+#disableKinds = ["taxonomy", "section"]
+disableKinds = ["section"]
+ignoreLogs = ['warning-goldmark-raw-html']
+
+## -----------------------------------------------
+## Analytics support
+## -----------------------------------------------
+
+#googleAnalytics: G-MEASUREMENT_ID
+#swetrixAnalytics = "3UYKaHJP56by"
+
+[Params.analytics]
+domain    = "cloud.umami.is"
+websiteid = "851feb30-981e-42e5-b269-453cfd2fb07f"
+
+## -----------------------------------------------
+## Taxonomies
+## -----------------------------------------------
+
+[taxonomies]
+topic = "topics"
+area = "areas"
+#category = "categories"
+
+[related]
+  includeNewer = true
+  threshold = 80
+  toLower = true
+
+  [[related.indices]]
+    name = "title"
+    weight = 30
+
+  [[related.indices]]
+    name = "description"
+    weight = 30
+
+  [[related.indices]]
+    name = "areas"
+    weight = 10
+
+  [[related.indices]]
+    name = "topics"
+    weight = 30
+
+## -----------------------------------------------
+## Site Parameters
+## -----------------------------------------------
+
+[Params]
+
+[Params.social]
+  #github = "https://github.com/caressofsteel/"
+  #twitter = "https://twitter.com/caressofsteel_"
+  email = "hello@waiq.technology"
+  #instagram = "https://instagram.com"
+  linkedin = "https://www.linkedin.com/company/waiq-community"
+  #telegram = "https://telegram.org"
+
+[Params.asset]
+additional_css = ["/css/fontawesome-all.min.css","/css/waiq.css","/css/lang.css"]
+additional_js = ["/js/fontawesome-all.min.js","/js/waiq.js"]
+
+## -----------------------------------------------
+## Languages support
+## -----------------------------------------------
+defaultContentLanguage = "en"
+defaultContentLanguageInSubdir = true
+
+[languages]
+
+[languages.en]
+  languageName = "English"
+  title = 'Welcome to this #WAIQ Age'
+  weight = 1
+  contentDir = "content/en"
+
+  [languages.en.params]
+    description = "WAIQ - Full experience"
+
+[languages.es]
+  languageName = "Español"
+  title = 'Bienvenido a la era #WAIQ'
+  weight = 2
+  contentDir = "content/es"
+
+  [languages.es.params]
+    description = "WAIQ - Experiencia completa de blog"
+
+[outputFormats]
+  [outputFormats.json]
+    mediaType   = "application/json"
+    baseName    = "index"
+    isPlainText = true
+    notAlternative = true

@@ -1,0 +1,31 @@
+{{ define "main" }}
+<!-- Language DEBUG -->
+<!--<div style="background: orange; padding: 20px; color: red;">
+  <p>Lang: {{ .Lang }}</p>
+	<p>Pages in "article": {{ len (where .Site.Pages "Section" "article") }}</p>
+	<p>Pages in "article" with "Lang": {{ len (where (where .Site.Pages "Section" "article") "Lang" .Lang)}}</p>
+  <p>Featured articles: {{ len (where (where .Site.Pages "Section" "article") "Params.featured" true) }}</p>
+</div>
+	{{ range sort (where .Site.Pages "Section" "article") ".Weight" "desc" ".Date" }}
+		{{ if .Params.featured }}
+			{{ .Render "spotlight" }}
+		{{ end }}
+	{{ end }}
+-->
+<!--
+	{{ range first 4 (sort (where .Site.Pages "Section" "article") ".Weight" "desc" ".Date") }}
+	  {{ if .Params.featured }}
+	    {{ .Render "spotlight" }}
+	  {{ end }}
+	{{ end }}
+-->
+
+	{{ $radar := where (where .Site.RegularPages "Type" "article") "Params.radar" true }}
+	{{ $newest := sort $radar "Date" "desc" | first 1 }}	
+	{{ with index $newest 0 }}
+		    {{ .Render "spotlight" }}
+	{{ end }}
+
+	{{ partial "galeria-waiqers.html" . }}
+
+{{ end }}

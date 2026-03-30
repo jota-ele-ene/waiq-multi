@@ -1,0 +1,14 @@
+{{- $articles := where .Site.RegularPages "Type" "article" -}}
+{
+  "contents": [
+    {{- range $i, $p := $articles }}
+    {{- if $i }},{{ end }}
+    {
+      "url": {{ $p.Params.button_url | default $p.Permalink | jsonify }},
+      "title": {{ $p.Title | jsonify }},
+      "date": {{ $p.Date.Format "2006-01-02" | jsonify }},
+      "radar": {{ $p.Params.radar | default false }}
+    }
+    {{- end }}
+  ]
+}

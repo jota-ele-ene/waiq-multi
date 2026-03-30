@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="manifest" href="/icons/site.webmanifest">
+    <link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="shortcut icon" href="/icons/favicon.ico">
+    <meta name="msapplication-config" content="/icons/browserconfig.xml">
+    <meta name="msapplication-TileColor" content="#7ecfe4">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="/css/main.min.css">
+    <noscript><link rel="stylesheet" href="/css/noscript.css" /></noscript>
+    <link rel="stylesheet" href="/css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="/css/waiq.css">
+    <title>WAIQ Close Garden</title>
+    <style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+    }
+
+        .container {
+            width: 100%;
+            padding: 10px 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .login-container {
+            background: white;
+            padding: 50px;
+            border-radius: 12px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 380px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        input[type="password"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        button {
+            width: 100%;
+            color: white;
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .error {
+            color: #e74c3c;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+            display: none;
+            padding: 10px;
+            background: #fadbd8;
+            border-radius: 6px;
+            border-left: 4px solid #e74c3c;
+        }
+
+        .success {
+            color: #27ae60;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+            display: none;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            color: #667eea;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        @media (max-width: 600px) {
+            #form-position-desktop { display: none }
+            #form-position-media { display: inline }
+            .container { padding: 30px 20px; }
+            .content { padding: 0 15%; }
+            .modal-content {     position: sticky; top: 20px; padding: 30px 20px; }
+            .form-row { grid-template-columns: 1fr; }
+            .modal-buttons { flex-direction: column; }
+            .logo h1 { font-size: 2rem; }
+            .confirmation-data-row { flex-direction: column; }
+            .confirmation-data-row span { max-width: 100%; text-align: left; margin-top: 5px; }
+            .image-info { grid-template-columns: 1fr; }
+            .image { height:auto!important; }
+            section.banner.style1 { display:grid; }
+            .loading-screen { margin:10px; }
+            .confirmation-screen h2 { margin: 5% auto 20px; }
+            .confirmation-container { display: block !important; }
+        }
+
+    </style>
+</head>
+<body>
+
+      <div class="login-container">
+          <h1>🔐</h1>
+          <h1 style="font-size: 20px;">Acceso Protegido</h1>
+          <p class="subtitle">Ingresa la contraseña para continuar</p>
+
+          <form id="loginForm">
+              <div class="form-group">
+                  <label for="password">Contraseña</label>
+                  <input
+                      type="password"
+                      id="password"
+                      placeholder="••••••••"
+                      required
+                      autocomplete="current-password"
+                  >
+              </div>
+
+              <button type="submit">Acceder</button>
+
+              <div class="loading" id="loading">Verificando...</div>
+              <div class="error" id="error">❌ Contraseña incorrecta</div>
+              <div class="success" id="success">✓ Acceso correcto. Redirigiendo...</div>
+          </form>
+      </div>
+
+
+  </div>
+</section>
+
+<script>
+    // ⚠️ REEMPLAZA ESTO CON TU HASH SHA-256
+    const PASSWORD_HASH = "1862cac9cf1788300c4e9c2c695924fd2cad49fd180f83b7ed343cb50ee1eb47";
+
+    // Función para hashear con SHA-256
+    async function sha256(message) {
+        try {
+            const msgBuffer = new TextEncoder().encode(message);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray
+                .map(b => b.toString(16).padStart(2, '0'))
+                .join('');
+            return hashHex;
+        } catch (error) {
+            console.error('Error al hashear:', error);
+            return null;
+        }
+    }
+
+    // Manejar envío del formulario
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const passwordInput = document.getElementById('password');
+        const errorDiv = document.getElementById('error');
+        const successDiv = document.getElementById('success');
+        const loadingDiv = document.getElementById('loading');
+
+        // Limpiar mensajes anteriores
+        errorDiv.style.display = 'none';
+        successDiv.style.display = 'none';
+        loadingDiv.style.display = 'block';
+
+        const inputPassword = passwordInput.value;
+
+        try {
+            // Hashear la password ingresada
+            const inputHash = await sha256(inputPassword);
+
+            // Simular un pequeño delay para UX
+            await new Promise(resolve => setTimeout(resolve, 300));
+
+            // Comparar hashes
+            if (inputHash === PASSWORD_HASH) {
+                successDiv.style.display = 'block';
+                loadingDiv.style.display = 'none';
+
+                // Guardar en sessionStorage
+                sessionStorage.setItem('authenticated', 'true');
+                sessionStorage.setItem('authTime', Date.now());
+
+                // Redirigir después de 1 segundo
+                setTimeout(() => {
+                    window.location.href = '../index.html';
+                }, 1000);
+            } else {
+                errorDiv.style.display = 'block';
+                loadingDiv.style.display = 'none';
+                passwordInput.value = '';
+                passwordInput.focus();
+            }
+        } catch (error) {
+            console.error('Error durante autenticación:', error);
+            errorDiv.textContent = '❌ Error en la autenticación. Intenta de nuevo.';
+            errorDiv.style.display = 'block';
+            loadingDiv.style.display = 'none';
+        }
+    });
+
+    // Si ya está autenticado, redirigir directamente
+    if (sessionStorage.getItem('authenticated') === 'true') {
+        const authTime = sessionStorage.getItem('authTime');
+        // Sesión válida por 8 horas
+        if (Date.now() - parseInt(authTime) <  8 * 60 * 60 * 1000) {
+            window.location.href = '../index.html';
+        } else {
+            sessionStorage.removeItem('authenticated');
+            sessionStorage.removeItem('authTime');
+        }
+    }
+
+    // Enfocar input automáticamente
+    document.getElementById('password').focus();
+</script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!-- Gallery -->
+{{ with .Site.GetPage "/banner/WhoWeAre.md" }}
+<section class="wrapper style1 align-center">
+    {{ $logo := `<span class="waiq-word"><img src="/images/waiq-text.png" alt="WAIQ" class="waiq-logo" style="height: 0.8em;"></span>` }}
+    {{ $summary := replace .Params.summary "#WAIQ" $logo }}
+    <div class="inner">
+        <h2>{{ .Title }}</h2>
+        <p>{{ $summary | safeHTML }}</p>
+    </div>
+
+    <!-- Gallery-->
+    <div class="gallery {{ .Params.style }}" id="gallery"><div class="inner">
+
+      {{ $pictures := where (where .Site.AllPages "Lang" "en") "Section" "picture" }}
+
+      
+      {{ range $pictures }}
+        {{- $tags := lower (default "" .Params.tags) -}}
+        {{- if in $tags (lower "core") -}}
+          {{ .Render "summary" }}
+        {{- end -}}
+      {{ end }}
+
+    </div></div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const gallery = document.getElementById('gallery');
+  if (!gallery) return;
+
+  const inner = gallery.querySelector('.inner');
+  if (!inner) return;
+
+  const items = Array.from(inner.querySelectorAll('article'));
+
+  // Barajar los artículos
+  for (let i = items.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [items[i], items[j]] = [items[j], items[i]];
+  }
+
+  // Volver a insertarlos en .inner en el nuevo orden
+  items.forEach(item => inner.appendChild(item));
+});
+</script>
+
+</section>
+{{ end }}

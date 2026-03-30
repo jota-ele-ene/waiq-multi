@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="icon" type="image/png" sizes="32x32" href="../icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../icons/favicon-16x16.png">
+    <link rel="manifest" href="../icons/site.webmanifest">
+    <link rel="mask-icon" href="../icons/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="shortcut icon" href="../icons/favicon.ico&quot;">
+    <meta name="msapplication-config" content="../icons/browserconfig.xml">
+    <meta name="msapplication-TileColor" content="#7ecfe4">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="../css/main.css">
+    <noscript><link rel="stylesheet" href="../css/noscript.css" /></noscript>
+    <link rel="stylesheet" href="../css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="../css/waiq.css">
+    <title>WAIQ Profiles - Formulario</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (min-width: 600px) {
+            .inner {
+                margin: 0 auto;
+                max-width: max-content;
+                padding: 0 20%;
+            }
+        }
+
+        .image {
+            display: inline!important;
+        }
+
+        .container {
+            width: 100%;
+            padding: 10px 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        #form-position-desktop { display: inline }
+        #form-position-media { display: none }
+
+        .logo p {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        h1.home {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        h2::before {
+            border-top: 0px;
+        }
+
+        .content {
+            padding: 0 0 2rem;
+        }
+
+        .content p {
+            padding: 0.4em 1em;
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            display: none;
+            text-align: center;
+            padding: 0 20px;
+            margin: 0 auto;
+        }
+
+        .loading-screen.active {
+            display: block;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 20px;
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loading-spinner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.3);
+            animation: loadingSlide 1.5s infinite;
+        }
+
+        @keyframes loadingSlide {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .loading-bar {
+            width: 100%;
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .hidden {
+          display:none;
+        }
+
+        .loading-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, rgb(0,168,188) 0%, rgb(2,21,71) 100%);
+            width: 30%;
+            animation: progressBar 2s infinite;
+            border-radius: 2px;
+        }
+
+        @keyframes progressBar {
+            0% { width: 10%; }
+            50% { width: 80%; }
+            100% { width: 100%; }
+        }
+
+        /*.loading-text {
+            color: #666;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }*/
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-group label {
+          display: block;
+          margin-bottom: 2px;
+          color: #333;
+          font-weight: 600;
+          font-size: 0.8em;
+          text-align: left;
+          margin-left: 0.5em;
+        }
+
+        .form-group label.required::after {
+            content: " *";
+            color: #e74c3c;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            background: white;
+            height: 2rem!important;
+            color: #333;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: rgb(0,168,188);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group input::placeholder, .form-group textarea::placeholder,
+          .form-group input:-webkit-input-placeholder, .form-group textarea::-webkit-input-placeholder {
+          color: #999;
+          opacity: 1; /* Importante para navegadores modernos */
+        }
+
+        /* File Input */
+        .file-input-wrapper {
+            position: relative;
+            display: block;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .file-input-wrapper input[type="file"] {
+            display: none;
+        }
+
+        .file-input-label {
+            display: flex!important;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            border: 2px dashed rgb(0,168,188);
+            border-radius: 10px;
+            background: rgba(102, 126, 234, 0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            min-height: 120px;
+            background: white;
+        }
+
+        .file-input-label:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #764ba2;
+        }
+
+        .file-input-label.hidden {
+            display: none !important;
+        }
+
+        .file-icon {
+            font-size: 2rem;
+            margin-right: 15px;
+        }
+
+        .file-text p {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .file-text small {
+            color: #999;
+            font-size: 0.85rem;
+        }
+
+        /* Image Preview */
+        .image-preview-container {
+          display: none !important;
+          gap: 20px;
+          margin: 20px 0;
+          padding: 20px;
+          background: #f8f9fa;
+          border-radius: 15px;
+          border: 2px solid #e0e0e0;
+          align-items: flex-start;
+        }
+
+        .image-preview-container.active {
+          display: flex !important;
+          animation: slideIn 0.3s ease;
+        }
+
+        .image-preview-wrapper {
+          display: flex;
+          flex-direction: column;
+          gap: 15px;
+          flex-shrink: 0;
+          align-items: center;
+        }
+
+        .image-preview-title {
+            width: 100%;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+
+        #imagePreview.image-preview {
+          width: 120px;
+          height: 120px;
+          border-radius: 12px;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+          border: 3px solid #667eea;
+          object-fit: cover;
+          display: block;
+          position: relative;
+          max-width: none !important;
+        }
+
+        .image-info {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 10px;
+          flex: 1;
+        }
+
+        .image-info-item {
+          text-align: left;
+          font-size: 0.8em;
+          line-height: 1em;
+        }
+
+        .image-info-item strong {
+          color: #667eea;
+          margin-bottom: 3px;
+          text-transform: uppercase;
+        }
+
+        .image-info-item span {
+            color: #333;
+        }
+
+        .change-image-btn {
+            background: #e74c3c!important;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: absolute;
+            z-index: 10;
+            margin: 0 -75px;
+            line-height: 10px;
+            height: 20px;
+            width: 120px;
+                padding: 0;
+                font-size: x-small;
+        }
+
+        .change-image-btn:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        /* Modal Overlay */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Modal Content */
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh; 
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: scaleIn 0.3s ease;
+            position: sticky;
+            top: 5%;
+        }
+
+        .modal-header {
+            margin-bottom: 30px;
+        }
+
+        .modal-header h2 {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .modal-header p {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        /* Checkboxes en Modal */
+        .checkbox-group {
+            margin-bottom: 25px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid rgb(0,168,188);
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            appearance: auto;
+            z-index:10;
+            opacity: inherit;
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            margin-top: 2px;
+            cursor: pointer;
+            accent-color: rgb(0,168,188);
+            flex-shrink: 0;
+        }
+
+        .checkbox-content {
+            flex: 1;
+                text-align: left;
+        }
+
+        .checkbox-content label {
+            display: block;
+            margin: 0;
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95rem;
+            cursor: pointer;
+            margin-bottom: 5px;
+        }
+
+        .checkbox-content .disclaimer {
+            font-size: 0.85rem;
+            color: #666;
+            line-height: 1.4;
+            margin: 0;
+        }
+
+        .checkbox-content .disclaimer a {
+            color: rgb(0,168,188);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .checkbox-content .disclaimer a:hover {
+            text-decoration: underline;
+        }
+
+        .checkbox-error {
+            display: none;
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-error.show {
+            display: block;
+        }
+
+        .modal-buttons {
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        button {
+            margin: 10px;
+            /* padding: 0.4rem; */
+            border: 0;
+            cursor: pointer;
+            display: inline-block;
+            font-weight: 400;
+            letter-spacing: .125em;
+            text-align: center;
+            text-decoration: none;
+            text-transform: uppercase;
+            white-space: nowrap;
+            font-size: .75rem;
+            max-width: 20rem;
+            height: 3.75em;
+            line-height: 3.75em;
+            border-radius: 3.75em;
+            padding: 0 1.5em;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-btn-cancel {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .modal-btn-cancel:hover {
+            background: #d0d0d0;
+        }
+
+        .modal-btn-submit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .modal-btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .modal-btn-submit:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Submit Button */
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Confirmation Screen */
+        .confirmation-screen {
+            display: none;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .confirmation-screen.active {
+            display: block;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: #27ae60;
+            margin-bottom: 20px;
+            animation: scaleIn 0.5s ease;
+        }
+
+        .confirmation-screen p {
+            color: #666;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .confirmation-container {
+            display: flex !important;
+            gap: 20px;
+            margin: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border: 2px solid #e0e0e0;
+            align-items: flex-start;
+        }
+
+        /* Preview wrapper (izquierda) */
+        .confirmation-image-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            flex-shrink: 0;
+            align-items: center;
+            width: 40%;
+        }
+
+        .image-preview {
+            max-width: 200px;
+            max-height: 200px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            border: 3px solid #667eea;
+            object-fit: cover;
+            display: block;
+        }
+
+        .confirmation-data {
+            background: #f8f9fa;
+            border-radius: 10px;
+            text-align: left;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .confirmation-data-row {
+            /*display: flex;*/
+            /*justify-content: space-between;*/
+            border-bottom: 1px solid #e0e0e0;
+            flex-wrap: wrap;
+        }
+
+        .confirmation-data-row:last-child {
+            border-bottom: none;
+        }
+
+        .confirmation-data-row strong {
+            color: #333;
+            margin: 0 8px;
+        }
+
+        .confirmation-data-row span {
+            color: #666;
+            word-break: break-word;
+            text-align: right;
+        }
+
+        .confirmation-image-full {
+            max-width: 150px;
+            max-height: 150px;
+            border-radius: 10px;
+            margin: 20px auto;
+            display: block;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #confirmationImage.confirmation-image {
+           /* width: 200px;
+            height: 200px;
+            object-fit: cover;
+            object-position: center;*/
+            border-radius: 12px;
+            position: relative;
+            max-width: 100%;
+            padding: 0;
+            margin: auto;
+        }
+
+        .reset-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .mode-badge {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .mode-badge.update {
+            background: #f39c12;
+        }
+
+        #formScreen {
+            display: none;
+        }
+
+        #formScreen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        @media (max-width: 600px) {
+            #form-position-desktop { display: none }
+            #form-position-media { display: inline }
+            .container { padding: 30px 20px; }
+            .content { padding: 0 15px; }
+            .modal-content {     position: sticky; top: 20px; padding: 30px 20px; }
+            .form-row { grid-template-columns: 1fr; }
+            .modal-buttons { flex-direction: column; }
+            .logo h1 { font-size: 2rem; }
+            .confirmation-data-row { flex-direction: column; }
+            .confirmation-data-row span { max-width: 100%; text-align: left; margin-top: 5px; }
+            .confirmation-data {margin: 20px 0;}
+            .image-info { grid-template-columns: 1fr; }
+            .image { height:auto!important; }
+            section.banner.style1 { display:grid; }
+            .loading-screen { margin:10px; }
+            .confirmation-screen h2 { margin: 5% auto 20px; }
+            .confirmation-container { display: block !important; }
+        }
+        
+
+    </style>
+</head>
+<body>
+
+  <section class="style1 orient-center content-align-center image-position-center fullscreen onload-image-fade-in onload-content-fade-right"
+  style="height: 100%;margin: 0; overflow: clip;contain: content;
+ ">
+   <div class="inner">
+    <div class="content">
+        <h1 class="home">      <img src="../images/waiq-tm.png" alt="" height="100px"></h1>
+        <p>Welcome to the <span class="waiq-world">
+  <img src="/images/waiq-text.png" alt="WAIQ" class="waiq-text">
+</span> site. We have sent you this form because you have participated in <span class="waiq-world">
+  <img src="/images/waiq-text.png" alt="WAIQ" class="waiq-text">
+</span> activities on occasion. </p>
+        <p>Please fill out the <span id="form-position-media">below</span> form <span id="form-position-desktop">on the right</span> with <strong>your details</strong> so we can stay in touch.</p>
+    </div>
+    <div class="image">
+      <div class="container ">
+        <!-- LOADING SCREEN -->
+        <div id="loadingScreen" class="loading-screen active">
+            <div class="loading-bar"><div class="loading-bar-fill"></div></div>
+            <div class="loading-text">Cargando tus datos</div>
+            <div class="loading-subtext">Por favor espera...</div>
+        </div>
+
+        <!-- FORMULARIO PRINCIPAL -->
+        <div id="formScreen">
+            <div id="message" class="message"></div>
+
+            <form id="contactForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name" class="required">Nombre</label>
+                        <input type="text" id="name" name="name" required placeholder="Ej: Juan">
+                    </div>
+                    <div class="form-group">
+                        <label for="surname" class="required">Apellido</label>
+                        <input type="text" id="surname" name="surname" required placeholder="Ej: García">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="display">Nombre de visualización</label>
+                    <input type="text" id="display" name="display" placeholder="Ej: Juan G. López">
+                </div>
+
+                <div class="form-group">
+                    <label for="rol" class="required">Rol/Posición</label>
+                    <input type="text" id="rol" name="rol" required placeholder="Ej: Alumni">
+                </div>
+
+                <div class="form-group">
+                    <label for="email" class="required">Email</label>
+                    <input type="text" id="email" name="email" required placeholder="Ej: john.doe@acme.com">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="linkedin">LinkedIn</label>
+                        <input type="url" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/...">
+                    </div>
+                    <div class="form-group">
+                        <label for="x">X (Twitter)</label>
+                        <input type="url" id="x" name="x" placeholder="https://x.com/...">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="github">GitHub</label>
+                        <input type="url" id="github" name="github" placeholder="https://github.com/...">
+                    </div>
+                    <div class="form-group">
+                        <label for="blog">Blog/Web</label>
+                        <input type="url" id="blog" name="blog" placeholder="https://tuwebsite.com">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="picture">Foto de perfil</label>
+                    <div class="file-input-wrapper">
+                        <input type="file" id="picture" name="picture" accept="image/jpeg,image/png,image/gif,image/webp">
+                        <label for="picture" class="file-input-label" id="fileLabel" onclick="document.getElementById('picture').click(); return false;">
+                            <div class="file-icon">📸</div>
+                            <div class="file-text">
+                                <p>Arrastra tu foto aquí o haz clic</p>
+                                <small>JPG, PNG, GIF, WebP (máx. 5MB)</small>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div id="imagePreviewContainer" class="image-preview-container">
+                    <div id="imagePreviewSubContainer" class="image-preview-wrapper">
+                      <button type="button" class="change-image-btn" onclick="changeImage()">
+                          Cambiar imagen
+                      </button>
+                      <img id="imagePreview" referrerpolicy="no-referrer" class="image-preview" alt="Vista previa">
+                    </div>
+                    <div class="image-info">
+                        <div class="image-info-item">
+                            <strong>Nombre:</strong>
+                            <span id="imageName"></span>
+                        </div>
+                        <div class="image-info-item">
+                            <strong>Tamaño:</strong>
+                            <span id="imageSize"></span>
+                        </div>
+                        <div class="image-info-item">
+                            <strong>Dimensiones:</strong>
+                            <span id="imageDimensions"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    Siguiente
+                </button>
+            </form>
+
+            <div class="footer">
+                <p>© <span id="year"></span> <a href="https://waiq.technology" target="_blank"><span class="waiq-world"><img src="/images/waiq-text.png" alt="WAIQ" class="waiq-text"></span></a></p>
+                <script>  document.getElementById("year").textContent = new Date().getFullYear();</script>
+            </div>
+        </div>
+
+        <!-- CONFIRMATION SCREEN -->
+        <div id="confirmationScreen" class="confirmation-screen">
+            <h2>✓¡Perfil actualizado correctamente!</h2>
+            <p>Tu información ha sido guardada exitosamente.</p>
+
+            <div class="confirmation-container">
+
+              <div class="confirmation-image-wrapper">
+                  <img id="confirmationImage" class="confirmation-image" alt="Foto de perfil" style="display: none;">
+              </div>
+
+              <div class="confirmation-data">
+                  <div class="confirmation-data-row hidden">
+                      <strong>ID:</strong>
+                      <span id="confirmId"></span>
+                  </div>
+                  <div class="confirmation-data-row">
+                      <strong>Nombre:</strong>
+                      <span id="confirmName"></span>
+                  </div>
+                  <div class="confirmation-data-row">
+                      <strong>Rol:</strong>
+                      <span id="confirmRol"></span>
+                  </div>
+                  <div class="confirmation-data-row">
+                      <strong>Email:</strong>
+                      <span id="confirmEmail"></span>
+                  </div>
+                  <div class="confirmation-data-row hidden">
+                      <strong>LinkedIn:</strong>
+                      <span id="confirmLinkedin"></span>
+                  </div>
+                  <div class="confirmation-data-row hidden ">
+                      <strong>GitHub:</strong>
+                      <span id="confirmGithub"></span>
+                  </div>
+              </div>
+
+            </div>
+
+            <button class="" onclick="resetForm()">Editar de nuevo</button>
+        </div>
+    </div>
+
+    <!-- MODAL DE CONSENTIMIENTO -->
+    <div id="modalOverlay" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Consentimientos requeridos</h2>
+                <p>Por favor, acepta los siguientes términos para continuar</p>
+            </div>
+
+            <div class="checkbox-group">
+                <div class="checkbox-item">
+                    <input type="checkbox" id="consentData" name="consentData">
+                    <div class="checkbox-content">
+                        <label for="consentData">Acepto la cesión de datos personales</label>
+                        <p class="disclaimer">
+                            Autorizo la cesión de mis datos personales para las actividades propias de gestión y dinamización de la comunidad <span class="waiq-world">
+  <img src="/images/waiq-text.png" alt="WAIQ" class="waiq-text">
+</span>, incluyendo comunicaciones, eventos y iniciativas comunitarias.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="checkbox-group">
+                <div class="checkbox-item">
+                    <input type="checkbox" id="consentPublication" name="consentPublication">
+                    <div class="checkbox-content">
+                        <label for="consentPublication">Acepto ser publicado en la web</label>
+                        <p class="disclaimer">
+                            Autorizo la publicación de mi perfil y datos en la página web <a href="http://waiq.technologies" target="_blank">waiq.technologies</a> sin restricción de acceso, con visibilidad pública.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="checkboxError" class="checkbox-error">
+                ⚠️ Debes aceptar ambos términos para continuar.
+            </div>
+
+            <div class="modal-buttons">
+              <div id="loadingBar" class="loading-bar hidden"><div class="loading-bar-fill"></div></div>
+                <button type="button"  onclick="closeModal()">
+                    Cancelar
+                </button>
+                <button type="button"  id="finalSubmitBtn" onclick="finalSubmit()">
+                    Enviar
+                </button>
+            </div>
+        </div>
+    </div>
+  </div>
+  </div>
+</section>
+
+
+    <script>
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzmkR1DSK_uHJclDXUa7gRPr0DCCEi45tANk3RbBNuhse_aPcVbMpKlMW0_4crFwk92xg/exec';
+
+        const form = document.getElementById('contactForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const finalSubmitBtn = document.getElementById('finalSubmitBtn');
+        const messageDiv = document.getElementById('message');
+        const fileInput = document.getElementById('picture');
+        const fileLabel = document.getElementById('fileLabel');
+        const formScreen = document.getElementById('formScreen');
+        const loadingScreen = document.getElementById('loadingScreen');
+        const confirmationScreen = document.getElementById('confirmationScreen');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modeBadge = document.getElementById('modeBadge');
+        const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+        const checkboxError = document.getElementById('checkboxError');
+        const consentDataCheckbox = document.getElementById('consentData');
+        const consentPublicationCheckbox = document.getElementById('consentPublication');
+        const email = document.getElementById('email');
+
+        let editMode = false;
+        let currentRowId = null;
+        let currentId = null;
+        let existingPictureUrl = null;
+        let formDataCache = null;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            let profileId = params.get('id') || params.get('Id') || params.get('ID');
+
+            if (profileId) {
+                loadingScreen.classList.add('active');
+                formScreen.classList.remove('active');
+                loadProfileData(profileId);
+            } else {
+                //window.location.href = '/';
+                currentRowId = buildNewId();
+                loadingScreen.classList.remove('active');
+                formScreen.classList.add('active');            }
+        });
+
+        async function loadProfileData(profileId) {
+            try {
+                const response = await fetch(SCRIPT_URL + '?action=findById&id=' + encodeURIComponent(profileId));
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                  console.log('Result:' + JSON.stringify(result, null, 1));
+                    editMode = true;
+                    currentRowId = result.rowId;
+                    currentId = profileId;
+
+                    document.getElementById('name').value = result.data.name || '';
+                    document.getElementById('surname').value = result.data.surname || '';
+                    document.getElementById('display').value = result.data.display || '';
+                    document.getElementById('rol').value = result.data.rol || '';
+                    document.getElementById('linkedin').value = result.data.linkedin || '';
+                    document.getElementById('x').value = result.data.x || '';
+                    document.getElementById('github').value = result.data.github || '';
+                    document.getElementById('blog').value = result.data.blog || '';
+                    document.getElementById('email').value = result.data.email || '';
+
+                    if (result.data.picture && result.data.picture.trim()) {
+                        existingPictureUrl = result.data.picture;
+                        displayExistingImage(result.data.picture);
+                    }
+
+                    submitBtn.textContent = 'Siguiente';
+
+                    setTimeout(() => {
+                        loadingScreen.classList.remove('active');
+                        formScreen.classList.add('active');
+                    }, 800);
+
+                } else {
+                    window.location.href = '/';
+                    //showMessage('Perfil no encontrado. Creando nuevo perfil.', 'error');
+                    //loadingScreen.classList.remove('active');
+                    //formScreen.classList.add('active');
+                }
+            } catch (error) {
+                console.error('Error cargando perfil:', error);
+                loadingScreen.classList.remove('active');
+                formScreen.classList.add('active');
+            }
+        }
+
+        function displayExistingImage(imageUrl) {
+            const preview = document.getElementById('imagePreview');
+            const container = document.getElementById('imagePreviewContainer');
+            const label = document.getElementById('fileLabel');
+
+            if (!preview || !container || !label) return;
+
+            preview.src = imageUrl;
+            document.getElementById('imageName').textContent = 'Foto actual del perfil';
+            document.getElementById('imageSize').textContent = '—';
+            document.getElementById('imageDimensions').textContent = '—';
+
+            label.classList.add('hidden');
+            container.classList.add('active');
+        }
+
+        function getDriveDirectUrl(urlCompartida) {
+          // Extrae el ID de la imagen del enlace compartido de Drive
+          const regex = /\/d\/([a-zA-Z0-9_-]+)/;
+          const match = urlCompartida.match(regex);
+          if (match && match[1]) {
+            const id = match[1];
+            // Construye la URL directa para usar en el src del img
+            return "https://drive.google.com/uc?id="+id+"&t=" + new Date().getTime();
+          } else {
+            console.error("No se pudo extraer el ID de la URL de Drive");
+            return null;
+          }
+        }
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                if (file.size > 5242880) {
+                    showMessage('El archivo es demasiado grande (máximo 5MB)', 'error');
+                    fileInput.value = '';
+                    return;
+                }
+
+                const reader = new FileReader();
+
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.onload = () => {
+                      console.log("img.onload() >" + event.target.result);
+                        displayImagePreview(event.target.result, file, img.width, img.height);
+                      };
+                    img.src = event.target.result;
+                };
+
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function displayImagePreview(base64, file, width, height) {
+            document.getElementById('imagePreview').src = base64;
+            document.getElementById('imageName').textContent = truncarName(file.name);
+            document.getElementById('imageSize').textContent = formatBytes(file.size);
+            document.getElementById('imageDimensions').textContent = width + 'x' + height + 'px';
+
+            fileLabel.classList.add('hidden');
+            imagePreviewContainer.classList.add('active');
+        }
+
+        function truncarName(nombreFichero) {
+            // Validar que sea un string
+            if (typeof nombreFichero !== 'string' || !nombreFichero.trim()) {
+                return '';
+            }
+
+            // Obtener el último punto (para separar extensión)
+            const ultimoPunto = nombreFichero.lastIndexOf('.');
+
+            // Si no hay punto, tratar todo como nombre
+            if (ultimoPunto === -1) {
+                const nombreSinExt = nombreFichero;
+                if (nombreSinExt.length <= 8) {
+                    return nombreSinExt;
+                }
+                return nombreSinExt.substring(0, 5) + '...' + nombreSinExt.substring(nombreSinExt.length - 1);
+            }
+
+            // Separar nombre y extensión
+            const nombre = nombreFichero.substring(0, ultimoPunto);
+            const extension = nombreFichero.substring(ultimoPunto + 1);
+
+            // Si el nombre sin extensión tiene 8 caracteres o menos, devolver tal cual
+            if (nombre.length <= 8) {
+                return nombreFichero;
+            }
+
+            // Truncar: 5 primeros caracteres + "..." + "." + extensión
+            return nombre.substring(0, 5) + '...' + '.' + extension;
+        }
+
+        function changeImage() {
+            //fileLabel.classList.remove('hidden');
+            fileInput.click();
+        }
+
+
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
+        }
+
+        fileLabel.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            if (!fileLabel.classList.contains('hidden')) {
+                fileLabel.style.borderColor = '#764ba2';
+                fileLabel.style.background = 'rgba(102, 126, 234, 0.15)';
+            }
+        });
+
+        fileLabel.addEventListener('dragleave', () => {
+            fileLabel.style.borderColor = '#667eea';
+            fileLabel.style.background = 'rgba(102, 126, 234, 0.05)';
+        });
+
+        fileLabel.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileLabel.style.borderColor = '#667eea';
+            fileLabel.style.background = 'rgba(102, 126, 234, 0.05)';
+
+            const file = e.dataTransfer.files[0];
+            if (file) {
+                fileInput.files = e.dataTransfer.files;
+                fileInput.dispatchEvent(new Event('change'));
+            }
+        });
+
+        // Paso 1: Validar formulario y abrir modal
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            // Guardar datos del formulario
+            formDataCache = {
+                name: document.getElementById('name').value,
+                surname: document.getElementById('surname').value,
+                display: document.getElementById('display').value || (document.getElementById('name').value + ' ' + document.getElementById('surname').value),
+                rol: document.getElementById('rol').value,
+                linkedin: document.getElementById('linkedin').value,
+                x: document.getElementById('x').value,
+                github: document.getElementById('github').value,
+                blog: document.getElementById('blog').value,
+                email: document.getElementById('email').value,
+                picture: document.getElementById('imagePreview').src
+            };
+
+            console.log("edirMore:"+editMode+"; currentId:"+currentId);
+            if (editMode) formDataCache.rowId = currentRowId;
+
+            // Abrir modal
+            openModal();
+        });
+
+        function openModal() {
+            modalOverlay.classList.add('active');
+            consentDataCheckbox.checked = false;
+            consentPublicationCheckbox.checked = false;
+            checkboxError.classList.remove('show');
+        }
+
+        function closeModal() {
+            modalOverlay.classList.remove('active');
+        }
+
+        consentDataCheckbox.addEventListener('change', () => {
+            if (consentDataCheckbox.checked && consentPublicationCheckbox.checked) {
+                checkboxError.classList.remove('show');
+            }
+        });
+
+        consentPublicationCheckbox.addEventListener('change', () => {
+            if (consentDataCheckbox.checked && consentPublicationCheckbox.checked) {
+                checkboxError.classList.remove('show');
+            }
+        });
+
+        // Paso 2: Enviar definitivamente
+        async function finalSubmit() {
+            //if (!consentDataCheckbox.checked || !consentPublicationCheckbox.checked) {
+            //    checkboxError.classList.add('show');
+            //    return;
+            //}
+            const loadingBar = document.getElementById('loadingBar');
+            loadingBar.classList.remove('hidden');
+
+            finalSubmitBtn.disabled = true;
+            finalSubmitBtn.textContent = 'Enviando...';
+
+            formDataCache.consentData = consentDataCheckbox.checked ? "SI" : "NO";
+
+            formDataCache.consentWeb = consentPublicationCheckbox.checked ? "SI" : "NO";
+
+            console.log("formDataCache:"+JSON.stringify(formDataCache))
+            try {
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formDataCache)
+                });
+
+                loadingBar.classList.add('hidden');
+                closeModal();
+                showConfirmation(formDataCache);
+
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('Hubo un error al guardar.', 'error');
+                finalSubmitBtn.disabled = false;
+                finalSubmitBtn.textContent = 'Enviar definitivo';
+            }
+        }
+
+        function showConfirmation(data) {
+            document.getElementById('confirmId').textContent = currentId || 'Nuevo perfil';
+            document.getElementById('confirmName').textContent = data.name + ' ' + data.surname;
+            document.getElementById('confirmRol').textContent = data.rol || 'No especificado';
+            if (data.linkedin) { document.getElementById('confirmLinkedin').textContent = data.linkedin } else { document.getElementById('confirmLinkedin').classList.add("hidden");}
+            if (data.github) { document.getElementById('confirmGithub').textContent = data.github  } else { document.getElementById('confirmGithub').classList.add("hidden");}
+            document.getElementById('confirmEmail').textContent = data.email  || "No especificado";
+
+            if (data.picture) {
+                document.getElementById('confirmationImage').src = data.picture;
+                document.getElementById('confirmationImage').style.display = 'block';
+            }
+
+            formScreen.style.display = 'none';
+            confirmationScreen.classList.add('active');
+        }
+
+        function resetForm() {
+            if (editMode) {
+                location.reload();
+            } else {
+                form.reset();
+                fileInput.value = '';
+                fileLabel.classList.remove('hidden');
+                imagePreviewContainer.classList.remove('active');
+
+                formScreen.style.display = 'block';
+                confirmationScreen.classList.remove('active');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Siguiente';
+                finalSubmitBtn.disabled = false;
+                finalSubmitBtn.textContent = 'Enviar definitivo';
+            }
+        }
+
+        function showMessage(text, type) {
+            messageDiv.textContent = text;
+            messageDiv.className = `message ${type}`;
+            messageDiv.style.display = 'block';
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        function buildNewId() {
+
+            // Generar nuevo profileID
+            let newID = "WAIQ_";
+
+            const letras = 'abcdefghijklmnopqrstuvwxyz';
+            const numeros = '0123456789';
+
+            for (let i = 0; i < 14; i++) {
+                newID += numeros.charAt(Math.floor(Math.random() * numeros.length));
+            }
+
+            newID += "_";
+
+            for (let i = 0; i < 14; i++) {
+                newID += (numeros+letras).charAt(Math.floor(Math.random() * (numeros+letras).length));
+            }
+
+            console.log ( "GEnerado nuevo ID: '"+newID+"'");
+            return newID;
+        }
+
+    </script>
+</body>
+</html>

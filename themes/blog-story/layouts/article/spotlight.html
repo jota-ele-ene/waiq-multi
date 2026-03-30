@@ -1,0 +1,57 @@
+<!-- Spotlight -->
+<section class="spotlight radar style1 content-align-left image-position-center onscroll-image-fade-in" id="first">
+    <div class="content">
+        <h2>{{ .Title }}{{ if .Params.button_url }}<br><a class="external" target="_blank" href="{{ .Params.button_url }}">external source<i class="fa fa-external-link-square icon" aria-hidden="true"></i></a>{{ end }}</h2>
+        <div class="tags">
+          <ul id="categories">
+            {{ range .Params.topics }}
+              <li><h4 class="topics"><a href="{{ "/topics/" | relLangURL }}{{ lower . | urlize }}">{{ . }}</a></h4> </li>
+            {{ end }}
+            {{ range .Params.areas }}
+              <li><h4 class="areas"><a href="{{ "/areas/" | relLangURL }}{{ lower . | urlize }}">{{ . }}</a></h4> </li>
+            {{ end }}
+          </ul>
+        </div>
+        {{ with .Description }}<p class="subheading">{{ . | safeHTML }}</p>{{ end }}
+        {{ if and .Content .Params.radar }}
+          <div class="content-body">{{ .Content }}</div>
+        {{ else }}
+          <ul class="actions stacked">
+            {{ if .Params.button_url }}
+              <li><a href="{{ .Params.button_url }}" target="_blank" rel="noopener noreferrer" class="button">{{ .Params.button_label }}</a></li>
+            {{ else }}
+              <li><a href="{{ .Permalink }}" class="button">{{ .Params.button_label }}</a></li>
+            {{ end }}
+          </ul>
+        {{ end }}
+    </div>
+
+    {{ if .Params.radar }}
+      <!-- Referencias gallery -->
+      {{ with .Params.references }}
+        <div class="radar-references">
+          <h2>{{ i18n "references.radar-references-intro" }}</h2>
+          {{ range . }}
+            <div class="radar-ref-item">
+              {{ if .image }}
+                <div class="radar-ref-thumb">
+                  <img src="{{ .image }}" alt="{{ .title }}" />
+                </div>
+              {{ end }}
+              <div class="radar-ref-body">
+                <h4 class="radar-ref-title">{{ .title }}</h4>
+                <a href="{{ .url }}" target="_blank" rel="noopener noreferrer" class="radar-ref-link">{{ i18n "references.read-in" }} {{ .source }} <i class="fa fa-external-link" aria-hidden="true"></i></a>
+              </div>
+            </div>
+          {{ end }}
+        </div>
+      {{ end }}
+    {{ else }}
+      {{ with .Params.image }}
+        <div class="image">
+            <img src="{{ . }}" alt="" />
+        </div>
+      {{ end }}
+    {{ end }}
+
+</section>

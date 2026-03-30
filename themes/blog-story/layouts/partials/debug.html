@@ -1,0 +1,6 @@
+<!-- DEBUG layout={{ .Layout }} kind={{ .Kind }} type={{ .Type }} section={{ .Section }} -->
+
+<pre>{{ printf "%#v" .Site.Params }}</pre>
+
+<p>UMAMI: {{ .Site.Params.umamiAnalytics }}</p>
+<p>UMAMI DOMAIN: {{ with .Site.Params.umamiAnalytics }}{{ .domain }}{{ end }}</p>

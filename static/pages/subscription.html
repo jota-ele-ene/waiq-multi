@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="icon" type="image/png" sizes="32x32" href="../icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../icons/favicon-16x16.png">
+    <link rel="manifest" href="../icons/site.webmanifest">
+    <link rel="mask-icon" href="../icons/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="shortcut icon" href="../icons/favicon.ico&quot;">
+    <meta name="msapplication-config" content="../icons/browserconfig.xml">
+    <meta name="msapplication-TileColor" content="#7ecfe4">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="../css/main.css">
+    <noscript><link rel="stylesheet" href="../css/noscript.css" /></noscript>
+    <link rel="stylesheet" href="../css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="../css/waiq.css">
+    <title>WAIQ - Newsletter Preferences</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (min-width: 600px) {
+            .inner {
+                margin: 0 auto;
+                max-width: max-content;
+                padding: 0 20%;
+            }
+        }
+
+        .image {
+            display: inline!important;
+        }
+
+        .container {
+            width: 100%;
+            padding: 10px 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            display: none;
+            text-align: center;
+            padding: 0 20px;
+            margin: 0 auto;
+        }
+
+        .loading-screen.active {
+            display: block;
+        }
+
+        .loading-bar {
+            width: 100%;
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .loading-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, rgb(0,168,188) 0%, rgb(2,21,71) 100%);
+            width: 30%;
+            animation: progressBar 2s infinite;
+            border-radius: 2px;
+        }
+
+        @keyframes progressBar {
+            0% { width: 10%; }
+            50% { width: 80%; }
+            100% { width: 100%; }
+        }
+
+        /* Form screen */
+        #formScreen {
+            display: none;
+        }
+
+        #formScreen.active {
+            display: block;
+        }
+
+        .intro-text {
+            font-size: 1rem;
+            color: #444;
+            line-height: 1.6;
+            margin-bottom: 28px;
+            text-align: left;
+        }
+
+        .intro-text strong {
+            font-weight: 700;
+            color: #333;
+        }
+
+        /* Radio group */
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            background: white;
+        }
+
+        .radio-item:hover {
+            border-color: rgb(0,168,188);
+            background: rgba(0,168,188,0.04);
+        }
+
+        .radio-item input[type="radio"] {
+            appearance: auto;
+            width: 18px;
+            height: 18px;
+            margin-right: 14px;
+            cursor: pointer;
+            accent-color: rgb(0,168,188);
+            flex-shrink: 0;
+        }
+
+        .radio-item input[type="radio"]:checked + .radio-label {
+            color: rgb(0,168,188);
+            font-weight: 700;
+        }
+
+        .radio-item:has(input[type="radio"]:checked) {
+            border-color: rgb(0,168,188);
+            background: rgba(0,168,188,0.06);
+        }
+
+        .radio-label {
+            font-size: 0.95rem;
+            color: #333;
+            font-weight: 500;
+            cursor: pointer;
+            letter-spacing: 0.03em;
+        }
+
+        /* Submit button */
+        button.submit-btn {
+            margin: 10px;
+            border: 0;
+            cursor: pointer;
+            display: inline-block;
+            font-weight: 400;
+            letter-spacing: .125em;
+            text-align: center;
+            text-decoration: none;
+            text-transform: uppercase;
+            white-space: nowrap;
+            font-size: .75rem;
+            max-width: 20rem;
+            height: 3.75em;
+            line-height: 3.75em;
+            border-radius: 3.75em;
+            padding: 0 1.5em;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgb(0,168,188) 0%, rgb(2,21,71) 100%);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        button.submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,168,188,0.3);
+        }
+
+        button.submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Success notice */
+        .success-notice {
+            display: none;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 20px;
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 10px;
+            color: #155724;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-top: 10px;
+            animation: slideIn 0.3s ease;
+        }
+
+        .success-notice.active {
+            display: flex;
+        }
+
+        .success-notice .check-icon {
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+
+        /* Error message */
+        .message {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        h1.home {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .content {
+            padding: 0 0 2rem;
+        }
+
+        .content p {
+            padding: 0.4em 1em;
+        }
+
+        h2::before {
+            border-top: 0px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            .container { padding: 30px 20px; }
+            .content { padding: 0 15px; }
+        }
+    </style>
+</head>
+<body>
+
+  <section class="style1 orient-center content-align-center image-position-center fullscreen onload-image-fade-in onload-content-fade-right"
+  style="height: 100%;margin: 0; overflow: clip;contain: content;">
+   <div class="inner">
+    <div class="content">
+        <h1 class="home"><img src="../images/waiq-tm.png" alt="" height="100px"></h1>
+    </div>
+    <div class="image">
+      <div class="container">
+
+        <!-- LOADING SCREEN -->
+        <div id="loadingScreen" class="loading-screen active">
+            <div class="loading-bar"><div class="loading-bar-fill"></div></div>
+            <div class="loading-text">Cargando tus datos…</div>
+        </div>
+
+        <!-- FORMULARIO PRINCIPAL -->
+        <div id="formScreen">
+            <div id="message" class="message"></div>
+
+            <p class="intro-text" id="introText"></p>
+
+            <div class="radio-group" id="newsRadioGroup">
+                <!-- Options injected by JS depending on Lang -->
+            </div>
+
+            <div class="loading-bar hidden" id="loadingBar"><div class="loading-bar-fill"></div></div>
+
+            <button type="button" class="submit-btn" id="submitBtn" onclick="savePreference()">
+                Guardar
+            </button>
+
+            <div class="success-notice" id="successNotice">
+                <span class="check-icon">✅</span>
+                <span id="successText"></span>
+            </div>
+
+            <div class="footer">
+                <p>© <span id="year"></span> <a href="https://waiq.technology" target="_blank"><span class="waiq-world"><img src="/images/waiq-text.png" alt="WAIQ" class="waiq-text"></span></a></p>
+                <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+            </div>
+        </div>
+
+      </div>
+    </div>
+   </div>
+  </section>
+
+    <script>
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzmkR1DSK_uHJclDXUa7gRPr0DCCEi45tANk3RbBNuhse_aPcVbMpKlMW0_4crFwk92xg/exec';
+
+        // ── i18n ──────────────────────────────────────────────────────────────
+        const i18n = {
+            ES: {
+                intro: (name) => `Hola <strong>${name}</strong>, gestiona con qué frecuencia quieres recibir nuestro boletín de actualidad <strong>'The WAIQ State of Play'</strong>`,
+                options: [
+                    { value: 'SEMANAL',   label: 'SEMANAL'   },
+                    { value: 'QUINCENAL', label: 'QUINCENAL' },
+                    { value: 'MENSUAL',   label: 'MENSUAL'   },
+                    { value: 'NUNCA',     label: 'NUNCA'     }
+                ],
+                save: 'Guardar',
+                saving: 'Guardando…',
+                success: '¡Preferencia actualizada correctamente!',
+                error: 'Hubo un error al guardar. Por favor, inténtalo de nuevo.'
+            },
+            EN: {
+                intro: (name) => `Hello <strong>${name}</strong>, manage how often you want to receive our newsletter <strong>'The WAIQ State of Play'</strong>`,
+                options: [
+                    { value: 'WEEKLY',    label: 'WEEKLY'    },
+                    { value: 'BIWEEKLY',  label: 'BIWEEKLY'  },
+                    { value: 'MONTHLY',   label: 'MONTHLY'   },
+                    { value: 'NEVER',     label: 'NEVER'     }
+                ],
+                save: 'Save',
+                saving: 'Saving…',
+                success: 'Preference updated successfully!',
+                error: 'There was an error saving. Please try again.'
+            }
+        };
+
+        // Value mapping ES ↔ EN so we can match whatever is in the sheet
+        const newsValueMap = {
+            'SEMANAL':   'WEEKLY',
+            'QUINCENAL': 'BIWEEKLY',
+            'MENSUAL':   'MONTHLY',
+            'NUNCA':     'NEVER',
+            'WEEKLY':    'WEEKLY',
+            'BIWEEKLY':  'BIWEEKLY',
+            'MONTHLY':   'MONTHLY',
+            'NEVER':     'NEVER'
+        };
+
+        // Normalise the sheet value to the EN canonical form
+        function canonicalNews(raw) {
+            return newsValueMap[(raw || '').trim().toUpperCase()] || null;
+        }
+
+        let lang = 'ES';
+        let currentRowId = null;
+        let contactName = '';
+
+        const loadingScreen = document.getElementById('loadingScreen');
+        const formScreen    = document.getElementById('formScreen');
+        const submitBtn     = document.getElementById('submitBtn');
+        const messageDiv    = document.getElementById('message');
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const params    = new URLSearchParams(window.location.search);
+            const profileId = params.get('id') || params.get('Id') || params.get('ID');
+
+            if (profileId) {
+                loadProfileData(profileId);
+            } else {
+                showError('No se ha encontrado un identificador de perfil en la URL.');
+                loadingScreen.classList.remove('active');
+            }
+        });
+
+        async function loadProfileData(profileId) {
+            try {
+                const response = await fetch(SCRIPT_URL + '?action=findById&id=' + encodeURIComponent(profileId));
+                const result   = await response.json();
+
+                if (result.status === 'success') {
+                    currentRowId = result.rowId;
+
+                    // Resolve lang (column Q) — default ES
+                    const rawLang = (result.data.lang || result.data.Lang || '').trim().toUpperCase();
+                    lang = (rawLang === 'EN') ? 'EN' : 'ES';
+
+                    // Resolve name
+                    const firstName = result.data.name || result.data.Name || '';
+                    const lastName  = result.data.surname || result.data.Surname || '';
+                    contactName = (firstName + ' ' + lastName).trim() || profileId;
+
+                    // Resolve current News value (column R)
+                    const rawNews = result.data.news || result.data.News || '';
+                    const canonNews = canonicalNews(rawNews);
+
+                    buildForm(lang, canonNews);
+
+                    setTimeout(() => {
+                        loadingScreen.classList.remove('active');
+                        formScreen.classList.add('active');
+                    }, 600);
+
+                } else {
+                    showError(lang === 'EN' ? 'Profile not found.' : 'Perfil no encontrado.');
+                    loadingScreen.classList.remove('active');
+                }
+            } catch (error) {
+                console.error('Error loading profile:', error);
+                showError('Error de conexión. Por favor, recarga la página.');
+                loadingScreen.classList.remove('active');
+            }
+        }
+
+        function buildForm(currentLang, selectedCanonical) {
+            const t = i18n[currentLang];
+
+            // Set html lang attribute
+            document.documentElement.lang = currentLang.toLowerCase();
+
+            // Intro text
+            document.getElementById('introText').innerHTML = t.intro(contactName);
+
+            // Submit button label
+            submitBtn.textContent = t.save;
+
+            // Build radio options
+            const group = document.getElementById('newsRadioGroup');
+            group.innerHTML = '';
+
+            t.options.forEach(opt => {
+                // Determine if this option should be pre-selected
+                // Compare canonical value of this option with the sheet value
+                const optCanonical = canonicalNews(opt.value);
+                const isSelected   = optCanonical && optCanonical === selectedCanonical;
+
+                const item = document.createElement('label');
+                item.className = 'radio-item';
+
+                const input = document.createElement('input');
+                input.type    = 'radio';
+                input.name    = 'newsFrequency';
+                input.value   = opt.value;
+                input.checked = isSelected;
+
+                const labelSpan = document.createElement('span');
+                labelSpan.className   = 'radio-label';
+                labelSpan.textContent = opt.label;
+
+                item.appendChild(input);
+                item.appendChild(labelSpan);
+                group.appendChild(item);
+            });
+        }
+
+        async function savePreference() {
+            const selected = document.querySelector('input[name="newsFrequency"]:checked');
+            if (!selected) {
+                showError(lang === 'EN' ? 'Please select an option.' : 'Por favor, selecciona una opción.');
+                return;
+            }
+
+            const t = i18n[lang];
+            const loadingBar = document.getElementById('loadingBar');
+
+            submitBtn.disabled    = true;
+            submitBtn.textContent = t.saving;
+            loadingBar.classList.remove('hidden');
+
+            // Siempre graba en español independientemente del idioma de la UI
+            const toSpanish = {
+                'SEMANAL':   'SEMANAL',
+                'QUINCENAL': 'QUINCENAL',
+                'MENSUAL':   'MENSUAL',
+                'NUNCA':     'NUNCA',
+                'WEEKLY':    'SEMANAL',
+                'BIWEEKLY':  'QUINCENAL',
+                'MONTHLY':   'MENSUAL',
+                'NEVER':     'NUNCA'
+            };
+            
+            const payload = {
+                rowId: currentRowId,
+                news:  toSpanish[selected.value] || selected.value,
+                action: 'updateNews'
+            };
+
+            try {
+                await fetch(SCRIPT_URL, {
+                    method:  'POST',
+                    mode:    'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body:    JSON.stringify(payload)
+                });
+
+                loadingBar.classList.add('hidden');
+                submitBtn.disabled    = false;
+                submitBtn.textContent = t.save;
+
+                // Show inline success notice
+                const notice = document.getElementById('successNotice');
+                document.getElementById('successText').textContent = t.success;
+                notice.classList.add('active');
+
+                // Scroll to notice
+                notice.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+            } catch (error) {
+                console.error('Error saving:', error);
+                loadingBar.classList.add('hidden');
+                submitBtn.disabled    = false;
+                submitBtn.textContent = t.save;
+                showError(t.error);
+            }
+        }
+
+        function showError(text) {
+            messageDiv.textContent  = text;
+            messageDiv.className    = 'message error';
+        }
+    </script>
+</body>
+</html>

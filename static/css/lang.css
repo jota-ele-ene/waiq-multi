@@ -1,0 +1,29 @@
+.language-switcher {
+  gap: 1rem;
+  align-items: center;
+  float: inline-end;
+}
+
+.lang-control {
+  color: #f2f2f2;
+  text-decoration: none;
+  letter-spacing: normal!important;
+  padding:0!important;
+}
+
+.lang-item {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.lang-active {
+  font-weight: bold!important;
+  background-color: var(--color-primary);
+  color: rgb(0,168,188)!important;
+}
+
+.lang-item:hover {
+  background-color: var(--color-secondary);
+}

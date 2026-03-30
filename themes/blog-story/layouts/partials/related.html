@@ -1,0 +1,14 @@
+{{ $related := .Site.RegularPages.Related . | first 5 }}
+{{ with $related }}
+<section class="wrapper style1 align-left">
+  <div class="inner">
+    <!-- Listing content with the same taxonomy term -->
+    <h3>You may also be interested in these articles:</h3>
+    <ul>
+     {{ range . }}
+     <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
+     {{ end }}
+    </ul>
+  </div>
+</section>
+{{ end }}

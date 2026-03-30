@@ -1,0 +1,33 @@
+{
+  "dependencies": {
+    "@tinacms/styles": "^0.42.1",
+    "lunr": "^2.3.9",
+    "tinacms": "^2.10.0"
+  },
+  "devDependencies": {
+    "@tinacms/cli": "^1.12.5",
+    "@types/node": "^24.10.1",
+    "hugo-extended": "^0.152.2"
+  },
+  "name": "waiq-full",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tinacms dev -c \"hugo server -D --bind 0.0.0.0 --port 5000 ${REPLIT_DEV_DOMAIN:+--baseURL https://$REPLIT_DEV_DOMAIN} --appendPort=false --disableFastRender\"",
+    "build": "tinacms build && hugo",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jota-ele-ene/waiq-full.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/jota-ele-ene/waiq-full/issues"
+  },
+  "homepage": "https://github.com/jota-ele-ene/waiq-full#readme"
+}

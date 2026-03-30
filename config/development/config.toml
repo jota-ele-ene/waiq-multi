@@ -1,0 +1,49 @@
+## -----------------------------------------------
+## Basic Configuration
+## -----------------------------------------------
+
+cnf = "/development/config.toml"
+title = "Welcome to the #WAIQ Age"
+copyright = "{year}"
+
+## -----------------------------------------------
+## Publish
+## -----------------------------------------------
+
+relativeURLs = "true"
+canonifyURLs = "false"
+
+# Local
+baseURL = ""
+publishDir = "public"
+
+# Remote
+#baseURL = "https://caressofsteel.github.io/demos/hugo/hugo-story/"
+#publishDir = "//centos/sites/hugodev/hugostory/"
+
+## -----------------------------------------------
+## Hugo Built-in Features
+## -----------------------------------------------
+
+#disableKinds = ["taxonomy", "section"]
+
+## -----------------------------------------------
+## Analytics support
+## -----------------------------------------------
+
+#googleAnalytics: G-MEASUREMENT_ID
+#swetrixAnalytics = "3UYKaHJP56by"
+
+## -----------------------------------------------
+## Site Parameters
+## -----------------------------------------------
+
+[Params]
+  description = "A (modular, highly tweakable) responsive one-page theme for Hugo"
+  logo = "images/banner.jpg"
+  favicon = true
+  #gated = true
+
+[Params.social]
+
+[Params.asset]

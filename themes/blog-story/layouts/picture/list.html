@@ -1,0 +1,17 @@
+<!-- Gallery -->
+{{ with .Site.GetPage "/banner/WhoWeAre.md" }}
+<section class="wrapper style1 align-center">
+    <div class="inner">
+        <h2>{{ .Title }}</h2>
+        <p>{{ .Params.summary | safeHTML }}</p>
+    </div>
+
+    <!-- Gallery-->
+    <div class="gallery {{ .Params.style }}">
+        {{ range shuffle (where .Site.RegularPages.ByDate "Section" "picture") }}
+            {{ .Render "summary" }}
+        {{ end }}
+    </div>
+
+</section>
+{{ end }}

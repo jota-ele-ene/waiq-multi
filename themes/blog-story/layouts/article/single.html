@@ -1,0 +1,27 @@
+{{ define "main" }}
+<section class="wrapper single style1 align-left">
+  <div class="inner">
+    <header>
+        <h1>{{ .Title }}</h1>
+        {{ with .Params.description }}<p>{{ . }}</p>{{ end }}
+    </header>
+    <div class="tags">
+      <ul id="categories">
+        {{ range .Params.topics }}
+          <li><h4 class="topics"><a href="{{ "/topics/" | relLangURL }}{{ lower . | urlize }}">{{ . }}</a></h4> </li>
+        {{ end }}
+        {{ range .Params.areas }}
+          <li><h4 class="areas"><a href="{{ "/areas/" | relLangURL }}{{ lower . | urlize }}">{{ . }}</a></h4> </li>
+        {{ end }}
+      </ul>
+    </div>
+    {{ with .Params.image }}<span class="image fit"><img src='{{ . }}'></span>{{ end }}
+    {{ .Content }}
+  </div>
+</section>
+
+{{ if not .Params.noRelated }}
+  {{ partial "related" . }}
+{{ end }}
+
+{{ end }}
