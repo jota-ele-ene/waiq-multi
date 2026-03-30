@@ -135,3 +135,15 @@ defaultContentLanguageInSubdir = false
     baseName       = "contents"
     isPlainText    = true
     notAlternative = true
+
+  [outputFormats.APIRadar]
+    mediaType      = "application/x-api"
+    baseName       = "radar"
+    isPlainText    = true
+    notAlternative = true
+
+  [outputFormats.APIDigest]
+    mediaType      = "application/x-api"
+    baseName       = "digest"
+    isPlainText    = true
+    notAlternative = true

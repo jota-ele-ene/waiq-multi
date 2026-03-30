@@ -2,8 +2,9 @@
 title: "Last Radar API"
 type: "api"
 layout: "radar"
+url: "/api/"
 outputs:
-  - "json"
+  - APIRadar
 build:
   render: "always"
   list: "never"

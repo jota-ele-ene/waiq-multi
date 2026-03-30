@@ -1,11 +1,11 @@
 ---
-title: "Contents API"
+title: "Digest API 30"
 type: "api"
-url: "/api/digest"
+url: "/api/"
 layout: "digest"
-days: 40
+days: 30
 outputs:
-  - "json"
+  - APIDigest
 build:
   render: "always"
   list: "never"

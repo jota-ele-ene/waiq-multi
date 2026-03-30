@@ -1,0 +1,43 @@
+{{- $days := .Params.days -}}
+{{- if not $days -}}
+  {{- $days = 15 -}}
+{{- end -}}
+
+{{- $cutoff := now.AddDate 0 0 (mul -1 $days) -}}
+
+{{- $urls := slice -}}
+
+{{- range site.Sites -}}
+  {{- $lang := .Language.Lang -}}
+  {{- if or (eq $lang "es") (eq $lang "en") -}}
+    {{- $pages := where .RegularPages "Type" "article" -}}
+    {{- $pages = where $pages "Date" "gt" $cutoff -}}
+    {{- range $pages -}}
+      {{- with .Params.button_url -}}
+        {{- $urls = $urls | append (dict
+          "url" .
+          "date" $.PublishDate
+        ) -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $byURL := dict -}}
+{{- range $urls -}}
+  {{- $byURL = merge $byURL (dict .url .) -}}
+{{- end -}}
+{{- $unique := slice -}}
+{{- range $k, $v := $byURL -}}
+  {{- $unique = $unique | append $v -}}
+{{- end -}}
+
+{{- $unique = sort $unique "date" "desc" -}}
+
+{{- dict
+  "button_urls" $unique
+  "total" (len $unique)
+  "days" $days
+  "cutoff" $cutoff
+  | jsonify (dict "indent" "  ")
+-}}
