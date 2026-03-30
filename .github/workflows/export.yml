@@ -69,5 +69,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: waiq-env-${{ github.event.inputs.env_name }}
-          path: output/.env.${{ github.event.inputs.env_name }}
+          path: output
           retention-days: 7
