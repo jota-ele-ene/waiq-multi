@@ -1,0 +1,17 @@
+{{ define "main" }}
+<main>
+  <h1>{{ .Title }}</h1>
+  {{ .Content }}
+
+  <ul>
+    {{/* Filtra solo las páginas con .Params.radar == true */}}
+    {{ $radars := where .Site.RegularPages ".Params.radar" true }}
+    {{/* Si quieres limitarlo a una sección/tipo concreto: */}}
+    {{ $radars = where $radars "Section" "nombre-de-seccion" }}
+
+    {{ range $radars }}
+        {{ .Render "spotlight" }}
+    {{ end }}
+  </ul>
+</main>
+{{ end }}
