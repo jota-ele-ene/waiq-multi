@@ -3,27 +3,15 @@ title: Hello world!
 draft: false
 style: style1 orient-center content-align-center image-position-center
   fullscreen onload-image-fade-in onload-content-fade-right
-summary: " Today, every company naturally integrates its strategies around web,
-  mobile and cloud. It is inconceivable that they can be understood as separate
-  disciplines. In a few years, history will repeat itself with three other
-  disciplines: web3, AI and quantum. All three will feed back
-  and complement each other and their convergence will multiply the
-  opportunities for startups and corporates to develop new competitive
-  advantages. Want to join us?"
-description: "Today, every company naturally integrates its strategies around
-  web, mobile and cloud. It is inconceivable that they can be understood as
-  separate disciplines. In a few years, history will repeat itself with three
-  other disciplines: web3, AI and quantum. All three will feed
-  back and complement each other and their convergence will multiply the
-  opportunities for startups and corporates to develop new competitive
-  advantages. Want to join us?"
-button_link: "#first"
-button_label: "Dive into #WAIQ"
-second_link: "/legal/manifesto"
-second_label: "Join #WAIQ"
+summary: " Technology sets a frenetic pace for us, but it is we humans – individuals and organisations alike – who must determine the end goal. Technology cannot make that decision for us. #WAIQ technologies (Web3 + AI + quantum) are merely a starting point for reflecting on how convergence and its ethical and responsible development multiply the opportunities for start-ups and large companies to develop new competitive advantages. If you’d like to know more about who we are and what we’re striving for, read our manifesto."
+description: "Technology sets a frenetic pace for us, but it is we humans – individuals and organisations alike – who must determine the end goal. Technology cannot make that decision for us. #WAIQ technologies (Web3 + AI + quantum) are merely a starting point for reflecting on how convergence and its ethical and responsible development multiply the opportunities for start-ups and large companies to develop new competitive advantages. If you’d like to know more about who we are and what we’re striving for, read our manifesto. "
+# button_link: "#navbar"
+# button_label: "Dive into #WAIQ"
+# second_link: "/legal/manifesto"
+# second_label: "Join #WAIQ"
 h1: home
 subtitle: Welcome to the home of <b>#WAIQ</b> conversations 
 date: 2023-10-23T23:11:31.017Z
 image: images/waiq-tm.png
 ---
- Today, every company naturally integrates its strategies around web, mobile and cloud. It is inconceivable that they can be understood as separate disciplines. In a few years, history will repeat itself with three other disciplines: **web3**, **AI** and **quantum**. All three will feed back and complement each other and their convergence will multiply the opportunities for startups and corporates to develop new competitive advantages. Want to join us?
+Technology sets a frenetic pace for us, but it is we humans – individuals and organisations – who must determine the end goal. Technology cannot make that decision for us. **#WAIQ** technologies (**web3**, **AI** and **quantum**) are merely a starting point for reflecting on how convergence and its ethical and responsible development multiply the opportunities for start-ups and large companies to develop new competitive advantages. If you’d like to know more about who we are and what we’re striving for, read [our manifesto](/legal/manifesto). 

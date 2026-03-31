@@ -3,21 +3,14 @@ title: Hello world!
 draft: false
 style: style1 orient-center content-align-center image-position-center
   fullscreen onload-image-fade-in onload-content-fade-right
-summary: "Hoy en día, todas las empresas integran de forma natural sus estrategias en torno a Internet, los dispositivos móviles y la nube. Es inconcebible que puedan entenderse como disciplinas separadas.
-   En unos años, la historia se repetirá con otras tres disciplinas: <strong>web3</strong>, <strong>inteligencia artificial</strong> y <strong>tecnologías cuánticas</strong>. Las tres se retroalimentarán y complementarán entre sí, y su convergencia multiplicará las oportunidades para que startups y empresas desarrollen nuevas ventajas competitivas.
-  ¿Quieres unirte a nosotros?"
-description: "Hoy en día, todas las empresas integran de forma natural sus estrategias en torno a Internet, los dispositivos móviles y la nube. Es inconcebible que puedan entenderse como disciplinas separadas.
-   En unos años, la historia se repetirá con otras tres disciplinas: <strong>web3</strong>, <strong>inteligencia artificial</strong> y <strong>tecnologías cuánticas</strong>. Las tres se retroalimentarán y complementarán entre sí, y su convergencia multiplicará las oportunidades para que startups y empresas desarrollen nuevas ventajas competitivas.
-  ¿Quieres unirte a nosotros?"
-button_link: "#first"
+summary: "La tecnología nos marca un ritmo trepidante pero somos los humanos, las personas y las organizaciones, quienes debemos marcamos el fin. La tecnología no puede tomar la decisión por nosotros. Las tecnologías WAIQ (web3 + IA +cuántica) son sólo la excusa para reflexionar sobre cómo la convergencia y su desarrollo ético y responsable multiplican las oportunidades para que startups y grandes empresas desarrollen nuevas ventajas competitivas. Si quieres saber más sobre quienes somos y qué perseguimos, lee nuestro manifiesto."
+button_link: "#navbar"
 button_label: "Sumérgete en #WAIQ"
-second_link: "/es/legal/manifesto"
-second_label: "Únete a WAIQ"
+# second_link: "/es/legal/manifesto"
+# second_label: "Únete a WAIQ"
 h1: home
-subtitle: Bienvenido a la casa de las conversaciones <b>#WAIQ</b>
+subtitle: Bienvenido a las conversaciones <b>#WAIQ</b>
 date: 2023-10-23T23:11:31.017Z
 image: images/waiq-tm.png
 ---
-Hoy en día, todas las empresas integran de forma natural sus estrategias en torno a Internet, los dispositivos móviles y la nube. Es inconcebible que puedan entenderse como disciplinas separadas.
-   En unos años, la historia se repetirá con otras tres disciplinas: **web3**, **inteligencia artificial** y **tecnologías cuánticas**. Las tres se retroalimentarán y complementarán entre sí, y su convergencia multiplicará las oportunidades para que startups y empresas desarrollen nuevas ventajas competitivas.
-  ¿Quieres unirte a nosotros?
+La tecnología nos marca un ritmo trepidante pero somos los humanos, las personas y las organizaciones, quienes debemos marcamos el fin. La tecnología no puede tomar la decisión por nosotros. Las tecnologías **#WAIQ** (**web3** + **IA** + **quantum**) son sólo la excusa para reflexionar sobre cómo la convergencia y su desarrollo ético y responsable multiplican las oportunidades para que startups y grandes empresas desarrollen nuevas ventajas competitivas. Si quieres saber más sobre quienes somos y qué perseguimos, lee [nuestro manifiesto](/legal/manifesto). 

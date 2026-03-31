@@ -16,7 +16,9 @@ contain: content;
         {{ with .Params.Subtitle }}<p class="major subtitle">{{ $subtitle | safeHTML }}</p>{{ end }}
         <p>{{ .Content }}</p>
         <ul class="actions stacked">
-            <li><a href="{{ with .Params.button_link }}{{ . }}{{ end }}" class="button primary large wide smooth-scroll-middle">{{ .Params.button_label }}</a></li>
+            {{ with .Params.buttton_link }}
+                <li><a href="{{ . }}" class="button primary large wide smooth-scroll-middle">{{ .Params.button_label }}</a></li>
+            {{ end }}
             {{ with .Params.second_link }}
                 <li><a href="{{ . }}" class="button primary large wide smooth-scroll-middle">{{ $.Params.second_label }}</a></li>
             {{ end }}

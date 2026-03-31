@@ -14,7 +14,8 @@
 
 	{{ if .IsHome }}
     {{ with .Site.GetPage "/banner/Home.md" }}{{ .Render "summary" }}{{ end }}
-  {{ end }}
+		{{ partial "scroll-arrow.html" . }}
+{{ end }}
 
   <div id="navbar">
 		<a href="/" class="home-icon icon solid fa-home"></a>
