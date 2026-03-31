@@ -1,11 +1,11 @@
 ---
 title: "Digest API 30"
 type: "api"
-url: "/api/"
+url: "/es/api/"
 layout: "digest"
 days: 30
 outputs:
-  - APIDigest
+  - APIDigest30
 build:
   render: "always"
   list: "never"

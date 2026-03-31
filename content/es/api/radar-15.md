@@ -1,12 +1,11 @@
 ---
-title: "Digest API"
+title: "Radar 15 Days API"
 type: "api"
-url: "/es/api/"
-layout: "digest"
+layout: "radar"
 days: 15
+url: "/es/api/"
 outputs:
-  - APIDigest
-  - APIDigest15
+  - APIRadar15
 build:
   render: "always"
   list: "never"

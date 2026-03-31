@@ -1,0 +1,20 @@
+{{- $days := .Params.days | default 15 -}}
+{{- $cutoff := now.AddDate 0 0 (mul -1 $days) -}}
+{{- $currentLang := .Site.Language.Lang -}}
+{{- $articles := where .Site.RegularPages "Section" "article" -}}
+{{- $articles = where $articles "Lang" $currentLang -}}
+{{- $radar := where $articles ".Params.radar" true -}}
+{{- $radar = where $radar "Date" "gt" $cutoff -}}
+{{- $radar = $radar.ByDate.Reverse -}}
+[
+  {{- range $i, $p := $radar -}}
+  {{- if $i }},{{ end }}
+  {
+    "title": {{ $p.Title | jsonify }},
+    "date": {{ $p.Date | jsonify }},
+    "permalink": {{ $p.Permalink | jsonify }},
+    "params": {{ $p.Params | jsonify }},
+    "content": {{ $p.RawContent | jsonify }}
+  }
+  {{- end }}
+]

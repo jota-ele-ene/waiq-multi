@@ -147,3 +147,27 @@ defaultContentLanguageInSubdir = false
     baseName       = "digest"
     isPlainText    = true
     notAlternative = true
+
+  [outputFormats.APIDigest15]
+    mediaType      = "application/x-api"
+    baseName       = "digest-15"
+    isPlainText    = true
+    notAlternative = true
+
+  [outputFormats.APIDigest30]
+    mediaType      = "application/x-api"
+    baseName       = "digest-30"
+    isPlainText    = true
+    notAlternative = true
+
+  [outputFormats.APIRadar15]
+    mediaType      = "application/x-api"
+    baseName       = "radar-15"
+    isPlainText    = true
+    notAlternative = true
+
+  [outputFormats.APIRadar30]
+    mediaType      = "application/x-api"
+    baseName       = "radar-30"
+    isPlainText    = true
+    notAlternative = true

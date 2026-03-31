@@ -1,4 +1,4 @@
-{{- $days := .Params.days | default 15 -}}
+{{- $days := .Params.days | default 30 -}}
 {{- $cutoff := now.AddDate 0 0 (mul -1 $days) -}}
 {{- $pages := where .Site.RegularPages "Type" "article" -}}
 {{- $pages = where $pages "Date" "gt" $cutoff -}}
