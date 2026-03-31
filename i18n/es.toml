@@ -1,6 +1,9 @@
 [readMore]
   other = "Leer Más"
 
+[recent-news]
+  other = "Noticias recientes sobre"
+  
 [posted]
   other = "Publicado el"
 

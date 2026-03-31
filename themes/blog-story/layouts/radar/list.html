@@ -1,8 +1,5 @@
 {{ define "main" }}
 <main>
-  <h1>{{ .Title }}</h1>
-  {{ .Content }}
-
   <ul>
     {{ $radars := where .Site.RegularPages "Section" "article" }}
     {{ $radars = where $radars ".Params.radar" true }}

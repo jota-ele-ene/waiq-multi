@@ -1,6 +1,9 @@
 [readMore]
   other = "Read More"    
 
+[recent-news]
+  other = "Recent news about "
+  
 [posted]
   other = "Posted on"
 

@@ -137,6 +137,12 @@ h1 .waiq-word img{
 };
 }
 
+@media screen and (min-width: 736px) {
+  .spotlight.style1.no-reverse {
+    flex-direction: row; /* o el valor por defecto que use el tema */
+  }
+}
+
 .mosaic article .caption>*,
 .gallery.style2 article .caption>* {
     max-width: 100%;

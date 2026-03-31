@@ -1,7 +1,17 @@
 <!-- Spotlight -->
-<section class="spotlight radar style1 content-align-left image-position-center onscroll-image-fade-in" id="first">
+{{- $t := time .Params.date -}}
+{{- $day := printf "%d" ($t.Day) -}}
+{{- $month := index (slice "enero" "febrero" "marzo" "abril" "mayo" "junio" "julio" "agosto" "septiembre" "octubre" "noviembre" "diciembre") (sub $t.Month 1) -}}
+{{- $year := printf "%d" ($t.Year) -}}
+{{- $date := printf "%s de %s de %s" $day $month $year -}}
+{{- $words := split .Params.button_label " " -}}
+{{- if ge (len $words) 3 -}}
+  {{- delimit (slice $words 2) " " -}}
+{{- end -}}
+<section class="spotlight radar style1 content-align-left image-position-center onscroll-image-fade-in{{ if .Params.radar }} no-reverse{{ end }}" id="first">
     <div class="content">
-        <h2>{{ .Title }}{{ if .Params.button_url }}<br><a class="external" target="_blank" href="{{ .Params.button_url }}">external source<i class="fa fa-external-link-square icon" aria-hidden="true"></i></a>{{ end }}</h2>
+        <h2>{{ .Title }}{{ if .Params.button_url }}
+        <a class="external" target="_blank" href="{{ .Params.button_url }}">external source<i class="fa fa-external-link-square icon" aria-hidden="true"></i></a>{{ end }}</h2>
         <div class="tags">
           <ul id="categories">
             {{ range .Params.topics }}
@@ -12,7 +22,8 @@
             {{ end }}
           </ul>
         </div>
-        {{ with .Description }}<p class="subheading">{{ . | safeHTML }}</p>{{ end }}
+      {{ if .Params.radar }} Publicado el {{ printf "%s" $date }}{{ end }}
+      {{ with .Description }}<p class="subheading">{{ . | safeHTML }}</p>{{ end }}
         {{ if and .Content .Params.radar }}
           <div class="content-body">{{ .Content }}</div>
         {{ else }}

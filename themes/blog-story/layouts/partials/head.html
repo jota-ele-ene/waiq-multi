@@ -1,12 +1,19 @@
 <head>
 
+	<title>
 	{{ if .IsHome }}
-		<title>{{ .Site.Title }}</title>
-		<meta name="description" content="{{ .Description }}">
+		{{ .Site.Title }}
+	{{ else if .IsSection }}
+		WAIQ · {{ .Site.Title }}
+	{{ else if eq .Kind "term" }}
+		WAIQ · {{ i18n "recent-news" }} {{ .Data.Term }} 
+	{{ else if eq .Kind "taxonomy" }}
+		WAIQ · {{ i18n "recent-news" }}{{ .Title }} 
 	{{ else }}
-		<title>{{ with .Title }}{{ . }}{{ else }}Any page from {{ .Site.Title }}{{ end }}</title>
-		<meta name="description" content="{{ with .Description }}{{ . }}{{ else }}Page at {{ .Permalink }}{{ end }}">
+		{{ with .Title }}WAIQ · {{ . }}{{ else }}{{ .Site.Title }}{{ end }}
 	{{ end }}
+	</title>
+	<meta name="description" content="{{ with .Description }}{{ . }}{{ end }}">
 
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
