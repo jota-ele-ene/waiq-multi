@@ -22,7 +22,7 @@
             {{ end }}
           </ul>
         </div>
-      {{ if .Params.radar }} Publicado el {{ printf "%s" $date }}{{ end }}
+      {{ if .Params.radar }}<p class="published">Compilación de noticias <strong>WAIQ</strong> publicado el {{ printf "%s" $date }}</p>{{ end }}
       {{ with .Description }}<p class="subheading">{{ . | safeHTML }}</p>{{ end }}
         {{ if and .Content .Params.radar }}
           <div class="content-body">{{ .Content }}</div>
