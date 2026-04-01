@@ -147,6 +147,19 @@ h1 .waiq-word img{
   bottom: -1.5em;
   transform: translateX(-50%);
   z-index: 20;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+
+.scroll-arrow.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 600px) {
+  .scroll-arrow {
+    display: none;
+  }
 }
 
 .scroll-arrow__svg {

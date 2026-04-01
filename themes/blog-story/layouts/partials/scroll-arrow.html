@@ -1,3 +1,21 @@
   <a href="#navbar" class="scroll-arrow">
     <img src="/images/arrow-down-circle-fill.svg" class="scroll-arrow__svg" alt="Scroll down" />
   </a>
+  <script>
+  (function () {
+    function fadeScrollArrow() {
+      var arrow = document.querySelector('.scroll-arrow');
+      if (arrow) arrow.classList.add('fade-out');
+      window.removeEventListener('wheel',     fadeScrollArrow);
+      window.removeEventListener('touchmove', fadeScrollArrow);
+      window.removeEventListener('keydown',   onScrollKey);
+    }
+    function onScrollKey(e) {
+      // Space, PageUp, PageDown, End, Home, ArrowUp, ArrowDown
+      if ([32, 33, 34, 35, 36, 38, 40].indexOf(e.keyCode) !== -1) fadeScrollArrow();
+    }
+    window.addEventListener('wheel',     fadeScrollArrow, { passive: true });
+    window.addEventListener('touchmove', fadeScrollArrow, { passive: true });
+    window.addEventListener('keydown',   onScrollKey);
+  }());
+  </script>

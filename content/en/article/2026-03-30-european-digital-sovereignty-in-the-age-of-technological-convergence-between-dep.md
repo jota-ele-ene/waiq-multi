@@ -14,7 +14,8 @@ description: >-
   Europe navigates between technological dependence and building digital sovereignty as Web3, AI, and quantum technologies converge toward a new economic paradigm.
 draft: "false"
 featured: "true"
-button_label: Read article
+button_url: #news
+button_label: Get this in my email
 radar: true
 references:
   - url: https://www.coindesk.com/business/2026/03/25/crypto-broker-bitpanda-launches-blockchain-to-connect-eu-banks-with-tokenized-assets

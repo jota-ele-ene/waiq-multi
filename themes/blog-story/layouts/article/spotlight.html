@@ -24,18 +24,13 @@
         </div>
       {{ if .Params.radar }}<p class="published">Compilación de noticias <strong>WAIQ</strong> publicado el {{ printf "%s" $date }}</p>{{ end }}
       {{ with .Description }}<p class="subheading">{{ . | safeHTML }}</p>{{ end }}
-        {{ if and .Content .Params.radar }}
-          <div class="content-body">{{ .Content }}</div>
-        {{ else }}
-          <ul class="actions stacked">
-            {{ if .Params.button_url }}
-              <li><a href="{{ .Params.button_url }}" target="_blank" rel="noopener noreferrer" class="button">{{ .Params.button_label }}</a></li>
-            {{ else }}
-              <li><a href="{{ .Permalink }}" class="button">{{ .Params.button_label }}</a></li>
-            {{ end }}
-          </ul>
-        {{ end }}
-    </div>
+      {{ if and .Content .Params.radar }}
+        <div class="content-body">{{ .Content }}</div>
+        <ul class="actions stacked">
+          <li><a href="#newsletter" onclick="event.preventDefault(); openNewsletterModal();" rel="noopener noreferrer" class="button">{{ .Params.button_label }}</a></li>
+        </ul>
+      {{ end }}
+</div>
 
     {{ if .Params.radar }}
       <!-- Referencias gallery -->
