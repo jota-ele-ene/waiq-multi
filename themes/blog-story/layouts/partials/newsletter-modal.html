@@ -1,0 +1,379 @@
+{{- $lang := .Site.Language.Lang | upper -}}
+{{- $isEN := eq $lang "EN" -}}
+
+<!-- ═══════════════════════════════════════════════════════════════
+     WAIQ Newsletter Subscribe Modal
+     Usage: {{ partial "newsletter-modal.html" . }}
+     Trigger: <button onclick="openNewsletterModal()">…</button>
+     ═══════════════════════════════════════════════════════════════ -->
+
+<style>
+  #waiq-nl-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.55);
+    z-index: 9998;
+    animation: waiqNlFadeIn .2s ease;
+  }
+  #waiq-nl-backdrop.open { display: flex; align-items: center; justify-content: center; }
+
+  #waiq-nl-box {
+    position: relative;
+    background: #fff;
+    border-radius: 16px;
+    padding: 36px 32px 28px;
+    width: 100%;
+    max-width: 500px;
+    margin: 16px;
+    box-shadow: 0 24px 60px rgba(0,0,0,.2);
+    animation: waiqNlSlideUp .25s ease;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  }
+
+  #waiq-nl-close {
+    position: absolute;
+    top: 14px; right: 18px;
+    background: none; border: none;
+    font-size: 1.6rem; line-height: 1;
+    color: #888; cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: background .15s, color .15s;
+  }
+  #waiq-nl-close:hover { background: #f0f0f0; color: #333; }
+
+  .waiq-nl-logo {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .waiq-nl-logo img { height: 56px; }
+
+  .waiq-nl-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #021547;
+    margin-bottom: 6px;
+    text-align: center;
+    letter-spacing: .02em;
+  }
+
+  .waiq-nl-subtitle {
+    font-size: .88rem;
+    color: #555;
+    text-align: center;
+    margin-bottom: 20px;
+    line-height: 1.45;
+  }
+
+  .waiq-nl-field {
+    margin-bottom: 18px;
+  }
+
+  .waiq-nl-field label {
+    display: block;
+    font-size: .8rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 6px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+
+  .waiq-nl-field input[type="email"] {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: .95rem;
+    color: #333;
+    background: #fafafa;
+    transition: border-color .2s, background .2s;
+    box-sizing: border-box;
+    outline: none;
+  }
+  .waiq-nl-field input[type="email"]:focus {
+    border-color: rgb(0,168,188);
+    background: #fff;
+  }
+
+  .waiq-nl-optin {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: border-color .2s, background .2s;
+    margin-bottom: 22px;
+    background: #fafafa;
+  }
+  .waiq-nl-optin:has(input:checked) {
+    border-color: rgb(0,168,188);
+    background: rgba(0,168,188,.05);
+  }
+  .waiq-nl-optin input[type="checkbox"] {
+    flex-shrink: 0;
+    width: 18px; height: 18px;
+    margin-top: 2px;
+    cursor: pointer;
+    accent-color: rgb(0,168,188);
+  }
+  .waiq-nl-optin-text {
+    font-size: .82rem;
+    color: #444;
+    line-height: 1.5;
+    cursor: pointer;
+  }
+
+  #waiq-nl-submit {
+    display: block;
+    width: 100%;
+    padding: 0 1.5em;
+    height: 3.4em;
+    border: 0;
+    border-radius: 3.4em;
+    background: linear-gradient(135deg, rgb(0,168,188) 0%, rgb(2,21,71) 100%);
+    color: #fff;
+    font-size: .78rem;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: transform .2s, box-shadow .2s, background .2s;
+  }
+  #waiq-nl-submit:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0,168,188,.3);
+  }
+  #waiq-nl-submit:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .waiq-nl-bar {
+    height: 4px; background: #e0e0e0;
+    border-radius: 2px; margin: 14px 0;
+    overflow: hidden; display: none;
+  }
+  .waiq-nl-bar.active { display: block; }
+  .waiq-nl-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, rgb(0,168,188) 0%, rgb(2,21,71) 100%);
+    width: 30%;
+    border-radius: 2px;
+    animation: waiqNlProgress 1.8s infinite;
+  }
+
+  .waiq-nl-notice {
+    display: none;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    border-radius: 10px;
+    font-size: .9rem;
+    font-weight: 600;
+    margin-top: 14px;
+    animation: waiqNlSlideUp .25s ease;
+  }
+  .waiq-nl-notice.success {
+    display: flex;
+    background: #d4edda; border: 1px solid #c3e6cb; color: #155724;
+  }
+  .waiq-nl-notice.error {
+    display: flex;
+    background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24;
+  }
+
+  @keyframes waiqNlFadeIn  { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes waiqNlSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes waiqNlProgress {
+    0% { width: 10%; } 50% { width: 80%; } 100% { width: 100%; }
+  }
+</style>
+
+<div id="waiq-nl-backdrop" role="dialog" aria-modal="true" aria-labelledby="waiq-nl-title-text"
+     onclick="if(event.target===this) closeNewsletterModal()">
+  <div id="waiq-nl-box">
+
+    <button id="waiq-nl-close" aria-label="Cerrar" onclick="closeNewsletterModal()">×</button>
+
+    <div class="waiq-nl-logo">
+      <img src="/images/waiq-tm.png" alt="WAIQ">
+    </div>
+
+    <p class="waiq-nl-title" id="waiq-nl-title-text">
+      {{- if $isEN -}}The WAIQ State of Play{{- else -}}The WAIQ State of Play{{- end -}}
+    </p>
+    <p class="waiq-nl-subtitle">
+      {{- if $isEN -}}
+        Weekly newsletter on AI, Quantum &amp; Web3
+      {{- else -}}
+        Boletín semanal sobre IA, Quantum &amp; Web3
+      {{- end -}}
+    </p>
+
+    <!-- Form -->
+    <div id="waiq-nl-form-wrap">
+      <div class="waiq-nl-field">
+        <label for="waiq-nl-email">
+          {{- if $isEN -}}Email address{{- else -}}Correo electrónico{{- end -}}
+        </label>
+        <input type="email" id="waiq-nl-email" autocomplete="email"
+               placeholder="{{ if $isEN }}your@email.com{{ else }}tu@email.com{{ end }}"
+               required>
+      </div>
+
+      <label class="waiq-nl-optin">
+        <input type="checkbox" id="waiq-nl-consent" required>
+        <span class="waiq-nl-optin-text">
+          {{- if $isEN -}}
+            I authorize the periodic sending to me by electronic means of the newsletter <strong>"The WAIQ State of Play"</strong> with relevant news from the #WAIQ ecosystem, in accordance with data protection regulations and information society services. I may withdraw my consent at any time.
+          {{- else -}}
+            Autorizo a enviarme periódicamente por medios electrónicos el boletín <strong>"The WAIQ State of Play"</strong> con noticias relevantes del ecosistema #WAIQ, de conformidad con la normativa de protección de datos y de servicios de la sociedad de la información. Podré retirar mi consentimiento en cualquier momento.
+          {{- end -}}
+        </span>
+      </label>
+
+      <div class="waiq-nl-bar" id="waiq-nl-bar"><div class="waiq-nl-bar-fill"></div></div>
+
+      <button id="waiq-nl-submit" type="button" onclick="submitNewsletterModal()">
+        {{- if $isEN -}}Subscribe{{- else -}}Suscribirme{{- end -}}
+      </button>
+
+      <div class="waiq-nl-notice" id="waiq-nl-notice" role="alert"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function () {
+  var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzmkR1DSK_uHJclDXUa7gRPr0DCCEi45tANk3RbBNuhse_aPcVbMpKlMW0_4crFwk92xg/exec';
+  var WAIQ_LANG  = '{{ $lang }}'; // ES or EN (injected by Hugo)
+
+  var i18n = {
+    EN: {
+      errEmail:   'Please enter a valid email address.',
+      errConsent: 'You must accept the terms to subscribe.',
+      sending:    'Sending…',
+      subscribe:  'Subscribe',
+      success:    '✅ Thank you! You are now subscribed to The WAIQ State of Play.',
+      error:      '❌ Something went wrong. Please try again.'
+    },
+    ES: {
+      errEmail:   'Por favor, introduce una dirección de email válida.',
+      errConsent: 'Debes aceptar los términos para suscribirte.',
+      sending:    'Enviando…',
+      subscribe:  'Suscribirme',
+      success:    '✅ ¡Gracias! Ya estás suscrito a The WAIQ State of Play.',
+      error:      '❌ Algo fue mal. Por favor, inténtalo de nuevo.'
+    }
+  };
+
+  function t(key) {
+    return (i18n[WAIQ_LANG] || i18n.ES)[key];
+  }
+
+  function generateNewsId() {
+    var ts     = Date.now();
+    var random = Math.random().toString(36).substr(2, 9);
+    return 'NEWS_' + ts + '_' + random;
+  }
+
+  function formatDate() {
+    var d = new Date();
+    var pad = function(n) { return n < 10 ? '0' + n : '' + n; };
+    return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+  }
+
+  window.openNewsletterModal = function () {
+    var backdrop = document.getElementById('waiq-nl-backdrop');
+    backdrop.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    setTimeout(function () {
+      var emailInput = document.getElementById('waiq-nl-email');
+      if (emailInput) emailInput.focus();
+    }, 250);
+  };
+
+  window.closeNewsletterModal = function () {
+    document.getElementById('waiq-nl-backdrop').classList.remove('open');
+    document.body.style.overflow = '';
+  };
+
+  // Close on Escape key
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') window.closeNewsletterModal();
+  });
+
+  window.submitNewsletterModal = function () {
+    var email   = (document.getElementById('waiq-nl-email').value || '').trim();
+    var consent = document.getElementById('waiq-nl-consent').checked;
+    var notice  = document.getElementById('waiq-nl-notice');
+    var btn     = document.getElementById('waiq-nl-submit');
+    var bar     = document.getElementById('waiq-nl-bar');
+
+    // Reset notice
+    notice.className = 'waiq-nl-notice';
+    notice.textContent = '';
+
+    // Validate
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      notice.className = 'waiq-nl-notice error';
+      notice.textContent = t('errEmail');
+      return;
+    }
+    if (!consent) {
+      notice.className = 'waiq-nl-notice error';
+      notice.textContent = t('errConsent');
+      return;
+    }
+
+    // Loading state
+    btn.disabled     = true;
+    btn.textContent  = t('sending');
+    bar.classList.add('active');
+
+    var payload = {
+      action : 'subscribe',
+      id     : generateNewsId(),   // NEWS_[timestamp]_[random] → columna G (Subscriptor)
+      email  : email,              // correo electrónico → columna G (Subscriptor)
+      date   : formatDate(),       // columna A
+      source : 'WEB',              // columna P
+      lang   : WAIQ_LANG,          // columna Q  ("ES" | "EN")
+      news   : 'SEMANAL'           // columna R
+    };
+
+    fetch(SCRIPT_URL, {
+      method:  'POST',
+      mode:    'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(payload)
+    })
+    .then(function () {
+      bar.classList.remove('active');
+      btn.disabled    = true;
+      btn.textContent = t('subscribe');
+
+      notice.className = 'waiq-nl-notice success';
+      notice.textContent = t('success');
+      notice.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+      // Auto-close after 4 s
+      setTimeout(window.closeNewsletterModal, 4000);
+    })
+    .catch(function () {
+      bar.classList.remove('active');
+      btn.disabled    = false;
+      btn.textContent = t('subscribe');
+
+      notice.className = 'waiq-nl-notice error';
+      notice.textContent = t('error');
+    });
+  };
+}());
+</script>
