@@ -26,6 +26,7 @@
       {{ with .Description }}<p class="subheading">{{ . | safeHTML }}</p>{{ end }}
       {{ if and .Content .Params.radar }}
         <div class="content-body">{{ .Content }}</div>
+        {{ partial "newsletter-modal.html" . }}
         <ul class="actions stacked">
           <li><a href="#newsletter" onclick="event.preventDefault(); openNewsletterModal();" rel="noopener noreferrer" class="button">{{ .Params.button_label }}</a></li>
         </ul>

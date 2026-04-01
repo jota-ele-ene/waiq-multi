@@ -3,7 +3,6 @@
 
 <!-- ═══════════════════════════════════════════════════════════════
      WAIQ Newsletter Subscribe Modal
-     Usage: {{ partial "newsletter-modal.html" . }}
      Trigger: <button onclick="openNewsletterModal()">…</button>
      ═══════════════════════════════════════════════════════════════ -->
 
@@ -26,22 +25,25 @@
     width: 100%;
     max-width: 500px;
     margin: 16px;
-    box-shadow: 0 24px 60px rgba(0,0,0,.2);
     animation: waiqNlSlideUp .25s ease;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   }
 
   #waiq-nl-close {
     position: absolute;
-    top: 14px; right: 18px;
-    background: none; border: none;
-    font-size: 1.6rem; line-height: 1;
-    color: #888; cursor: pointer;
-    padding: 4px 8px;
+    top: -14px;
+    right: 18px;
+    background-color: transparent !important;
+    box-shadow: inset 0 0 0 0px;
+    font-size: 1.6rem;
+    line-height: 1;
+    color: #887 !important;
+    cursor: pointer;
+    padding: 0;
     border-radius: 6px;
     transition: background .15s, color .15s;
   }
-  #waiq-nl-close:hover { background: #f0f0f0; color: #333; }
+  #waiq-nl-close:hover { background: #f0f0f0; color: #333; box-shadow: inset 0 0 0 0px!important;}
 
   .waiq-nl-logo {
     text-align: center;
@@ -76,8 +78,6 @@
     font-weight: 600;
     color: #333;
     margin-bottom: 6px;
-    letter-spacing: .04em;
-    text-transform: uppercase;
   }
 
   .waiq-nl-field input[type="email"] {
@@ -95,6 +95,29 @@
   .waiq-nl-field input[type="email"]:focus {
     border-color: rgb(0,168,188);
     background: #fff;
+  }
+
+  .waiq-nl-consent-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 22px;
+  }
+
+  #waiq-nl-consent {
+    width: 18px;
+    height: 18px;
+    margin-top: 3px;
+    flex-shrink: 0;
+    accent-color: rgb(0,168,188);
+    cursor: pointer;
+  }
+
+  .waiq-nl-consent-text {
+    font-size: .82rem;
+    color: #444;
+    line-height: 1.5;
+    cursor: pointer;
   }
 
   .waiq-nl-optin {
@@ -227,16 +250,16 @@
                required>
       </div>
 
-      <label class="waiq-nl-optin">
+      <div class="waiq-nl-field waiq-nl-consent-row">
         <input type="checkbox" id="waiq-nl-consent" required>
-        <span class="waiq-nl-optin-text">
+        <label for="waiq-nl-consent" class="waiq-nl-consent-text">
           {{- if $isEN -}}
-            I authorize the periodic sending to me by electronic means of the newsletter <strong>"The WAIQ State of Play"</strong> with relevant news from the #WAIQ ecosystem, in accordance with data protection regulations and information society services. I may withdraw my consent at any time.
+            I authorize the periodic sending to me by electronic means of <strong>"The WAIQ State of Play"</strong> with relevant news from the <strong>#WAIQ</strong> ecosystem, in accordance with data protection regulations and information society services. I may withdraw my consent at any time.
           {{- else -}}
             Autorizo a enviarme periódicamente por medios electrónicos el boletín <strong>"The WAIQ State of Play"</strong> con noticias relevantes del ecosistema #WAIQ, de conformidad con la normativa de protección de datos y de servicios de la sociedad de la información. Podré retirar mi consentimiento en cualquier momento.
           {{- end -}}
-        </span>
-      </label>
+        </label>
+      </div>
 
       <div class="waiq-nl-bar" id="waiq-nl-bar"><div class="waiq-nl-bar-fill"></div></div>
 
