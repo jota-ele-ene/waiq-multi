@@ -14,7 +14,7 @@ description: >-
   The convergence of Web3, AI, and quantum computing poses a critical dilemma for Europe: leading in responsible governance or risking its global technological competitiveness.
 draft: "false"
 featured: "true"
-button_label: Read article
+button_label: Get this digest in your email
 radar: true
 references:
   - url: https://www.coindesk.com/business/2026/03/25/crypto-broker-bitpanda-launches-blockchain-to-connect-eu-banks-with-tokenized-assets
